@@ -1984,37 +1984,37 @@
                 <div class="resource-icon">&#128203;</div>
                 <h3>상담 체크리스트</h3>
                 <p>5단계 상담 구조를 점검할 수 있는 실전 체크리스트</p>
-                <a href="checklist.html" class="btn btn-primary">바로가기</a>
+                <button onclick="openResource('checklist.html')" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128172;</div>
                 <h3>상담 문장 카드</h3>
                 <p>상황별로 사용할 수 있는 효과적인 상담 문장 모음</p>
-                <a href="sentence-cards.html" class="btn btn-primary">바로가기</a>
+                <button onclick="openResource('sentence-cards.html')" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128218;</div>
                 <h3>사용자 가이드북</h3>
                 <p>아카데미 200% 활용을 위한 상세 가이드</p>
-                <a href="guidebook.html" class="btn btn-primary">바로가기</a>
+                <button onclick="openResource('guidebook.html')" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#127891;</div>
                 <h3>QLRCQ 요약본</h3>
                 <p>QLRCQ 기법의 핵심을 정리한 한 장 요약</p>
-                <a href="qlrcq.html" class="btn btn-primary">바로가기</a>
+                <button onclick="openResource('qlrcq.html')" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128187;</div>
                 <h3>AI 환자상담튜터</h3>
                 <p>실전 롤플레이로 상담 스킬을 연습할 수 있는 AI 튜터</p>
-                <a href="https://aitalker.co.kr/biz018" target="_blank" class="btn btn-primary">바로가기</a>
+                <button onclick="openResource('https://aitalker.co.kr/biz018', true)" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128196;</div>
                 <h3>상담 시나리오</h3>
                 <p>다양한 상황별 상담 시나리오 예시</p>
-                <a href="scenarios.html" class="btn btn-primary">바로가기</a>
+                <button onclick="openResource('scenarios.html')" class="btn btn-primary">열기</button>
             </div>
         </div>
     </div>
@@ -2312,15 +2312,15 @@
     <div class="modal-overlay" id="resourcesPasswordModal">
         <div class="modal" style="max-width: 450px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                <h3 style="color: white;">자료실 접근</h3>
+                <h3 style="color: white;">자료 열기</h3>
                 <button class="modal-close" onclick="closeResourcesModal()" style="color: white;">&times;</button>
             </div>
             <div class="modal-body" style="padding: 40px;">
                 <div style="text-align: center;">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">&#128218;</div>
-                    <h3 style="color: var(--dark); margin-bottom: 10px; font-size: 1.4rem;">유료 콘텐츠입니다</h3>
+                    <div style="font-size: 4rem; margin-bottom: 20px;">&#128274;</div>
+                    <h3 style="color: var(--dark); margin-bottom: 10px; font-size: 1.4rem;">유료 회원 전용 자료입니다</h3>
                     <p style="color: var(--gray); margin-bottom: 30px; line-height: 1.6;">
-                        자료실은 유료 회원 전용입니다.<br>
+                        자료를 열람하시려면<br>
                         비밀번호를 입력해 주세요.
                     </p>
                     <div style="margin-bottom: 20px;">
@@ -2501,14 +2501,6 @@
         function handleHashChange() {
             const hash = window.location.hash.replace('#', '') || 'home';
 
-            // 자료실 접근 시 비밀번호 확인
-            if (hash === 'resources') {
-                if (!isPasswordVerified()) {
-                    showResourcesPasswordModal();
-                    return;
-                }
-            }
-
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -2529,8 +2521,30 @@
             window.scrollTo(0, 0);
         }
 
+        // 자료 열기 대상 URL 저장
+        let pendingResourceUrl = '';
+
+        // 자료 열기 (비밀번호 확인 필요)
+        function openResource(url, isExternal = false) {
+            pendingResourceUrl = url;
+
+            // 이미 인증된 경우 바로 이동
+            if (isPasswordVerified()) {
+                if (isExternal) {
+                    window.open(url, '_blank');
+                } else {
+                    window.location.href = url;
+                }
+                return;
+            }
+
+            // 비밀번호 모달 표시
+            showResourcesPasswordModal(isExternal);
+        }
+
         // 자료실 비밀번호 모달 표시
-        function showResourcesPasswordModal() {
+        function showResourcesPasswordModal(isExternal = false) {
+            document.getElementById('resourcesPasswordModal').dataset.external = isExternal;
             document.getElementById('resourcesPasswordModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             setTimeout(() => {
@@ -2544,20 +2558,29 @@
             document.body.style.overflow = 'auto';
             document.getElementById('resourcesPasswordInput').value = '';
             document.getElementById('resourcesPasswordError').style.display = 'none';
+            document.getElementById('resourcesPasswordInput').style.borderColor = '#11998e';
+            pendingResourceUrl = '';
         }
 
         // 자료실 비밀번호 확인
         function checkResourcesPassword() {
             const input = document.getElementById('resourcesPasswordInput');
             const error = document.getElementById('resourcesPasswordError');
+            const modal = document.getElementById('resourcesPasswordModal');
+            const isExternal = modal.dataset.external === 'true';
 
             if (input.value === PAID_VIDEO_PASSWORD) {
                 // 비밀번호 정확 - 세션에 인증 상태 저장 (유료 강의와 공유)
                 setPasswordVerified();
                 closeResourcesModal();
-                // 자료실 페이지로 이동
-                window.location.hash = 'resources';
-                handleHashChange();
+                // 자료로 이동
+                if (pendingResourceUrl) {
+                    if (isExternal) {
+                        window.open(pendingResourceUrl, '_blank');
+                    } else {
+                        window.location.href = pendingResourceUrl;
+                    }
+                }
             } else {
                 // 비밀번호 오류
                 error.style.display = 'block';
