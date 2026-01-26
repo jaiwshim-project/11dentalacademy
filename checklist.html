@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담 체크리스트 진단 | 덴탈클리닉파인더 환자상담 아카데미</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-light: #2d7d9a;
+            --accent: #e74c3c;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+            --light: #f8f9fa;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(26,95,122,0.95) 0%, rgba(21,152,149,0.95) 100%);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            z-index: 1000;
+            padding: 0 4%;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo .academy-name {
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-left: 12px;
+            -webkit-text-fill-color: #ffd700;
+            background: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 4px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.9);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.88rem;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .nav-menu .btn-courses {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        }
+
+        .nav-menu .btn-courses:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.5);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .nav-menu {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 4% 50px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Overview */
+        .progress-overview {
+            max-width: 1000px;
+            margin: -40px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .progress-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+
+        .overall-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-stages {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .stage-pill {
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage-pill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stage-pill[data-stage="1"] {
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .stage-pill[data-stage="2"] {
+            border: 2px solid #8b5cf6;
+            color: #8b5cf6;
+        }
+        .stage-pill[data-stage="3"] {
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+        }
+        .stage-pill[data-stage="4"] {
+            border: 2px solid #10b981;
+            color: #10b981;
+        }
+        .stage-pill[data-stage="5"] {
+            border: 2px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .stage-pill[data-stage="1"]:hover {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(59,130,246,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59,130,246,0.25);
+        }
+        .stage-pill[data-stage="2"]:hover {
+            background: linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139,92,246,0.25);
+        }
+        .stage-pill[data-stage="3"]:hover {
+            background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(245,158,11,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245,158,11,0.25);
+        }
+        .stage-pill[data-stage="4"]:hover {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.25);
+        }
+        .stage-pill[data-stage="5"]:hover {
+            background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239,68,68,0.25);
+        }
+
+        .stage-pill[data-stage="1"].active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(59,130,246,0.4);
+        }
+        .stage-pill[data-stage="2"].active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(139,92,246,0.4);
+        }
+        .stage-pill[data-stage="3"].active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(245,158,11,0.4);
+        }
+        .stage-pill[data-stage="4"].active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+        }
+        .stage-pill[data-stage="5"].active {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(239,68,68,0.4);
+        }
+
+        .stage-pill.completed {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            border-color: transparent !important;
+            color: white !important;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+        }
+
+        .stage-pill.completed::after {
+            content: '✓';
+            margin-left: 6px;
+            font-size: 0.75rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        /* Stage Section */
+        .stage-section {
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+        }
+
+        .stage-header {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .stage-header:hover {
+            background: var(--light);
+        }
+
+        .stage-header.stage-1 { border-left: 5px solid #3b82f6; }
+        .stage-header.stage-2 { border-left: 5px solid #8b5cf6; }
+        .stage-header.stage-3 { border-left: 5px solid #f59e0b; }
+        .stage-header.stage-4 { border-left: 5px solid #10b981; }
+        .stage-header.stage-5 { border-left: 5px solid #e74c3c; }
+
+        .stage-info h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stage-number {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .stage-info p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .stage-progress {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stage-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            color: var(--gray);
+            transition: transform 0.3s;
+        }
+
+        .stage-section.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .stage-content {
+            display: none;
+            padding: 0 30px 30px;
+        }
+
+        .stage-section.open .stage-content {
+            display: block;
+        }
+
+        /* Checklist */
+        .checklist-group {
+            margin-bottom: 30px;
+        }
+
+        .checklist-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .checklist-title h4 {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .checklist-title .icon {
+            font-size: 1.3rem;
+        }
+
+        .checklist-title .count {
+            background: var(--light);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: var(--light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checklist-item:hover {
+            background: #e8f4f8;
+        }
+
+        .checklist-item.checked {
+            background: #d1fae5;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .custom-checkbox {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            border: 2px solid var(--gray);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .checklist-item.checked .custom-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .custom-checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .checklist-item.checked .custom-checkbox::after {
+            opacity: 1;
+        }
+
+        .checklist-text {
+            flex: 1;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        /* Key C Section */
+        .key-c-group {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .key-c-group .checklist-title {
+            border-bottom-color: rgba(0,0,0,0.1);
+        }
+
+        .key-c-group .checklist-title h4 {
+            color: #92400e;
+        }
+
+        .key-c-notice {
+            background: rgba(255,255,255,0.7);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        .key-c-group .checklist-item {
+            background: rgba(255,255,255,0.8);
+        }
+
+        .key-c-group .checklist-item:hover {
+            background: rgba(255,255,255,0.95);
+        }
+
+        .key-c-group .checklist-item.checked {
+            background: #d1fae5;
+        }
+
+        /* Final Principle */
+        .final-principle {
+            background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .final-principle .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .final-principle h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .final-principle p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* Reset Button */
+        .reset-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reset-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: rgba(255,255,255,0.7);
+            padding: 40px 4% 20px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #57c5b6 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul a {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.88rem;
+        }
+
+        .footer-section ul a:hover {
+            color: #4facfe;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.82rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo .academy-name {
+                display: none;
+            }
+
+            .hero {
+                padding: 70px 4% 25px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .stage-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .stage-progress {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .progress-stages {
+                justify-content: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .checklist-section {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
+
+            .check-item {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .footer {
+                padding: 25px 4% 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">덴탈클리닉<span>파인더</span><span class="academy-name">치과 환자상담 AI 아카데미</span></a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">&#9776;</button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">홈</a></li>
+                <li><a href="index.html#about">강의 소개</a></li>
+                <li><a href="index.html#courses" class="btn-courses">강의 영상</a></li>
+                <li><a href="index.html#free">무료 강의</a></li>
+                <li><a href="index.html#resources">자료실</a></li>
+                <li><a href="index.html#instructors">강사 소개</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>상담 체크리스트 진단</h1>
+        <p>5단계 상담 모델의 실전 체크리스트로 상담 품질을 자가 진단해보세요</p>
+    </section>
+
+    <!-- Progress Overview -->
+    <div class="progress-overview">
+        <div class="progress-card">
+            <div class="progress-header">
+                <div>
+                    <h3>전체 진행률</h3>
+                    <div class="progress-stages">
+                        <span class="stage-pill" data-stage="1">STAGE 1</span>
+                        <span class="stage-pill" data-stage="2">STAGE 2</span>
+                        <span class="stage-pill" data-stage="3">STAGE 3</span>
+                        <span class="stage-pill" data-stage="4">STAGE 4</span>
+                        <span class="stage-pill" data-stage="5">STAGE 5</span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="overall-score"><span id="totalChecked">0</span> / <span id="totalItems">75</span></div>
+                    <button class="reset-btn" onclick="resetAll()">🔄 초기화</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- STAGE 1 -->
+        <div class="stage-section open" data-stage="1">
+            <div class="stage-header stage-1" onclick="toggleStage(1)">
+                <div class="stage-info">
+                    <h2><span class="stage-number">STAGE 1</span> 공감 단계</h2>
+                    <p>설득 이전에 심리적 안전과 존중감을 형성했는가</p>
+                </div>
+                <div class="stage-progress">
+                    <span class="stage-score"><span id="stage1-score">0</span>/15</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="stage-content">
+                <div class="checklist-group">
+                    <div class="checklist-title">
+                        <span class="icon">✅</span>
+                        <h4>점검 항목</h4>
+                        <span class="count">10개</span>
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">상담 시작 시 설명보다 질문으로 시작했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 감정 상태를 먼저 묻고 들었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">판단·교정·조언을 의도적으로 보류했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 말을 끊지 않고 끝까지 들었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"그럴 수 있습니다", "많이 걱정되셨겠습니다"와 같은 감정 반응이 있었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">정보 제공 없이 공감 문장만으로 응답한 구간이 있었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 표정·톤·속도를 관찰했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 말할 시간을 충분히 가졌는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">상담자가 방향을 정하려는 신호를 자제했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 '이해받고 있다'고 느낄 수 있는 분위기를 만들었는가</span>
+                    </label>
+                </div>
+                <div class="key-c-group">
+                    <div class="checklist-title">
+                        <span class="icon">🔑</span>
+                        <h4>Key C</h4>
+                        <span class="count">5개</span>
+                    </div>
+                    <div class="key-c-notice">
+                        아래 중 하나라도 명확히 나타나야 다음 단계로 이동 가능
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"네, 맞아요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"사실 그게 제일 걱정이었어요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"제가 그 부분 때문에 망설였어요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이야기해 보니까 마음이 좀 놓이네요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="1" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 스스로 감정을 추가 설명하기 시작함</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 2 -->
+        <div class="stage-section" data-stage="2">
+            <div class="stage-header stage-2" onclick="toggleStage(2)">
+                <div class="stage-info">
+                    <h2><span class="stage-number">STAGE 2</span> 이해 단계</h2>
+                    <p>의사가 설명한 것이 아니라 환자가 스스로 이해했다고 느끼게 했는가</p>
+                </div>
+                <div class="stage-progress">
+                    <span class="stage-score"><span id="stage2-score">0</span>/15</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="stage-content">
+                <div class="checklist-group">
+                    <div class="checklist-title">
+                        <span class="icon">✅</span>
+                        <h4>점검 항목</h4>
+                        <span class="count">10개</span>
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">설명 전에 환자의 인식과 해석을 먼저 물었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">질문–경청–반응–확인–재질문(Q L R C Q)이 반복되었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"제가 이해한 게 맞다면…"이라는 확인 문장을 사용했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 말을 요약해 다시 돌려주었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">설명 중간에 환자의 반응을 확인했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">일방적인 설명이 1분 이상 지속되지 않았는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 자신의 상태를 말로 재구성할 기회를 가졌는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">핵심과 비핵심을 환자가 구분하도록 도왔는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 언어를 그대로 사용했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">이해 여부를 '고개 끄덕임'이 아니라 '언어'로 확인했는가</span>
+                    </label>
+                </div>
+                <div class="key-c-group">
+                    <div class="checklist-title">
+                        <span class="icon">🔑</span>
+                        <h4>Key C</h4>
+                        <span class="count">5개</span>
+                    </div>
+                    <div class="key-c-notice">
+                        아래 중 하나라도 명확히 나타나야 다음 단계로 이동 가능
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"아, 그러니까 제 상태는…"</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"정리해보면 이런 상황이네요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"결국 핵심은 이 부분이군요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이게 제일 중요한 문제네요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="2" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 설명을 요약하거나 다시 말함</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 3 -->
+        <div class="stage-section" data-stage="3">
+            <div class="stage-header stage-3" onclick="toggleStage(3)">
+                <div class="stage-info">
+                    <h2><span class="stage-number">STAGE 3</span> 결정권 제공 단계</h2>
+                    <p>결정을 받는 것이 아니라 결정의 주도권을 환자에게 돌려주었는가</p>
+                </div>
+                <div class="stage-progress">
+                    <span class="stage-score"><span id="stage3-score">0</span>/15</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="stage-content">
+                <div class="checklist-group">
+                    <div class="checklist-title">
+                        <span class="icon">✅</span>
+                        <h4>점검 항목</h4>
+                        <span class="count">10개</span>
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"정해도 됩니다"라는 메시지를 명확히 전달했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">선택지를 제시하되 결론을 유도하지 않았는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 기준을 먼저 물었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">기준을 환자의 언어로 확인했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">결정 속도를 환자에게 맡겼는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">'지금 결정해야 한다'는 압박을 주지 않았는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">비교 설명 전에 기준 정리가 먼저 이루어졌는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 망설임을 문제로 취급하지 않았는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">선택하지 않아도 괜찮다는 여지를 주었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 판단 주체임을 반복적으로 확인했는가</span>
+                    </label>
+                </div>
+                <div class="key-c-group">
+                    <div class="checklist-title">
+                        <span class="icon">🔑</span>
+                        <h4>Key C</h4>
+                        <span class="count">5개</span>
+                    </div>
+                    <div class="key-c-notice">
+                        아래 중 하나라도 명확히 나타나야 다음 단계로 이동 가능
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"제가 선택해야 하는 거네요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"제 기준으로 보면…"</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이건 제가 결정하는 거군요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이 기준이 중요할 것 같아요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="3" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 옵션을 비교하기 시작함</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 4 -->
+        <div class="stage-section" data-stage="4">
+            <div class="stage-header stage-4" onclick="toggleStage(4)">
+                <div class="stage-info">
+                    <h2><span class="stage-number">STAGE 4</span> 가치 전달 단계</h2>
+                    <p>치료의 장점이 아니라 환자의 기준과 가치가 연결되었는가</p>
+                </div>
+                <div class="stage-progress">
+                    <span class="stage-score"><span id="stage4-score">0</span>/15</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="stage-content">
+                <div class="checklist-group">
+                    <div class="checklist-title">
+                        <span class="icon">✅</span>
+                        <h4>점검 항목</h4>
+                        <span class="count">10개</span>
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">치료 장점 나열을 자제했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 기준을 다시 언급하며 설명했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"왜 이 환자에게 맞는가" 중심으로 설명했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">설명보다 질문 비중이 높았는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 반응을 보며 설명 깊이를 조절했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 언어로 가치를 재정의했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">표정·자세·호흡 변화에 주의를 기울였는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">감동보다 납득을 목표로 했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 스스로 연결하도록 기다렸는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">'설명 완료'가 아닌 '이해 완료'를 기준으로 삼았는가</span>
+                    </label>
+                </div>
+                <div class="key-c-group">
+                    <div class="checklist-title">
+                        <span class="icon">🔑</span>
+                        <h4>Key C</h4>
+                        <span class="count">5개</span>
+                    </div>
+                    <div class="key-c-notice">
+                        아래 중 하나라도 명확히 나타나야 다음 단계로 이동 가능
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"그래서 이 치료가 저한테 맞는 거군요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"제 기준으로 보면 이해가 됩니다."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이 선택이 의미가 있네요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이제 왜 필요한지 알겠습니다."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="4" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 고개가 아닌 말로 납득을 표현함</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 5 -->
+        <div class="stage-section" data-stage="5">
+            <div class="stage-header stage-5" onclick="toggleStage(5)">
+                <div class="stage-info">
+                    <h2><span class="stage-number">STAGE 5</span> 신뢰 형성 단계</h2>
+                    <p>결정이 아니라 '선택한 경험'을 긍정적으로 고정했는가</p>
+                </div>
+                <div class="stage-progress">
+                    <span class="stage-score"><span id="stage5-score">0</span>/15</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="stage-content">
+                <div class="checklist-group">
+                    <div class="checklist-title">
+                        <span class="icon">✅</span>
+                        <h4>점검 항목</h4>
+                        <span class="count">10개</span>
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">결정 이후에도 상담을 이어갔는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">치료가 아닌 '느낌'을 묻는 질문을 했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 감정 변화를 관찰했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">안도감을 언어로 확인했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">관계의 안전망을 명확히 전달했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">급하게 상담을 종료하지 않았는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 선택을 존중하는 메시지를 전달했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">사후 불안 가능성을 고려했는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"언제든 말씀 주셔도 됩니다"라는 문장이 있었는가</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="check">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자가 '잘 선택했다'는 감정을 가질 시간을 주었는가</span>
+                    </label>
+                </div>
+                <div class="key-c-group">
+                    <div class="checklist-title">
+                        <span class="icon">🔑</span>
+                        <h4>Key C</h4>
+                        <span class="count">5개</span>
+                    </div>
+                    <div class="key-c-notice">
+                        아래 중 하나라도 명확히 나타나야 다음 단계로 이동 가능
+                    </div>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"마음이 좀 편해졌어요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"여기서 하길 잘한 것 같아요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"이제 안심이 되네요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">"믿고 맡겨도 될 것 같아요."</span>
+                    </label>
+                    <label class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" data-stage="5" data-type="keyc">
+                        <span class="custom-checkbox"></span>
+                        <span class="checklist-text">환자의 표정·톤·자세가 이완됨</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Principle -->
+        <div class="final-principle">
+            <div class="lock-icon">🔒</div>
+            <h3>최종 원칙</h3>
+            <p>
+                각 단계에서 Key C가 확인되지 않았다면, 다음 단계로 이동하지 않습니다.<br>
+                단계는 앞으로 가더라도, 환자의 마음은 움직이지 않기 때문입니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>덴탈클리닉파인더</h4>
+                <p style="font-size: 0.9rem; line-height: 1.8;">
+                    환자가 스스로 결정하고<br>
+                    신뢰가 남는 상담의 기준
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>강의</h4>
+                <ul>
+                    <li><a href="index.html#curriculum1">A01 - 설득의 종말</a></li>
+                    <li><a href="index.html#curriculum2">A02 - 성공적인 환자 상담</a></li>
+                    <li><a href="index.html#free">무료 강의</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>자료</h4>
+                <ul>
+                    <li><a href="checklist.html">상담 체크리스트</a></li>
+                    <li><a href="sentence-cards.html">상담 문장 카드</a></li>
+                    <li><a href="index.html#resources">교육용 가이드</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>강사진</h4>
+                <ul>
+                    <li><a href="index.html#instructors">심재우 CEO</a></li>
+                    <li><a href="index.html#instructors">임영일 CCO</a></li>
+                    <li><a href="index.html#instructors">이용식 CMO</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>지원</h4>
+                <ul>
+                    <li><a href="#">이용약관</a></li>
+                    <li><a href="#">개인정보처리방침</a></li>
+                    <li><a href="#">문의하기</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 덴탈클리닉파인더. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- AI상담튜터 (TalkerSDK) -->
+    <script src="https://chatbot-sdk.aitalker.co.kr/talker-sdk.umd.js"></script>
+    <script>
+        TalkerSDK.initializeTalkerSDK({ code: "biz018", position: "right" });
+    </script>
+
+    <script>
+        // Toggle stage section
+        function toggleStage(stageNum) {
+            const section = document.querySelector(`.stage-section[data-stage="${stageNum}"]`);
+            section.classList.toggle('open');
+        }
+
+        // Toggle checkbox
+        function toggleCheck(item) {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            item.classList.toggle('checked', checkbox.checked);
+            updateScores();
+            saveState();
+        }
+
+        // Update all scores
+        function updateScores() {
+            let total = 0;
+
+            for (let i = 1; i <= 5; i++) {
+                const stageCheckboxes = document.querySelectorAll(`input[data-stage="${i}"]:checked`);
+                const stageScore = stageCheckboxes.length;
+                document.getElementById(`stage${i}-score`).textContent = stageScore;
+                total += stageScore;
+
+                // Update stage pill
+                const pill = document.querySelector(`.stage-pill[data-stage="${i}"]`);
+                if (stageScore === 15) {
+                    pill.classList.add('completed');
+                    pill.classList.remove('active');
+                } else if (stageScore > 0) {
+                    pill.classList.add('active');
+                    pill.classList.remove('completed');
+                } else {
+                    pill.classList.remove('active', 'completed');
+                }
+            }
+
+            document.getElementById('totalChecked').textContent = total;
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            const state = {};
+            document.querySelectorAll('input[type="checkbox"]').forEach((cb, index) => {
+                state[index] = cb.checked;
+            });
+            localStorage.setItem('checklistState', JSON.stringify(state));
+        }
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('checklistState');
+            if (saved) {
+                const state = JSON.parse(saved);
+                document.querySelectorAll('input[type="checkbox"]').forEach((cb, index) => {
+                    if (state[index]) {
+                        cb.checked = true;
+                        cb.closest('.checklist-item').classList.add('checked');
+                    }
+                });
+                updateScores();
+            }
+        }
+
+        // Reset all checkboxes
+        function resetAll() {
+            if (confirm('모든 체크를 초기화하시겠습니까?')) {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                    cb.closest('.checklist-item').classList.remove('checked');
+                });
+                localStorage.removeItem('checklistState');
+                updateScores();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+        });
+    </script>
+</body>
+</html>

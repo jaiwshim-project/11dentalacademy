@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담 문장 카드 | 덴탈클리닉파인더 환자상담 아카데미</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-light: #2d7d9a;
+            --accent: #e74c3c;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+            --light: #f8f9fa;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --stage1: #3b82f6;
+            --stage2: #8b5cf6;
+            --stage3: #f59e0b;
+            --stage4: #10b981;
+            --stage5: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(26,95,122,0.95) 0%, rgba(21,152,149,0.95) 100%);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            z-index: 1000;
+            padding: 0 4%;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo .academy-name {
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-left: 12px;
+            -webkit-text-fill-color: #ffd700;
+            background: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 4px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.9);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.88rem;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .nav-menu .btn-courses {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        }
+
+        .nav-menu .btn-courses:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.5);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .nav-menu {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 4% 50px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 15px;
+            line-height: 1.7;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .hero-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Stage Navigation */
+        .stage-nav {
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stage-nav-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stage-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage-btn[data-stage="1"] {
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .stage-btn[data-stage="2"] {
+            border: 2px solid #8b5cf6;
+            color: #8b5cf6;
+        }
+        .stage-btn[data-stage="3"] {
+            border: 2px solid #f59e0b;
+            color: #f59e0b;
+        }
+        .stage-btn[data-stage="4"] {
+            border: 2px solid #10b981;
+            color: #10b981;
+        }
+        .stage-btn[data-stage="5"] {
+            border: 2px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .stage-btn[data-stage="1"]:hover {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(59,130,246,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59,130,246,0.25);
+        }
+        .stage-btn[data-stage="2"]:hover {
+            background: linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139,92,246,0.25);
+        }
+        .stage-btn[data-stage="3"]:hover {
+            background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(245,158,11,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245,158,11,0.25);
+        }
+        .stage-btn[data-stage="4"]:hover {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.25);
+        }
+        .stage-btn[data-stage="5"]:hover {
+            background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239,68,68,0.25);
+        }
+
+        .stage-btn[data-stage="1"].active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(59,130,246,0.4);
+        }
+        .stage-btn[data-stage="2"].active {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(139,92,246,0.4);
+        }
+        .stage-btn[data-stage="3"].active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(245,158,11,0.4);
+        }
+        .stage-btn[data-stage="4"].active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+        }
+        .stage-btn[data-stage="5"].active {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 6px 20px rgba(239,68,68,0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        /* Stage Section */
+        .stage-section {
+            display: none;
+        }
+
+        .stage-section.active {
+            display: block;
+        }
+
+        .stage-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stage-label {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .stage-1 .stage-label { background: var(--stage1); }
+        .stage-2 .stage-label { background: var(--stage2); }
+        .stage-3 .stage-label { background: var(--stage3); }
+        .stage-4 .stage-label { background: var(--stage4); }
+        .stage-5 .stage-label { background: var(--stage5); }
+
+        .stage-header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .stage-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Sentence Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .sentence-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sentence-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .stage-1 .sentence-card::before { background: var(--stage1); }
+        .stage-2 .sentence-card::before { background: var(--stage2); }
+        .stage-3 .sentence-card::before { background: var(--stage3); }
+        .stage-4 .sentence-card::before { background: var(--stage4); }
+        .stage-5 .sentence-card::before { background: var(--stage5); }
+
+        .sentence-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .sentence-card.copied {
+            background: #d1fae5;
+        }
+
+        .card-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .sentence-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--dark);
+            padding-right: 30px;
+        }
+
+        .copy-hint {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .sentence-card:hover .copy-hint {
+            opacity: 1;
+        }
+
+        .copied-text {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Final Quote */
+        .final-quote {
+            background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+        }
+
+        .final-quote .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .final-quote h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .final-quote p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* Stats */
+        .stats-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: rgba(255,255,255,0.7);
+            padding: 40px 4% 20px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 28px;
+            margin-bottom: 28px;
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #57c5b6 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul a {
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.88rem;
+        }
+
+        .footer-section ul a:hover {
+            color: #4facfe;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.82rem;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dark);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo .academy-name {
+                display: none;
+            }
+
+            .hero {
+                padding: 70px 4% 25px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stage-nav-card {
+                padding: 12px;
+            }
+
+            .stage-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-bar {
+                justify-content: center;
+                font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .sentence-card {
+                padding: 15px;
+            }
+
+            .sentence-text {
+                font-size: 0.95rem;
+            }
+
+            .footer {
+                padding: 25px 4% 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">덴탈클리닉<span>파인더</span><span class="academy-name">치과 환자상담 AI 아카데미</span></a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">&#9776;</button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">홈</a></li>
+                <li><a href="index.html#about">강의 소개</a></li>
+                <li><a href="index.html#courses" class="btn-courses">강의 영상</a></li>
+                <li><a href="index.html#free">무료 강의</a></li>
+                <li><a href="index.html#resources">자료실</a></li>
+                <li><a href="index.html#instructors">강사 소개</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>상담 문장 카드</h1>
+        <p>5단계 상담 구조별로 현장에서 바로 사용할 수 있는<br>'효과적인 상담 문장 모음' 최종본입니다.</p>
+        <div class="hero-badges">
+            <span class="hero-badge">존댓말</span>
+            <span class="hero-badge">설득·압박 배제</span>
+            <span class="hero-badge">QLRCQ 구조</span>
+        </div>
+    </section>
+
+    <!-- Stage Navigation -->
+    <div class="stage-nav">
+        <div class="stage-nav-card">
+            <button class="stage-btn active" data-stage="1" onclick="showStage(1)">STAGE 1. 공감</button>
+            <button class="stage-btn" data-stage="2" onclick="showStage(2)">STAGE 2. 이해</button>
+            <button class="stage-btn" data-stage="3" onclick="showStage(3)">STAGE 3. 결정권</button>
+            <button class="stage-btn" data-stage="4" onclick="showStage(4)">STAGE 4. 가치</button>
+            <button class="stage-btn" data-stage="5" onclick="showStage(5)">STAGE 5. 신뢰</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">100</div>
+                <div class="stat-label">총 문장 수</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">상담 단계</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">20</div>
+                <div class="stat-label">단계별 문장</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="copiedCount">0</div>
+                <div class="stat-label">복사한 문장</div>
+            </div>
+        </div>
+
+        <!-- STAGE 1 -->
+        <div class="stage-section stage-1 active" data-stage="1">
+            <div class="stage-header">
+                <span class="stage-label">STAGE 1</span>
+                <h2>공감 단계</h2>
+                <p>설득이 아니라 존중과 심리적 안전을 느끼게 하는 문장</p>
+            </div>
+            <div class="cards-grid">
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">1</span>
+                    <p class="sentence-text">"지금 상황에서 그렇게 느끼시는 건 충분히 이해가 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">2</span>
+                    <p class="sentence-text">"처음 오시면 누구나 비슷한 걱정을 하십니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">3</span>
+                    <p class="sentence-text">"그 부분이 마음에 걸리셨군요."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">4</span>
+                    <p class="sentence-text">"말씀 주신 내용을 들으니 왜 망설이셨는지 알 것 같습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">5</span>
+                    <p class="sentence-text">"그런 경험이 있으셨다면 조심스러우실 수밖에 없겠습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">6</span>
+                    <p class="sentence-text">"결정하기 전에 불안해지는 게 자연스러운 반응입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">7</span>
+                    <p class="sentence-text">"그 점이 가장 신경 쓰이셨던 거군요."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">8</span>
+                    <p class="sentence-text">"지금까지 혼자서 많이 고민하셨을 것 같습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">9</span>
+                    <p class="sentence-text">"그렇게 느끼시는 분들이 정말 많습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">10</span>
+                    <p class="sentence-text">"편하게 말씀해 주셔도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">11</span>
+                    <p class="sentence-text">"정답을 찾으러 오신 게 아니라 고민을 나누러 오신 거라고 느껴집니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">12</span>
+                    <p class="sentence-text">"지금 당장 결정하셔야 할 상황은 아닙니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">13</span>
+                    <p class="sentence-text">"걱정하시는 마음부터 충분히 이야기 나누는 게 먼저입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">14</span>
+                    <p class="sentence-text">"그런 생각이 드신 이유를 조금 더 듣고 싶습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">15</span>
+                    <p class="sentence-text">"그 부분을 말씀해 주셔서 감사합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">16</span>
+                    <p class="sentence-text">"이 자리에서는 어떤 판단도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">17</span>
+                    <p class="sentence-text">"지금 느낌 그대로 말씀해 주셔도 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">18</span>
+                    <p class="sentence-text">"그 감정이 먼저 정리되는 게 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">19</span>
+                    <p class="sentence-text">"지금은 이해받는 단계라고 보셔도 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">20</span>
+                    <p class="sentence-text">"천천히 이야기해 주셔도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 2 -->
+        <div class="stage-section stage-2" data-stage="2">
+            <div class="stage-header">
+                <span class="stage-label">STAGE 2</span>
+                <h2>이해 단계</h2>
+                <p>의사가 설명한 것이 아니라 환자가 스스로 이해했다고 느끼게 하는 문장</p>
+            </div>
+            <div class="cards-grid">
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">1</span>
+                    <p class="sentence-text">"지금 상황을 선생님 기준으로 어떻게 이해하고 계신지 여쭤봐도 될까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">2</span>
+                    <p class="sentence-text">"제가 설명드린 내용 중에서 가장 중요하다고 느껴지신 부분은 어디일까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">3</span>
+                    <p class="sentence-text">"제가 이해한 게 맞다면, 지금 이 부분이 핵심이신 거죠?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">4</span>
+                    <p class="sentence-text">"지금 상태를 한 문장으로 정리해 본다면 어떻게 표현하실 것 같으세요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">5</span>
+                    <p class="sentence-text">"이 상황이 왜 생겼다고 느끼고 계신지 궁금합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">6</span>
+                    <p class="sentence-text">"설명을 들으시면서 새롭게 알게 된 점이 있으셨을까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">7</span>
+                    <p class="sentence-text">"이해되신 부분과 아직 헷갈리는 부분을 나눠서 말씀해 주셔도 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">8</span>
+                    <p class="sentence-text">"지금까지 말씀 주신 걸 정리해 보면 이런 흐름으로 보입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">9</span>
+                    <p class="sentence-text">"혹시 제가 놓친 부분이 있다면 바로 말씀 주세요."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">10</span>
+                    <p class="sentence-text">"이렇게 정리하면 선생님 상황에 더 가까울까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">11</span>
+                    <p class="sentence-text">"지금 설명이 선생님 기준과 맞는지 확인하고 싶습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">12</span>
+                    <p class="sentence-text">"지금까지 들으신 내용을 선생님 말로 한번 정리해 보신다면요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">13</span>
+                    <p class="sentence-text">"이 부분에서 고개가 끄덕여지신 이유가 있을까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">14</span>
+                    <p class="sentence-text">"이해되셨다는 느낌이 드는 지점이 어디쯤일까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">15</span>
+                    <p class="sentence-text">"아직 확실하지 않은 부분이 남아 있어도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">16</span>
+                    <p class="sentence-text">"지금은 판단이 아니라 이해를 맞추는 단계입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">17</span>
+                    <p class="sentence-text">"이 상황을 어떻게 받아들이고 계신지가 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">18</span>
+                    <p class="sentence-text">"선생님 관점에서 다시 설명해 주셔도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">19</span>
+                    <p class="sentence-text">"제가 이해한 방향이 맞는지 한 번 더 확인드리겠습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">20</span>
+                    <p class="sentence-text">"이제 상황이 조금 정리되신 느낌이 드시나요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 3 -->
+        <div class="stage-section stage-3" data-stage="3">
+            <div class="stage-header">
+                <span class="stage-label">STAGE 3</span>
+                <h2>결정권 제공 단계</h2>
+                <p>결정을 유도하지 않고 결정의 주인이 환자임을 체감하게 하는 문장</p>
+            </div>
+            <div class="cards-grid">
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">1</span>
+                    <p class="sentence-text">"이 부분은 선생님께서 선택하셔도 되는 영역입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">2</span>
+                    <p class="sentence-text">"어떤 선택이 맞는지는 선생님 기준이 가장 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">3</span>
+                    <p class="sentence-text">"지금 바로 정하셔야 할 필요는 없습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">4</span>
+                    <p class="sentence-text">"결정의 속도도 선생님이 정하셔도 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">5</span>
+                    <p class="sentence-text">"제가 추천은 드릴 수 있지만, 결정은 선생님 몫입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">6</span>
+                    <p class="sentence-text">"선생님이 중요하게 보시는 기준이 무엇인지 먼저 듣고 싶습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">7</span>
+                    <p class="sentence-text">"이 선택에서 가장 부담되는 요소는 어떤 부분일까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">8</span>
+                    <p class="sentence-text">"결정 자체보다 결정해야 한다는 상황이 부담스러우신 걸까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">9</span>
+                    <p class="sentence-text">"지금 단계에서는 선택지를 열어두셔도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">10</span>
+                    <p class="sentence-text">"선생님 기준으로 보면 어떤 쪽이 더 맞다고 느껴지세요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">11</span>
+                    <p class="sentence-text">"어느 쪽이 더 편안하게 느껴지시는지 궁금합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">12</span>
+                    <p class="sentence-text">"정하지 않는 선택도 선택일 수 있습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">13</span>
+                    <p class="sentence-text">"이건 옳고 그름의 문제가 아닙니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">14</span>
+                    <p class="sentence-text">"선생님 입장에서 판단할 수 있도록 돕는 게 제 역할입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">15</span>
+                    <p class="sentence-text">"결정을 미루고 싶다는 느낌도 존중되어야 합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">16</span>
+                    <p class="sentence-text">"이 기준으로 보면 어떤 선택이 더 나아 보이세요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">17</span>
+                    <p class="sentence-text">"지금은 비교해보는 단계라고 보셔도 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">18</span>
+                    <p class="sentence-text">"선생님이 결정 주체라는 점은 변하지 않습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">19</span>
+                    <p class="sentence-text">"어떤 기준이 가장 중요하신지부터 정리해볼까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">20</span>
+                    <p class="sentence-text">"결정은 선생님이 하셔도 충분히 괜찮은 상황입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 4 -->
+        <div class="stage-section stage-4" data-stage="4">
+            <div class="stage-header">
+                <span class="stage-label">STAGE 4</span>
+                <h2>가치 전달 단계</h2>
+                <p>치료의 장점이 아니라 환자의 기준과 치료를 연결하는 문장</p>
+            </div>
+            <div class="cards-grid">
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">1</span>
+                    <p class="sentence-text">"아까 말씀하신 기준을 기준으로 보면 이 치료는 이런 의미를 가집니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">2</span>
+                    <p class="sentence-text">"선생님이 중요하게 보신 부분과 이 치료가 만나는 지점이 여기입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">3</span>
+                    <p class="sentence-text">"그래서 이 치료가 '좋다'기보다 '선생님께 맞다'고 볼 수 있습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">4</span>
+                    <p class="sentence-text">"선생님 기준으로 해석해 보면 이런 선택이 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">5</span>
+                    <p class="sentence-text">"이 치료의 장점보다, 선생님 상황에서의 의미가 더 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">6</span>
+                    <p class="sentence-text">"아까 말씀하신 걱정을 기준으로 다시 보면 어떠신가요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">7</span>
+                    <p class="sentence-text">"이 선택이 선생님 기준을 어떻게 충족시키는지 연결해 보겠습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">8</span>
+                    <p class="sentence-text">"지금까지 정리된 기준 안에서 보면 자연스럽게 이어집니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">9</span>
+                    <p class="sentence-text">"그래서 이 치료가 필요한 이유가 달라집니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">10</span>
+                    <p class="sentence-text">"선생님 기준으로 보면 무리한 선택은 아닙니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">11</span>
+                    <p class="sentence-text">"이 치료가 선생님에게 어떤 가치를 주는지 다시 짚어보겠습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">12</span>
+                    <p class="sentence-text">"이 부분이 선생님 기준과 가장 맞닿아 있습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">13</span>
+                    <p class="sentence-text">"그래서 이 선택이 의미 있게 느껴지실 수 있습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">14</span>
+                    <p class="sentence-text">"선생님이 중요하게 보신 점이 여기에서 반영됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">15</span>
+                    <p class="sentence-text">"이 치료의 핵심은 결과가 아니라 기준과의 정합성입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">16</span>
+                    <p class="sentence-text">"아까 말씀 주신 우선순위와 연결해 보면 이해가 쉬워집니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">17</span>
+                    <p class="sentence-text">"그래서 이 치료가 선생님 상황에서는 합리적인 선택이 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">18</span>
+                    <p class="sentence-text">"선생님 기준에서 납득이 되시는지가 가장 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">19</span>
+                    <p class="sentence-text">"이제 이 선택이 왜 맞는지 스스로 정리되시는 것 같습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">20</span>
+                    <p class="sentence-text">"지금 느낌으로는 이 선택이 선생님 기준에 잘 맞아 보이십니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 5 -->
+        <div class="stage-section stage-5" data-stage="5">
+            <div class="stage-header">
+                <span class="stage-label">STAGE 5</span>
+                <h2>신뢰 형성 단계</h2>
+                <p>결정 이후 안도감과 관계의 안전을 고정하는 문장</p>
+            </div>
+            <div class="cards-grid">
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">1</span>
+                    <p class="sentence-text">"지금 결정하신 과정 자체가 충분히 존중받아야 합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">2</span>
+                    <p class="sentence-text">"오늘 상담에서 가장 편해지신 순간이 언제였을까요?"</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">3</span>
+                    <p class="sentence-text">"지금 마음 상태가 처음 오셨을 때와는 좀 달라지신 것 같습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">4</span>
+                    <p class="sentence-text">"이 선택을 하시면서 마음이 조금 가벼워지셨다면 그걸로 충분합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">5</span>
+                    <p class="sentence-text">"잘 결정하셨다는 느낌보다, 편안해지셨다면 그게 더 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">6</span>
+                    <p class="sentence-text">"이 병원을 선택한 경험이 좋은 기억으로 남았으면 합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">7</span>
+                    <p class="sentence-text">"앞으로 과정에서도 언제든 질문하셔도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">8</span>
+                    <p class="sentence-text">"불안해지시면 그때 다시 이야기 나누면 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">9</span>
+                    <p class="sentence-text">"오늘 결정이 아니라 오늘 안심하셨다는 게 더 의미 있습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">10</span>
+                    <p class="sentence-text">"선생님 선택을 존중합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">11</span>
+                    <p class="sentence-text">"이 과정에서 혼자라고 느끼지 않으셔도 됩니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">12</span>
+                    <p class="sentence-text">"저희는 선생님 속도에 맞춰 함께 가겠습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">13</span>
+                    <p class="sentence-text">"지금 마음이 조금 편해지셨다면 상담은 잘 마무리된 겁니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">14</span>
+                    <p class="sentence-text">"이후에도 마음이 바뀌면 언제든 말씀 주세요."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">15</span>
+                    <p class="sentence-text">"결정을 잘했다는 느낌보다, 믿고 맡길 수 있다는 느낌이 중요합니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">16</span>
+                    <p class="sentence-text">"선생님 입장에서 충분히 고민하신 선택입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">17</span>
+                    <p class="sentence-text">"이제부터는 함께 관리해 나가는 단계입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">18</span>
+                    <p class="sentence-text">"오늘 상담은 여기까지여도 괜찮습니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">19</span>
+                    <p class="sentence-text">"지금 느끼시는 안도감이 가장 중요한 결과입니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+                <div class="sentence-card" onclick="copyText(this)">
+                    <span class="card-number">20</span>
+                    <p class="sentence-text">"앞으로도 이 관계는 계속 이어집니다."</p>
+                    <div class="copy-hint">클릭하여 복사</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Quote -->
+        <div class="final-quote">
+            <div class="icon">🔑</div>
+            <h3>한 줄 정리</h3>
+            <p>
+                이 문장들은 '설득을 잘하기 위한 말'이 아니라<br>
+                환자의 마음이 스스로 정리되도록 돕는 언어입니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">문장이 복사되었습니다</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>덴탈클리닉파인더</h4>
+                <p style="font-size: 0.9rem; line-height: 1.8;">
+                    환자가 스스로 결정하고<br>
+                    신뢰가 남는 상담의 기준
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>강의</h4>
+                <ul>
+                    <li><a href="index.html#curriculum1">A01 - 설득의 종말</a></li>
+                    <li><a href="index.html#curriculum2">A02 - 성공적인 환자 상담</a></li>
+                    <li><a href="index.html#free">무료 강의</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>자료</h4>
+                <ul>
+                    <li><a href="checklist.html">상담 체크리스트</a></li>
+                    <li><a href="sentence-cards.html">상담 문장 카드</a></li>
+                    <li><a href="index.html#resources">교육용 가이드</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>강사진</h4>
+                <ul>
+                    <li><a href="index.html#instructors">심재우 CEO</a></li>
+                    <li><a href="index.html#instructors">임영일 CCO</a></li>
+                    <li><a href="index.html#instructors">이용식 CMO</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>지원</h4>
+                <ul>
+                    <li><a href="#">이용약관</a></li>
+                    <li><a href="#">개인정보처리방침</a></li>
+                    <li><a href="#">문의하기</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 덴탈클리닉파인더. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- AI상담튜터 (TalkerSDK) -->
+    <script src="https://chatbot-sdk.aitalker.co.kr/talker-sdk.umd.js"></script>
+    <script>
+        TalkerSDK.initializeTalkerSDK({ code: "biz018", position: "right" });
+    </script>
+
+    <script>
+        let copiedCount = parseInt(localStorage.getItem('copiedCount') || '0');
+        document.getElementById('copiedCount').textContent = copiedCount;
+
+        // Show specific stage
+        function showStage(stageNum) {
+            // Update buttons
+            document.querySelectorAll('.stage-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.stage-btn[data-stage="${stageNum}"]`).classList.add('active');
+
+            // Update sections
+            document.querySelectorAll('.stage-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelector(`.stage-section[data-stage="${stageNum}"]`).classList.add('active');
+
+            // Scroll to top of content
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+        }
+
+        // Copy text function
+        function copyText(card) {
+            const text = card.querySelector('.sentence-text').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Show copied state
+                card.classList.add('copied');
+                card.querySelector('.copy-hint').innerHTML = '<span class="copied-text">복사됨!</span>';
+
+                // Update count
+                copiedCount++;
+                document.getElementById('copiedCount').textContent = copiedCount;
+                localStorage.setItem('copiedCount', copiedCount);
+
+                // Show toast
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+
+                // Reset card after delay
+                setTimeout(() => {
+                    card.classList.remove('copied');
+                    card.querySelector('.copy-hint').textContent = '클릭하여 복사';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

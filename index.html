@@ -21,6 +21,11 @@
             --light: #f8f9fa;
             --gray: #6c757d;
             --white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
 
         body {
@@ -36,11 +41,11 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, rgba(26,95,122,0.95) 0%, rgba(21,152,149,0.95) 100%);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
             z-index: 1000;
-            padding: 0 5%;
+            padding: 0 4%;
         }
 
         .nav-container {
@@ -49,79 +54,94 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 56px;
         }
 
         .logo {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--primary);
+            color: white;
             text-decoration: none;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .logo span {
-            color: var(--secondary);
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo .academy-name {
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-left: 12px;
+            -webkit-text-fill-color: #ffd700;
+            background: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 10px;
+            gap: 4px;
         }
 
         .nav-menu a {
             text-decoration: none;
-            color: var(--dark);
-            padding: 10px 18px;
+            color: rgba(255,255,255,0.9);
+            padding: 8px 14px;
             border-radius: 8px;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             transition: all 0.3s;
         }
 
         .nav-menu a:hover {
-            background: var(--light);
-            color: var(--primary);
+            background: rgba(255,255,255,0.15);
+            color: white;
         }
 
         .nav-menu .btn-login {
-            background: var(--primary);
+            background: rgba(255,255,255,0.2);
             color: white;
         }
 
         .nav-menu .btn-login:hover {
-            background: var(--primary-dark);
+            background: rgba(255,255,255,0.3);
         }
 
         .nav-menu .btn-courses {
             background: linear-gradient(135deg, #ff6b6b, #feca57);
             color: white;
             font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
         }
 
         .nav-menu .btn-courses:hover {
-            background: linear-gradient(135deg, #ee5a5a, #f5b942);
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.5);
         }
 
         .mobile-menu-btn {
             display: none;
             background: none;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             cursor: pointer;
-            color: var(--dark);
+            color: white;
         }
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
+            min-height: 85vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #1a5f7a 0%, #134b61 50%, #0d3d4f 100%);
+            background: linear-gradient(135deg, #1a5f7a 0%, #134b61 40%, #667eea 100%);
             position: relative;
             overflow: hidden;
-            padding-top: 70px;
+            padding-top: 56px;
         }
 
         .hero::before {
@@ -145,14 +165,14 @@
 
         .hero-badge {
             display: inline-block;
-            background: rgba(87, 197, 182, 0.2);
-            color: var(--secondary);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
             margin-bottom: 30px;
-            border: 1px solid rgba(87, 197, 182, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.5);
         }
 
         .hero h1 {
@@ -172,6 +192,22 @@
             color: rgba(255,255,255,0.85);
             margin-bottom: 15px;
             font-weight: 400;
+        }
+
+        .hero-patent {
+            font-size: 1.05rem;
+            color: #ffd700;
+            max-width: 700px;
+            margin: 20px auto 15px;
+            padding: 12px 25px;
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: inline-block;
+        }
+
+        .hero-patent strong {
+            color: #fff;
         }
 
         .hero-desc {
@@ -224,69 +260,86 @@
 
         /* Section Common */
         section {
-            padding: 100px 5%;
+            padding: 50px 4%;
         }
 
         .section-header {
             text-align: center;
             max-width: 800px;
-            margin: 0 auto 60px;
+            margin: 0 auto 35px;
         }
 
         .section-header h2 {
-            font-size: 2.4rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 20px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .section-header p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--gray);
         }
 
         /* Problem Section */
         .problem-section {
-            background: var(--light);
+            background: linear-gradient(180deg, #f8f9fa 0%, #e8f4f8 100%);
         }
 
         .problem-cards {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .problem-card {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--accent);
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(102,126,234,0.1);
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, #667eea, #764ba2) 1;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102,126,234,0.2);
         }
 
         .problem-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
         .problem-card p {
             color: var(--gray);
-            font-size: 1rem;
+            font-size: 0.92rem;
+            line-height: 1.6;
         }
 
         /* Paradigm Section */
         .paradigm-section {
-            background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             color: white;
             text-align: center;
+            padding: 45px 4%;
         }
 
         .paradigm-section .section-header h2 {
             color: white;
+            background: linear-gradient(135deg, #57c5b6 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .paradigm-section .section-header p {
@@ -294,121 +347,131 @@
         }
 
         .paradigm-quote {
-            font-size: 2rem;
+            font-size: 1.7rem;
             font-weight: 700;
-            color: var(--secondary);
+            background: linear-gradient(135deg, #57c5b6 0%, #feca57 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             max-width: 800px;
-            margin: 0 auto 40px;
+            margin: 0 auto 25px;
             line-height: 1.5;
         }
 
         .paradigm-text {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: rgba(255,255,255,0.8);
             max-width: 700px;
             margin: 0 auto;
-            line-height: 1.9;
+            line-height: 1.8;
         }
 
         /* Framework Section */
         .framework-section {
-            background: white;
+            background: linear-gradient(180deg, white 0%, #f0f4ff 100%);
         }
 
         .framework-grid {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
         }
 
         .framework-card {
-            background: var(--light);
-            padding: 35px;
-            border-radius: 16px;
+            background: white;
+            padding: 24px 20px;
+            border-radius: 14px;
             text-align: center;
             transition: all 0.3s;
-            border: 2px solid transparent;
+            border: 1px solid rgba(102,126,234,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
         }
 
         .framework-card:hover {
             transform: translateY(-5px);
-            border-color: var(--secondary);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 35px rgba(102,126,234,0.15);
+            border-color: rgba(102,126,234,0.3);
         }
 
         .framework-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            border-radius: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 1.8rem;
+            margin: 0 auto 14px;
+            font-size: 1.5rem;
             color: white;
         }
 
+        .framework-card:nth-child(2) .framework-icon { background: var(--gradient-3); }
+        .framework-card:nth-child(3) .framework-icon { background: var(--gradient-4); }
+        .framework-card:nth-child(4) .framework-icon { background: var(--gradient-5); }
+        .framework-card:nth-child(5) .framework-icon { background: var(--gradient-2); }
+
         .framework-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             color: var(--dark);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
         .framework-card p {
             color: var(--gray);
-            font-size: 0.95rem;
+            font-size: 0.88rem;
+            line-height: 1.5;
         }
 
         /* Curriculum Section */
         .curriculum-section {
-            background: var(--light);
+            background: linear-gradient(180deg, #f8f9fa 0%, #eef2ff 100%);
         }
 
         .curriculum-tracks {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 24px;
         }
 
         .track {
             background: white;
-            border-radius: 24px;
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 40px rgba(102,126,234,0.1);
         }
 
         .track-header {
-            padding: 35px 40px;
+            padding: 22px 28px;
             color: white;
         }
 
         .track-1 .track-header {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
         .track-2 .track-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
         .track-header h3 {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .track-header p {
             opacity: 0.9;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
         }
 
         .track-content {
-            padding: 30px 40px;
+            padding: 20px 28px;
         }
 
         .track-list {
@@ -416,20 +479,20 @@
         }
 
         .track-list li {
-            padding: 14px 0;
-            border-bottom: 1px solid var(--light);
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 0.98rem;
+            gap: 10px;
+            font-size: 0.9rem;
             color: var(--dark);
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .track-list li:hover {
-            color: var(--primary);
-            padding-left: 10px;
+            color: #667eea;
+            padding-left: 8px;
         }
 
         .track-list li:last-child {
@@ -438,132 +501,146 @@
 
         .track-list li::before {
             content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--secondary);
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
             flex-shrink: 0;
         }
 
         /* Target Section */
         .target-section {
-            background: white;
+            background: linear-gradient(180deg, white 0%, #faf5ff 100%);
         }
 
         .target-cards {
             max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
         }
 
         .target-card {
-            background: linear-gradient(145deg, var(--light) 0%, white 100%);
-            padding: 45px 35px;
-            border-radius: 20px;
+            background: white;
+            padding: 30px 24px;
+            border-radius: 16px;
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(118,75,162,0.1);
             transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(118,75,162,0.06);
         }
 
         .target-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(118,75,162,0.15);
         }
 
         .target-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 25px;
-            font-size: 2rem;
+            margin: 0 auto 18px;
+            font-size: 1.6rem;
             color: white;
         }
 
+        .target-card:nth-child(2) .target-icon { background: var(--gradient-2); }
+        .target-card:nth-child(3) .target-icon { background: var(--gradient-3); }
+
         .target-card h3 {
-            font-size: 1.4rem;
+            font-size: 1.15rem;
             color: var(--dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: 700;
         }
 
         .target-card p {
             color: var(--gray);
-            font-size: 1rem;
-            line-height: 1.7;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         /* Usage Section */
         .usage-section {
-            background: var(--light);
+            background: linear-gradient(180deg, #f8f9fa 0%, #e8f8f5 100%);
         }
 
         .usage-grid {
             max-width: 1000px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
         }
 
         .usage-item {
             background: white;
-            padding: 30px;
-            border-radius: 16px;
+            padding: 22px 18px;
+            border-radius: 14px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(67,233,123,0.08);
+            border: 1px solid rgba(67,233,123,0.1);
+            transition: all 0.3s;
+        }
+
+        .usage-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(67,233,123,0.15);
         }
 
         .usage-item h4 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--dark);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
         .usage-item p {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
         }
 
         /* CTA Section */
         .cta-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             text-align: center;
             color: white;
-            padding: 100px 5%;
+            padding: 50px 4%;
         }
 
         .cta-section h2 {
-            font-size: 2.4rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .cta-section p {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             opacity: 0.9;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
         .cta-section .btn-primary {
             background: white;
-            color: var(--primary);
+            color: #667eea;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
         .cta-section .btn-primary:hover {
-            background: var(--light);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
         }
 
         /* Video List Page Styles */
         .page {
             display: none;
-            padding-top: 70px;
+            padding-top: 56px;
             min-height: 100vh;
         }
 
@@ -572,60 +649,60 @@
         }
 
         .page-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            padding: 60px 5%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 4%;
             color: white;
             text-align: center;
         }
 
         .page-header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .page-header p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
 
         .video-list-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 60px 5%;
+            padding: 40px 4%;
         }
 
         .video-item {
             background: white;
-            border-radius: 16px;
-            padding: 25px 30px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            gap: 16px;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.08);
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid transparent;
+            border: 1px solid rgba(102,126,234,0.1);
         }
 
         .video-item:hover {
-            transform: translateX(10px);
-            border-color: var(--secondary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateX(8px);
+            border-color: rgba(102,126,234,0.3);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.15);
         }
 
         .video-number {
-            width: 50px;
-            height: 50px;
-            background: var(--light);
-            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-1);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: var(--primary);
-            font-size: 1.2rem;
+            color: white;
+            font-size: 1rem;
             flex-shrink: 0;
         }
 
@@ -634,91 +711,93 @@
         }
 
         .video-info h3 {
-            font-size: 1.1rem;
+            font-size: 0.98rem;
             color: var(--dark);
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 600;
         }
 
         .video-info p {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.82rem;
         }
 
         .video-duration {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .video-badge {
-            background: var(--secondary);
+            background: var(--gradient-4);
             color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
             font-weight: 600;
         }
 
         .video-badge.locked {
-            background: #ff6b9d;
+            background: var(--gradient-2);
         }
 
         /* Free Lessons Section */
         .free-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 60px 5%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            padding: 40px 4%;
             color: white;
             text-align: center;
         }
 
         .free-section h2 {
-            font-size: 2rem;
-            margin-bottom: 40px;
+            font-size: 1.7rem;
+            margin-bottom: 28px;
         }
 
         .free-videos {
             max-width: 800px;
             margin: 0 auto;
             display: grid;
-            gap: 20px;
+            gap: 14px;
         }
 
         .free-video-card {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 25px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 14px;
+            padding: 18px 22px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             cursor: pointer;
             transition: all 0.3s;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
         .free-video-card:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.22);
             transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .play-icon {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #764ba2;
             flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .free-video-card h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-align: left;
         }
 
@@ -726,55 +805,72 @@
         .resources-grid {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 60px 5%;
+            padding: 40px 4%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
         }
 
         .resource-card {
             background: white;
-            border-radius: 16px;
-            padding: 35px;
+            border-radius: 14px;
+            padding: 26px 22px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 25px rgba(102,126,234,0.08);
             transition: all 0.3s;
             cursor: pointer;
+            border: 1px solid rgba(102,126,234,0.1);
         }
 
         .resource-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 35px rgba(102,126,234,0.15);
+            border-color: rgba(102,126,234,0.3);
         }
 
         .resource-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--light);
-            border-radius: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
+            margin: 0 auto 16px;
+            font-size: 1.6rem;
         }
 
+        .resource-card:nth-child(2) .resource-icon { background: var(--gradient-2); }
+        .resource-card:nth-child(3) .resource-icon { background: var(--gradient-3); }
+        .resource-card:nth-child(4) .resource-icon { background: var(--gradient-4); }
+        .resource-card:nth-child(5) .resource-icon { background: var(--gradient-5); }
+        .resource-card:nth-child(6) .resource-icon { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+
         .resource-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             color: var(--dark);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
         .resource-card p {
             color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
         }
 
         .resource-card .btn {
-            padding: 12px 24px;
-            font-size: 0.9rem;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .resource-card .btn:hover {
+            background: var(--primary);
+            color: white;
         }
 
         /* Login Page */
@@ -986,24 +1082,42 @@
 
         /* Footer */
         footer {
-            background: var(--dark);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: rgba(255,255,255,0.7);
-            padding: 60px 5% 30px;
+            padding: 40px 4% 20px;
         }
 
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 28px;
+            margin-bottom: 28px;
         }
 
         .footer-section h4 {
             color: white;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+        }
+
+        .footer-section h4 a {
+            background: linear-gradient(135deg, #57c5b6 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section h4 a:hover {
+            background: linear-gradient(135deg, #ffd700 0%, #ffeb3b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform: translateX(3px);
+            display: inline-block;
         }
 
         .footer-section ul {
@@ -1011,24 +1125,26 @@
         }
 
         .footer-section ul li {
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .footer-section ul a {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.65);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            font-size: 0.88rem;
         }
 
         .footer-section ul a:hover {
-            color: var(--secondary);
+            color: #4facfe;
+            padding-left: 5px;
         }
 
         .footer-bottom {
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.82rem;
         }
 
         /* Brand News Links */
@@ -1082,12 +1198,12 @@
             .nav-menu {
                 display: none;
                 position: absolute;
-                top: 70px;
+                top: 56px;
                 left: 0;
                 right: 0;
                 background: white;
                 flex-direction: column;
-                padding: 20px;
+                padding: 15px;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             }
 
@@ -1099,39 +1215,158 @@
                 display: block;
             }
 
+            .logo .academy-name {
+                display: none;
+            }
+
+            /* Hero Section - Compact */
+            .hero {
+                min-height: auto;
+                padding-top: 56px;
+                padding-bottom: 30px;
+            }
+
+            .hero-content {
+                padding: 30px 4%;
+            }
+
+            .hero-badge {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+                margin-bottom: 15px;
+            }
+
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+                line-height: 1.4;
             }
 
-            .hero-subtitle {
-                font-size: 1.1rem;
+            .hero-patent {
+                font-size: 0.85rem;
+                padding: 10px 18px;
+                margin: 15px auto 12px;
             }
 
-            .section-header h2 {
-                font-size: 1.8rem;
-            }
-
-            .curriculum-tracks {
-                grid-template-columns: 1fr;
-            }
-
-            .paradigm-quote {
-                font-size: 1.5rem;
-            }
-
-            .track-content {
-                padding: 20px 25px;
+            .hero-desc {
+                font-size: 0.95rem;
+                margin-bottom: 20px;
             }
 
             .hero-buttons {
                 flex-direction: column;
                 align-items: center;
+                gap: 10px;
             }
 
             .btn {
                 width: 100%;
-                max-width: 300px;
+                max-width: 280px;
                 text-align: center;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            /* Sections - Compact */
+            .section-header {
+                padding: 25px 4%;
+            }
+
+            .section-header h2 {
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+
+            .section-header p {
+                font-size: 0.9rem;
+            }
+
+            .problem-section,
+            .paradigm-section,
+            .cta-section {
+                padding: 30px 4%;
+            }
+
+            .paradigm-quote {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            .curriculum-tracks {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .track-content {
+                padding: 15px 20px;
+            }
+
+            .track-title {
+                font-size: 1.1rem;
+            }
+
+            .module-item {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            /* Resource Cards - Compact */
+            .resource-card {
+                padding: 20px 15px;
+            }
+
+            .resource-card h3 {
+                font-size: 1rem;
+            }
+
+            .resource-card p {
+                font-size: 0.85rem;
+                margin-bottom: 12px;
+            }
+
+            /* Page Headers - Compact */
+            .page-header {
+                padding: 25px 4%;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .page-header p {
+                font-size: 0.9rem;
+            }
+
+            /* Free Section - Compact */
+            .free-section {
+                padding: 30px 4%;
+            }
+
+            .free-section h2 {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+
+            .video-card {
+                padding: 15px;
+            }
+
+            /* Footer - Compact */
+            .footer {
+                padding: 30px 4% 20px;
+            }
+
+            .footer-grid {
+                gap: 20px;
+            }
+
+            .footer h4 {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+
+            .footer a, .footer p {
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -1140,7 +1375,7 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#home" class="logo">덴탈클리닉<span>파인더</span></a>
+            <a href="#home" class="logo">덴탈클리닉<span>파인더</span><span class="academy-name">치과 환자상담 AI 아카데미</span></a>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">&#9776;</button>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home">홈</a></li>
@@ -1158,9 +1393,9 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <span class="hero-badge">치과 환자상담 아카데미</span>
+                <span class="hero-badge">치과 환자상담 AI 아카데미</span>
                 <h1>설득의 시대는 끝났습니다<br><span class="highlight">이제는 환자의 결정을 돕는 상담의 시대입니다</span></h1>
-                <p class="hero-subtitle">덴탈클리닉파인더 환자상담 아카데미</p>
+                <p class="hero-patent">저작권과 특허로 등록된 <strong>'환자상담 5단계(공감-이해-결정권-가치-신뢰)'</strong> 기법에 기반한 검증된 솔루션!</p>
                 <p class="hero-desc">환자가 스스로 결정하고, 신뢰가 남는 상담 구조를 배웁니다</p>
                 <div class="hero-buttons">
                     <a href="#curriculum1" class="btn btn-primary">강의 커리큘럼 보기</a>
@@ -1730,37 +1965,37 @@
                 <div class="resource-icon">&#128203;</div>
                 <h3>상담 체크리스트</h3>
                 <p>5단계 상담 구조를 점검할 수 있는 실전 체크리스트</p>
-                <button class="btn btn-primary">다운로드</button>
+                <a href="checklist.html" class="btn btn-primary">바로가기</a>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128172;</div>
                 <h3>상담 문장 카드</h3>
                 <p>상황별로 사용할 수 있는 효과적인 상담 문장 모음</p>
-                <button class="btn btn-primary">다운로드</button>
+                <a href="sentence-cards.html" class="btn btn-primary">바로가기</a>
             </div>
             <div class="resource-card">
-                <div class="resource-icon">&#128214;</div>
-                <h3>교육용 가이드</h3>
-                <p>병원 내부 교육에 활용할 수 있는 종합 가이드</p>
-                <button class="btn btn-primary">다운로드</button>
+                <div class="resource-icon">&#128218;</div>
+                <h3>사용자 가이드북</h3>
+                <p>아카데미 200% 활용을 위한 상세 가이드</p>
+                <a href="guidebook.html" class="btn btn-primary">바로가기</a>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#127891;</div>
                 <h3>QLRCQ 요약본</h3>
                 <p>QLRCQ 기법의 핵심을 정리한 한 장 요약</p>
-                <button class="btn btn-primary">다운로드</button>
+                <a href="qlrcq.html" class="btn btn-primary">바로가기</a>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128187;</div>
                 <h3>AI 환자상담튜터</h3>
                 <p>실전 롤플레이로 상담 스킬을 연습할 수 있는 AI 튜터</p>
-                <button class="btn btn-primary">바로가기</button>
+                <a href="https://aitalker.co.kr/biz018" target="_blank" class="btn btn-primary">바로가기</a>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128196;</div>
                 <h3>상담 시나리오</h3>
                 <p>다양한 상황별 상담 시나리오 예시</p>
-                <button class="btn btn-primary">다운로드</button>
+                <a href="scenarios.html" class="btn btn-primary">바로가기</a>
             </div>
         </div>
     </div>
@@ -1879,14 +2114,14 @@
             <p>덴탈클리닉파인더 환자상담 아카데미를 이끄는 전문가들</p>
         </div>
         <div style="max-width: 1200px; margin: 0 auto; padding: 60px 5%;">
-            <!-- 심재우 대표 -->
+            <!-- 심재우 CEO -->
             <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 24px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
                 <div style="flex: 0 0 250px;">
-                    <img src="https://jaiwshim-project.github.io/dental_platform/images/coach-shim.jpg" alt="심재우 대표" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                    <img src="https://jaiwshim-project.github.io/dental_platform/images/coach-shim.jpg" alt="심재우 CEO" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
                 </div>
                 <div style="flex: 1; min-width: 300px;">
                     <div style="display: inline-block; background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 15px;">CEO</div>
-                    <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 10px;">심재우 대표</h2>
+                    <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 10px;">심재우 CEO</h2>
                     <p style="color: var(--primary); font-weight: 600; margin-bottom: 20px;">DentalClinicFinder CEO | 치과 경영 컨설팅 전문가</p>
                     <p style="color: var(--gray); line-height: 1.8; margin-bottom: 25px; font-size: 1.05rem;">
                         "수많은 치과의 디지털 전환과 신뢰 시스템 구축을 성공적으로 이끌어온 경험을 바탕으로,<br>
@@ -1929,14 +2164,14 @@
                 </div>
             </div>
 
-            <!-- 임영일 원장 -->
+            <!-- 임영일 CCO -->
             <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 24px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
                 <div style="flex: 0 0 250px;">
-                    <img src="https://jaiwshim-project.github.io/dental_platform/AI%EA%B0%A4%EB%9F%AC%EB%A6%AC/image-removebg-preview%20(12).png" alt="임영일 원장" style="width: 100%; border-radius: 16px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px;">
+                    <img src="https://jaiwshim-project.github.io/dental_platform/AI%EA%B0%A4%EB%9F%AC%EB%A6%AC/image-removebg-preview%20(12).png" alt="임영일 CCO" style="width: 100%; border-radius: 16px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px;">
                 </div>
                 <div style="flex: 1; min-width: 300px;">
                     <div style="display: inline-block; background: var(--accent); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 15px;">CCO</div>
-                    <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 10px;">임영일 원장</h2>
+                    <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 10px;">임영일 CCO</h2>
                     <p style="color: var(--primary); font-weight: 600; margin-bottom: 20px;">화이트서울치과 대표원장 | DentalClinicFinder CCO</p>
                     <p style="color: var(--gray); line-height: 1.8; margin-bottom: 25px; font-size: 1.05rem;">
                         "자연치아 보존 철학을 바탕으로 환자 중심의 진료를 실천하는 치과보존과 전문의로서,<br>
@@ -2016,7 +2251,7 @@
                         </h4>
                         <div style="display: flex; flex-wrap: wrap; gap: 12px;">
                             <a href="https://www.ibrandnews.com/news/articleView.html?idxno=11506" target="_blank" class="news-link red">
-                                <span class="news-icon">📰</span> 세 리더, 하나의 비전 - 이용식 CMO가 심재우 대표와 '신뢰'로 치과 산업의 판도를 바꾸는 방법
+                                <span class="news-icon">📰</span> 세 리더, 하나의 비전 - 이용식 CMO가 심재우 CEO와 '신뢰'로 치과 산업의 판도를 바꾸는 방법
                             </a>
                         </div>
                     </div>
@@ -2065,26 +2300,26 @@
                 </p>
             </div>
             <div class="footer-section">
-                <h4>강의</h4>
+                <h4><a href="#courses">강의</a></h4>
                 <ul>
-                    <li><a href="#curriculum1">설득의 종말</a></li>
-                    <li><a href="#curriculum2">성공적인 환자 상담</a></li>
+                    <li><a href="#curriculum1">A01 - 설득의 종말</a></li>
+                    <li><a href="#curriculum2">A02 - 성공적인 환자 상담</a></li>
                     <li><a href="#free">무료 강의</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>자료</h4>
+                <h4><a href="#resources">자료</a></h4>
                 <ul>
-                    <li><a href="#resources">상담 체크리스트</a></li>
-                    <li><a href="#resources">상담 문장 카드</a></li>
-                    <li><a href="#resources">교육용 가이드</a></li>
+                    <li><a href="checklist.html">상담 체크리스트</a></li>
+                    <li><a href="sentence-cards.html">상담 문장 카드</a></li>
+                    <li><a href="guidebook.html">사용자 가이드북</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>강사진</h4>
+                <h4><a href="#instructors">강사진</a></h4>
                 <ul>
-                    <li><a href="#instructors">심재우 대표</a></li>
-                    <li><a href="#instructors">임영일 원장</a></li>
+                    <li><a href="#instructors">심재우 CEO</a></li>
+                    <li><a href="#instructors">임영일 CCO</a></li>
                     <li><a href="#instructors">이용식 CMO</a></li>
                 </ul>
             </div>
@@ -2399,6 +2634,12 @@
                 navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
             }
         });
+    </script>
+
+    <!-- AI상담튜터 (TalkerSDK) -->
+    <script src="https://chatbot-sdk.aitalker.co.kr/talker-sdk.umd.js"></script>
+    <script>
+        TalkerSDK.initializeTalkerSDK({ code: "biz018", position: "right" });
     </script>
 </body>
 </html>
