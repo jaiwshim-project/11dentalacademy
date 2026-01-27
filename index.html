@@ -3139,5 +3139,53 @@
     <script>
         TalkerSDK.initializeTalkerSDK({ code: "biz018", position: "right" });
     </script>
+
+    <!-- 화이트서울치과 플로팅 버튼 -->
+    <style>
+        .floating-btn-left {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #1a5f7a 0%, #159895 100%);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 20px rgba(26, 95, 122, 0.4);
+            transition: all 0.3s ease;
+            animation: floatPulse 2s ease-in-out infinite;
+        }
+        .floating-btn-left:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(26, 95, 122, 0.5);
+        }
+        .floating-btn-left svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        @keyframes floatPulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @media (max-width: 768px) {
+            .floating-btn-left {
+                bottom: 20px;
+                left: 20px;
+                padding: 12px 18px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <a href="https://jaiwshim-project.github.io/dental_platform/" target="_blank" class="floating-btn-left">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        화이트서울치과
+    </a>
 </body>
 </html>
