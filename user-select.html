@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 유형 선택 | 덴탈클리닉파인더 환자상담 AI 아카데미</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo .academy-name {
+            display: block;
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 5px;
+            -webkit-text-fill-color: #ffd700;
+            background: none;
+        }
+
+        .selection-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .selection-card h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .selection-card p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .option-card {
+            flex: 1;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 3px solid transparent;
+            border-radius: 16px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .option-card.free:hover {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+
+        .option-card.paid:hover {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+        }
+
+        .option-card.free.selected {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .option-card.paid.selected {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .option-card.selected .option-icon,
+        .option-card.selected .option-title,
+        .option-card.selected .option-desc {
+            color: white;
+        }
+
+        .option-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .option-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .option-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .option-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .option-card.free .option-badge {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .option-card.paid .option-badge {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .option-card.selected .option-badge {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .confirm-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        .features-list {
+            text-align: left;
+            margin-top: 12px;
+            padding-left: 5px;
+        }
+
+        .features-list li {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 4px;
+            list-style: none;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+        }
+
+        .option-card.paid .features-list li::before {
+            color: #8b5cf6;
+        }
+
+        .option-card.selected .features-list li {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .option-card.selected .features-list li::before {
+            color: rgba(255,255,255,0.9);
+        }
+
+        @media (max-width: 600px) {
+            .options {
+                flex-direction: column;
+            }
+
+            .selection-card {
+                padding: 30px 20px;
+            }
+
+            .selection-card h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <a href="index.html" class="logo">
+                덴탈클리닉<span>파인더</span>
+                <span class="academy-name">치과 환자상담 AI 아카데미</span>
+            </a>
+        </div>
+
+        <div class="selection-card">
+            <h1>사용자 유형을 선택해주세요</h1>
+            <p>선택하신 유형에 따라 맞춤 콘텐츠가 제공됩니다</p>
+
+            <div class="options">
+                <div class="option-card free" onclick="selectOption('free')">
+                    <span class="option-badge">무료</span>
+                    <span class="option-icon">🎁</span>
+                    <div class="option-title">무료 사용자</div>
+                    <div class="option-desc">무료 콘텐츠만 이용합니다</div>
+                    <ul class="features-list">
+                        <li>무료 강의 4개 시청</li>
+                        <li>자료실 이용 불가</li>
+                        <li>AI 튜터 체험</li>
+                    </ul>
+                </div>
+
+                <div class="option-card paid" onclick="selectOption('paid')">
+                    <span class="option-badge">프리미엄</span>
+                    <span class="option-icon">👑</span>
+                    <div class="option-title">유료 사용자</div>
+                    <div class="option-desc">전체 콘텐츠를 이용합니다</div>
+                    <ul class="features-list">
+                        <li>전체 강의 28개 시청</li>
+                        <li>자료실 전체 열람</li>
+                        <li>AI 튜터 무제한</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmSelection()">
+                선택 후 계속하기
+            </button>
+        </div>
+
+        <a href="#" onclick="resetSelection(); return false;" class="back-link">선택 초기화</a>
+    </div>
+
+    <script>
+        let selectedType = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const destination = urlParams.get('dest') || 'index.html#home';
+
+        function selectOption(type) {
+            selectedType = type;
+
+            // Update UI
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`.option-card.${type}`).classList.add('selected');
+
+            // Enable button
+            document.getElementById('confirmBtn').disabled = false;
+            document.getElementById('confirmBtn').textContent =
+                type === 'free' ? '무료 사용자로 계속하기' : '유료 사용자로 계속하기';
+        }
+
+        function confirmSelection() {
+            if (!selectedType) return;
+
+            if (selectedType === 'free') {
+                // 무료 사용자: 바로 메인 페이지로 이동
+                localStorage.setItem('userType', 'free');
+                sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+
+                if (destination.startsWith('#')) {
+                    window.location.href = 'index.html' + destination;
+                } else if (destination.startsWith('http')) {
+                    window.open(destination, '_blank');
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = destination;
+                }
+            } else {
+                // 유료 사용자: 유료 사용자 선택/등록 페이지로 이동
+                window.location.href = 'paid-user-select.html?dest=' + encodeURIComponent(destination);
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        window.onload = function() {
+            // 이전 선택 표시 제거
+        };
+
+        // 사용자 유형 초기화 함수
+        function resetSelection() {
+            localStorage.removeItem('userType');
+            sessionStorage.removeItem('userTypeSelectedThisSession');
+            selectedType = null;
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('confirmBtn').disabled = true;
+            document.getElementById('confirmBtn').textContent = '선택 후 계속하기';
+        }
+    </script>
+</body>
+</html>

@@ -2,8 +2,14 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <script>
+        // 이 세션에서 사용자 유형을 선택했는지 확인
+        if (sessionStorage.getItem('userTypeSelectedThisSession') !== 'true') {
+            window.location.replace('user-select.html?dest=' + encodeURIComponent(window.location.hash || '#home'));
+        }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>덴탈클리닉파인더 환자상담 아카데미</title>
+    <title>덴탈클리닉파인더 환자상담 AI 아카데미</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -85,16 +91,16 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 4px;
+            gap: 2px;
         }
 
         .nav-menu a {
             text-decoration: none;
             color: rgba(255,255,255,0.9);
-            padding: 8px 14px;
+            padding: 6px 10px;
             border-radius: 8px;
             font-weight: 500;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             transition: all 0.3s;
         }
 
@@ -122,6 +128,18 @@
         .nav-menu .btn-courses:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255,107,107,0.5);
+        }
+
+        .nav-menu .btn-dashboard {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+        }
+
+        .nav-menu .btn-dashboard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.5);
         }
 
         .mobile-menu-btn {
@@ -656,26 +674,26 @@
 
         .page-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 4%;
+            padding: 25px 4%;
             color: white;
             text-align: center;
         }
 
         .page-header h1 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .page-header p {
-            font-size: 1rem;
+            font-size: 0.9rem;
             opacity: 0.9;
         }
 
         .video-list-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 40px 4%;
+            padding: 25px 4%;
         }
 
         .video-item {
@@ -809,66 +827,86 @@
 
         /* Resources Page */
         .resources-grid {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 40px 4%;
+            padding: 25px 4%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
         }
 
         .resource-card {
             background: white;
-            border-radius: 14px;
-            padding: 26px 22px;
+            border-radius: 10px;
+            padding: 16px 14px;
             text-align: center;
-            box-shadow: 0 6px 25px rgba(102,126,234,0.08);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.08);
             transition: all 0.3s;
             cursor: pointer;
             border: 1px solid rgba(102,126,234,0.1);
         }
 
         .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(102,126,234,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.15);
             border-color: rgba(102,126,234,0.3);
         }
 
         .resource-icon {
-            width: 56px;
-            height: 56px;
-            background: var(--gradient-1);
-            border-radius: 14px;
+            width: 44px;
+            height: 44px;
+            background: #f0f4f8;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 1.6rem;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
         }
 
-        .resource-card:nth-child(2) .resource-icon { background: var(--gradient-2); }
-        .resource-card:nth-child(3) .resource-icon { background: var(--gradient-3); }
-        .resource-card:nth-child(4) .resource-icon { background: var(--gradient-4); }
-        .resource-card:nth-child(5) .resource-icon { background: var(--gradient-5); }
-        .resource-card:nth-child(6) .resource-icon { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        /* 카드 배경색 */
+        .resource-card:nth-child(1) { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+        .resource-card:nth-child(2) { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); }
+        .resource-card:nth-child(3) { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
+        .resource-card:nth-child(4) { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); }
+        .resource-card:nth-child(5) { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); }
+        .resource-card:nth-child(6) { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); }
+        .resource-card:nth-child(7) { background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%); }
+        .resource-card:nth-child(8) { background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%); }
+        .resource-card:nth-child(9) { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); }
+        .resource-card:nth-child(10) { background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); }
+        .resource-card:nth-child(11) { background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%); }
+
+        /* 아이콘 배경색 */
+        .resource-card:nth-child(1) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(2) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(3) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(4) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(5) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(6) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(7) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(8) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(9) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(10) .resource-icon { background: rgba(255,255,255,0.8); }
+        .resource-card:nth-child(11) .resource-icon { background: rgba(255,255,255,0.8); }
 
         .resource-card h3 {
-            font-size: 1.05rem;
+            font-size: 0.9rem;
             color: var(--dark);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
         }
 
         .resource-card p {
             color: var(--gray);
-            font-size: 0.85rem;
-            margin-bottom: 16px;
-            line-height: 1.5;
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
         }
 
         .resource-card .btn {
-            padding: 10px 20px;
-            font-size: 0.85rem;
+            padding: 7px 14px;
+            font-size: 0.75rem;
             border: 2px solid var(--primary);
             background: transparent;
             color: var(--primary);
@@ -885,7 +923,7 @@
             margin: 60px auto;
             padding: 50px;
             background: white;
-            border-radius: 24px;
+            border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.1);
         }
 
@@ -961,7 +999,7 @@
 
         .modal {
             background: white;
-            border-radius: 24px;
+            border-radius: 16px;
             max-width: 800px;
             width: 90%;
             max-height: 90vh;
@@ -1151,6 +1189,24 @@
             padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.08);
             font-size: 0.82rem;
+        }
+
+        .footer-bottom .admin-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .footer-bottom .admin-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
         }
 
         /* Brand News Links */
@@ -1385,16 +1441,17 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#home" class="logo">덴탈클리닉<span>파인더</span><span class="academy-name">치과 환자상담 AI 아카데미</span></a>
+            <a href="#home" class="logo" onclick="return checkUserAndNavigate('#home', event)">덴탈클리닉<span>파인더</span><span class="academy-name">치과 환자상담 AI 아카데미</span></a>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()">&#9776;</button>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#home">홈</a></li>
-                <li><a href="#about">강의 소개</a></li>
-                <li><a href="#course-guide">과정 안내</a></li>
-                <li><a href="#courses" class="btn-courses">강의 영상</a></li>
-                <li><a href="#free">무료 강의</a></li>
-                <li><a href="#resources">자료실</a></li>
-                <li><a href="#instructors">강사 소개</a></li>
+                <li><a href="#home" onclick="return checkUserAndNavigate('#home', event)">홈</a></li>
+                <li><a href="#about" onclick="return checkUserAndNavigate('#about', event)">강의 소개</a></li>
+                <li><a href="#course-guide" onclick="return checkUserAndNavigate('#course-guide', event)">과정 안내</a></li>
+                <li><a href="#courses" class="btn-courses" onclick="return checkUserAndNavigate('#courses', event)">강의 영상</a></li>
+                <li><a href="#free" onclick="return checkUserAndNavigate('#free', event)">무료 강의</a></li>
+                <li><a href="#resources" onclick="return checkUserAndNavigate('#resources', event)">자료실</a></li>
+                <li><a href="#instructors" onclick="return checkUserAndNavigate('#instructors', event)">강사 소개</a></li>
+                <li><a href="paid-user-select.html" class="btn-dashboard">내 대시보드</a></li>
             </ul>
         </div>
     </nav>
@@ -1409,8 +1466,8 @@
                 <p class="hero-patent">저작권과 특허로 등록된 <strong>'환자상담 5단계(공감-이해-결정권-가치-신뢰)'</strong> 기법에 기반한 검증된 솔루션!</p>
                 <p class="hero-desc">환자가 스스로 결정하고, 신뢰가 남는 상담 구조를 배웁니다</p>
                 <div class="hero-buttons">
-                    <a href="#curriculum1" class="btn btn-primary">강의 커리큘럼 보기</a>
-                    <a href="#free" class="btn btn-outline">무료 영상 먼저 보기</a>
+                    <a href="#curriculum1" class="btn btn-primary" onclick="return checkUserAndNavigate('#curriculum1', event)">강의 커리큘럼 보기</a>
+                    <a href="#free" class="btn btn-outline" onclick="return checkUserAndNavigate('#free', event)">무료 영상 먼저 보기</a>
                 </div>
                 <div class="hero-video">
                     <iframe
@@ -1509,7 +1566,7 @@
                             <li>The QLRCQ Cycle: 설득을 대체하는 의사결정 구조</li>
                             <li>QLRCQ: 질문을 멈추지 않는 의사결정 구조</li>
                         </ul>
-                        <a href="#curriculum1" class="btn btn-primary" style="margin-top: 20px;">전체 커리큘럼 보기</a>
+                        <a href="#curriculum1" class="btn btn-primary" style="margin-top: 20px;" onclick="return checkUserAndNavigate('#curriculum1', event)">전체 커리큘럼 보기</a>
                     </div>
                 </div>
                 <div class="track track-2">
@@ -1525,7 +1582,7 @@
                             <li>다음 단계로 넘어가는 단 하나의 조건</li>
                             <li>환자의 여정을 함께하는 신뢰받는 안내자</li>
                         </ul>
-                        <a href="#curriculum2" class="btn btn-primary" style="margin-top: 20px;">전체 커리큘럼 보기</a>
+                        <a href="#curriculum2" class="btn btn-primary" style="margin-top: 20px;" onclick="return checkUserAndNavigate('#curriculum2', event)">전체 커리큘럼 보기</a>
                     </div>
                 </div>
             </div>
@@ -1584,10 +1641,10 @@
         <!-- CTA Section -->
         <section class="cta-section">
             <h2>이제, 설득하지 마십시오<br>환자의 결정을 도와주십시오</h2>
-            <p>덴탈클리닉파인더 환자상담 아카데미와 함께 시작하세요</p>
+            <p>덴탈클리닉파인더 환자상담 AI 아카데미와 함께 시작하세요</p>
             <div class="hero-buttons">
-                <a href="#curriculum1" class="btn btn-primary">전체 강의 보러 가기</a>
-                <a href="#free" class="btn btn-outline">무료 맛보기 강의 보기</a>
+                <a href="#curriculum1" class="btn btn-primary" onclick="return checkUserAndNavigate('#curriculum1', event)">전체 강의 보러 가기</a>
+                <a href="#free" class="btn btn-outline" onclick="return checkUserAndNavigate('#free', event)">무료 맛보기 강의 보기</a>
             </div>
         </section>
     </div>
@@ -1601,7 +1658,7 @@
         <section style="max-width: 800px; margin: 0 auto; padding: 60px 5%;">
             <h2 style="margin-bottom: 30px; color: var(--dark);">강의 철학</h2>
             <p style="font-size: 1.1rem; color: var(--gray); line-height: 2; margin-bottom: 40px;">
-                덴탈클리닉파인더 환자상담 아카데미는 단순한 상담 기술을 가르치지 않습니다.
+                덴탈클리닉파인더 환자상담 AI 아카데미는 단순한 상담 기술을 가르치지 않습니다.
                 우리는 환자와의 관계에서 '설득'이라는 패러다임이 더 이상 유효하지 않다고 믿습니다.
             </p>
 
@@ -1621,7 +1678,7 @@
             </p>
 
             <div style="text-align: center; margin-top: 60px;">
-                <a href="#curriculum1" class="btn btn-primary">커리큘럼 살펴보기</a>
+                <a href="#curriculum1" class="btn btn-primary" onclick="return checkUserAndNavigate('#curriculum1', event)">커리큘럼 살펴보기</a>
             </div>
         </section>
     </div>
@@ -1675,7 +1732,7 @@
 
             <!-- 1단계: 기본과정 -->
             <section style="margin-bottom: 70px;">
-                <div style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
+                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
                     <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 35px 40px; color: white;">
                         <div style="display: inline-block; background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; margin-bottom: 15px;">1단계</div>
                         <h3 style="font-size: 1.8rem; margin-bottom: 10px;">기본과정 (Foundation Course)</h3>
@@ -1787,7 +1844,7 @@
 
             <!-- 2단계: 심화과정 -->
             <section style="margin-bottom: 70px;">
-                <div style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 15px 50px rgba(108,92,231,0.15);">
+                <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(108,92,231,0.15);">
                     <div style="background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); padding: 35px 40px; color: white;">
                         <div style="display: inline-block; background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; margin-bottom: 15px;">2단계</div>
                         <h3 style="font-size: 1.8rem; margin-bottom: 10px;">심화과정 (Advanced Coaching Course)</h3>
@@ -1937,15 +1994,15 @@
             </section>
 
             <!-- CTA -->
-            <section style="text-align: center; padding: 50px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 24px; color: white;">
+            <section style="text-align: center; padding: 50px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white;">
                 <h2 style="font-size: 1.6rem; margin-bottom: 15px;">지금 바로 시작하세요</h2>
                 <p style="opacity: 0.9; margin-bottom: 30px; line-height: 1.8;">
                     기본과정은 '중급 상담 역량을 검증하는 과정'이고,<br>
                     심화과정은 '고급 상담 역량을 완성하는 과정'입니다.
                 </p>
                 <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                    <a href="#curriculum1" class="btn btn-primary" style="background: white; color: #667eea; padding: 15px 35px; font-weight: 700;">기본과정 커리큘럼</a>
-                    <a href="#free" class="btn btn-outline" style="border-color: white; color: white; padding: 15px 35px;">무료 강의 먼저 보기</a>
+                    <a href="#curriculum1" class="btn btn-primary" style="background: white; color: #667eea; padding: 15px 35px; font-weight: 700;" onclick="return checkUserAndNavigate('#curriculum1', event)">기본과정 커리큘럼</a>
+                    <a href="#free" class="btn btn-outline" style="border-color: white; color: white; padding: 15px 35px;" onclick="return checkUserAndNavigate('#free', event)">무료 강의 먼저 보기</a>
                 </div>
             </section>
         </div>
@@ -1972,7 +2029,7 @@
             </div>
         </div>
         <div class="video-list-container">
-            <div class="video-item" onclick="openModal('설득의 종말')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('설득의 종말', event)">
                 <div class="video-number">01</div>
                 <div class="video-info">
                     <h3>설득의 종말</h3>
@@ -1980,7 +2037,7 @@
                 </div>
                 <span class="video-badge">무료</span>
             </div>
-            <div class="video-item" onclick="openModal('설득, 왜 항상 어려울까?')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('설득, 왜 항상 어려울까?', event)">
                 <div class="video-number">02</div>
                 <div class="video-info">
                     <h3>설득, 왜 항상 어려울까?</h3>
@@ -1988,7 +2045,7 @@
                 </div>
                 <span class="video-badge">무료</span>
             </div>
-            <div class="video-item" onclick="openModal(&quot;사람은 '논리'가 아닌 '안전'으로 결정한다&quot;)">
+            <div class="video-item" onclick="return checkUserAndOpenModal(&quot;사람은 '논리'가 아닌 '안전'으로 결정한다&quot;, event)">
                 <div class="video-number">03</div>
                 <div class="video-info">
                     <h3>사람은 '논리'가 아닌 '안전'으로 결정한다</h3>
@@ -1996,7 +2053,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal(&quot;'설득'이 시작되는 순간, '방어'가 시작된다&quot;)">
+            <div class="video-item" onclick="return checkUserAndOpenModal(&quot;'설득'이 시작되는 순간, '방어'가 시작된다&quot;, event)">
                 <div class="video-number">04</div>
                 <div class="video-info">
                     <h3>'설득'이 시작되는 순간, '방어'가 시작된다</h3>
@@ -2004,7 +2061,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal(&quot;문제는 '정보 부족'이 아니라 '기준 부재'다&quot;)">
+            <div class="video-item" onclick="return checkUserAndOpenModal(&quot;문제는 '정보 부족'이 아니라 '기준 부재'다&quot;, event)">
                 <div class="video-number">05</div>
                 <div class="video-info">
                     <h3>문제는 '정보 부족'이 아니라 '기준 부재'다</h3>
@@ -2012,7 +2069,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal(&quot;설득은 '말의 기술'이 아닌 '질문의 구조'다&quot;)">
+            <div class="video-item" onclick="return checkUserAndOpenModal(&quot;설득은 '말의 기술'이 아닌 '질문의 구조'다&quot;, event)">
                 <div class="video-number">06</div>
                 <div class="video-info">
                     <h3>설득은 '말의 기술'이 아닌 '질문의 구조'다</h3>
@@ -2020,7 +2077,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('The QLRCQ Cycle: 설득을 대체하는 의사결정 구조')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('The QLRCQ Cycle: 설득을 대체하는 의사결정 구조', event)">
                 <div class="video-number">07</div>
                 <div class="video-info">
                     <h3>The QLRCQ Cycle: 설득을 대체하는 의사결정 구조</h3>
@@ -2028,7 +2085,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal(&quot;QLRCQ의 엔진: 상대의 언어로 '확인'하라&quot;)">
+            <div class="video-item" onclick="return checkUserAndOpenModal(&quot;QLRCQ의 엔진: 상대의 언어로 '확인'하라&quot;, event)">
                 <div class="video-number">08</div>
                 <div class="video-info">
                     <h3>QLRCQ의 엔진: 상대의 언어로 '확인'하라</h3>
@@ -2036,7 +2093,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('실전 사례: QLRCQ 사이클은 어떻게 작동하는가')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('실전 사례: QLRCQ 사이클은 어떻게 작동하는가', event)">
                 <div class="video-number">09</div>
                 <div class="video-info">
                     <h3>실전 사례: QLRCQ 사이클은 어떻게 작동하는가</h3>
@@ -2044,7 +2101,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('사례 1 & 2: 필요성을 못 느끼는 환자 / 결정을 미루는 환자')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('사례 1 & 2: 필요성을 못 느끼는 환자 / 결정을 미루는 환자', event)">
                 <div class="video-number">10</div>
                 <div class="video-info">
                     <h3>사례 1 & 2: 필요성을 못 느끼는 환자 / 결정을 미루는 환자</h3>
@@ -2052,7 +2109,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('사례 3 & 4: 과거 경험으로 방어적인 환자 / 자기 기준이 없는 환자')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('사례 3 & 4: 과거 경험으로 방어적인 환자 / 자기 기준이 없는 환자', event)">
                 <div class="video-number">11</div>
                 <div class="video-info">
                     <h3>사례 3 & 4: 과거 경험으로 방어적인 환자 / 자기 기준이 없는 환자</h3>
@@ -2060,7 +2117,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('사례 5 - 비용에서 멈춘 환자 / 모든 사례의 단 하나의 공통점')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('사례 5 - 비용에서 멈춘 환자 / 모든 사례의 단 하나의 공통점', event)">
                 <div class="video-number">12</div>
                 <div class="video-info">
                     <h3>사례 5 - 비용에서 멈춘 환자 / 모든 사례의 단 하나의 공통점</h3>
@@ -2068,7 +2125,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('&quot;설득당했다&quot; vs &quot;내가 정리했다&quot;')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('&quot;설득당했다&quot; vs &quot;내가 정리했다&quot;', event)">
                 <div class="video-number">13</div>
                 <div class="video-info">
                     <h3>"설득당했다" vs "내가 정리했다"</h3>
@@ -2076,7 +2133,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('QLRCQ: 질문을 멈추지 않는 의사결정 구조')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('QLRCQ: 질문을 멈추지 않는 의사결정 구조', event)">
                 <div class="video-number">14</div>
                 <div class="video-info">
                     <h3>QLRCQ: 질문을 멈추지 않는 의사결정 구조</h3>
@@ -2110,7 +2167,7 @@
         <div class="video-list-container">
             <!-- 섹션 1: 통합 프레임워크 개요 -->
             <h3 style="margin: 30px 0 20px; color: var(--primary);">1. 통합 프레임워크 개요</h3>
-            <div class="video-item" onclick="openModal('성공적인 환자 상담의 완성')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('성공적인 환자 상담의 완성', event)">
                 <div class="video-number">01</div>
                 <div class="video-info">
                     <h3>성공적인 환자 상담의 완성</h3>
@@ -2118,7 +2175,7 @@
                 </div>
                 <span class="video-badge">무료</span>
             </div>
-            <div class="video-item" onclick="openModal('환자의 마음은 어떻게 움직이는가')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('환자의 마음은 어떻게 움직이는가', event)">
                 <div class="video-number">02</div>
                 <div class="video-info">
                     <h3>환자의 마음은 어떻게 움직이는가</h3>
@@ -2126,7 +2183,7 @@
                 </div>
                 <span class="video-badge">무료</span>
             </div>
-            <div class="video-item" onclick="openModal('두 가지 핵심 요소의 결합')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('두 가지 핵심 요소의 결합', event)">
                 <div class="video-number">03</div>
                 <div class="video-info">
                     <h3>두 가지 핵심 요소의 결합</h3>
@@ -2137,7 +2194,7 @@
 
             <!-- 섹션 2: 지도와 엔진 -->
             <h3 style="margin: 40px 0 20px; color: var(--primary);">2. 지도와 엔진</h3>
-            <div class="video-item" onclick="openModal('상담의 지도: 5단계 여정')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('상담의 지도: 5단계 여정', event)">
                 <div class="video-number">04</div>
                 <div class="video-info">
                     <h3>상담의 지도: 5단계 여정</h3>
@@ -2145,7 +2202,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('마음의 엔진: QLRCQ 반복 메커니즘')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('마음의 엔진: QLRCQ 반복 메커니즘', event)">
                 <div class="video-number">05</div>
                 <div class="video-info">
                     <h3>마음의 엔진: QLRCQ 반복 메커니즘</h3>
@@ -2153,7 +2210,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('다음 단계로 넘어가는 단 하나의 조건')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('다음 단계로 넘어가는 단 하나의 조건', event)">
                 <div class="video-number">06</div>
                 <div class="video-info">
                     <h3>다음 단계로 넘어가는 단 하나의 조건</h3>
@@ -2161,7 +2218,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('실전 통합 프레임: 단계별 엔진 가동법')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('실전 통합 프레임: 단계별 엔진 가동법', event)">
                 <div class="video-number">07</div>
                 <div class="video-info">
                     <h3>실전 통합 프레임: 단계별 엔진 가동법</h3>
@@ -2172,7 +2229,7 @@
 
             <!-- 섹션 3: 5단계 × QLRCQ 실전 적용 -->
             <h3 style="margin: 40px 0 20px; color: var(--primary);">3. 5단계 × QLRCQ 실전 적용</h3>
-            <div class="video-item" onclick="openModal('STAGE 1: 공감 × QLRCQ')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('STAGE 1: 공감 × QLRCQ', event)">
                 <div class="video-number">08</div>
                 <div class="video-info">
                     <h3>STAGE 1: 공감 × QLRCQ</h3>
@@ -2180,7 +2237,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('STAGE 2: 이해 × QLRCQ')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('STAGE 2: 이해 × QLRCQ', event)">
                 <div class="video-number">09</div>
                 <div class="video-info">
                     <h3>STAGE 2: 이해 × QLRCQ</h3>
@@ -2188,7 +2245,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('STAGE 3: 결정권 제공 × QLRCQ')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('STAGE 3: 결정권 제공 × QLRCQ', event)">
                 <div class="video-number">10</div>
                 <div class="video-info">
                     <h3>STAGE 3: 결정권 제공 × QLRCQ</h3>
@@ -2196,7 +2253,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('STAGE 4: 가치 전달 × QLRCQ')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('STAGE 4: 가치 전달 × QLRCQ', event)">
                 <div class="video-number">11</div>
                 <div class="video-info">
                     <h3>STAGE 4: 가치 전달 × QLRCQ</h3>
@@ -2204,7 +2261,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('STAGE 5: 신뢰관계 형성 × QLRCQ')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('STAGE 5: 신뢰관계 형성 × QLRCQ', event)">
                 <div class="video-number">12</div>
                 <div class="video-info">
                     <h3>STAGE 5: 신뢰관계 형성 × QLRCQ</h3>
@@ -2215,7 +2272,7 @@
 
             <!-- 섹션 4: 마무리 -->
             <h3 style="margin: 40px 0 20px; color: var(--primary);">4. 마무리</h3>
-            <div class="video-item" onclick="openModal('구조에는 생명을, 기법에는 방향을')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('구조에는 생명을, 기법에는 방향을', event)">
                 <div class="video-number">13</div>
                 <div class="video-info">
                     <h3>구조에는 생명을, 기법에는 방향을</h3>
@@ -2223,7 +2280,7 @@
                 </div>
                 <span class="video-badge locked">유료</span>
             </div>
-            <div class="video-item" onclick="openModal('환자의 여정을 함께하는 신뢰받는 안내자')">
+            <div class="video-item" onclick="return checkUserAndOpenModal('환자의 여정을 함께하는 신뢰받는 안내자', event)">
                 <div class="video-number">14</div>
                 <div class="video-info">
                     <h3>환자의 여정을 함께하는 신뢰받는 안내자</h3>
@@ -2238,20 +2295,20 @@
     <div id="free" class="page">
         <div class="page-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <h1>무료 강의</h1>
-            <p>덴탈클리닉파인더 환자상담 아카데미를 미리 경험해보세요</p>
+            <p>덴탈클리닉파인더 환자상담 AI 아카데미를 미리 경험해보세요</p>
         </div>
         <section class="free-section">
             <h2>지금 바로 시청 가능한 무료 강의</h2>
             <div class="free-videos">
-                <div class="free-video-card" onclick="openModal('설득의 종말')">
+                <div class="free-video-card" onclick="return checkUserAndOpenModal('설득의 종말', event)">
                     <div class="play-icon">&#9654;</div>
                     <h3>설득의 종말<br><small style="opacity: 0.8; font-weight: 400;">왜 최고의 전문가들조차 설득에 실패하는가?</small></h3>
                 </div>
-                <div class="free-video-card" onclick="openModal('성공적인 환자 상담의 완성')">
+                <div class="free-video-card" onclick="return checkUserAndOpenModal('성공적인 환자 상담의 완성', event)">
                     <div class="play-icon">&#9654;</div>
                     <h3>통합 프레임워크 맛보기<br><small style="opacity: 0.8; font-weight: 400;">성공적인 환자 상담의 완성</small></h3>
                 </div>
-                <div class="free-video-card" onclick="openModal('결정권 제공 미니 강의')">
+                <div class="free-video-card" onclick="return checkUserAndOpenModal('결정권 제공 미니 강의', event)">
                     <div class="play-icon">&#9654;</div>
                     <h3>결정권 제공 미니 강의<br><small style="opacity: 0.8; font-weight: 400;">환자에게 결정권을 돌려주는 방법</small></h3>
                 </div>
@@ -2260,7 +2317,7 @@
         <section style="text-align: center; padding: 60px 5%;">
             <h2 style="margin-bottom: 20px;">더 깊이 있는 학습을 원하시나요?</h2>
             <p style="color: var(--gray); margin-bottom: 30px;">프리미엄 강의에서 환자 상담의 완전한 구조를 익혀보세요</p>
-            <a href="#curriculum1" class="btn btn-primary">전체 커리큘럼 보기</a>
+            <a href="#curriculum1" class="btn btn-primary" onclick="return checkUserAndNavigate('#curriculum1', event)">전체 커리큘럼 보기</a>
         </section>
     </div>
 
@@ -2273,39 +2330,69 @@
         <div class="resources-grid">
             <div class="resource-card">
                 <div class="resource-icon">&#128203;</div>
-                <h3>상담 체크리스트</h3>
+                <h3>01 상담 체크리스트</h3>
                 <p>5단계 상담 구조를 점검할 수 있는 실전 체크리스트</p>
-                <button onclick="openResource('checklist.html')" class="btn btn-primary">열기</button>
+                <button onclick="return checkUserAndOpenResource('checklist.html', false, event)" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128172;</div>
-                <h3>상담 문장 카드</h3>
+                <h3>02 상담 문장 카드</h3>
                 <p>상황별로 사용할 수 있는 효과적인 상담 문장 모음</p>
-                <button onclick="openResource('sentence-cards.html')" class="btn btn-primary">열기</button>
+                <button onclick="return checkUserAndOpenResource('sentence-cards.html', false, event)" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128218;</div>
-                <h3>사용자 가이드북</h3>
+                <h3>03 사용자 가이드북</h3>
                 <p>아카데미 200% 활용을 위한 상세 가이드</p>
-                <button onclick="openResource('guidebook.html')" class="btn btn-primary">열기</button>
+                <button onclick="return checkUserAndOpenResource('guidebook.html', false, event)" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#127891;</div>
-                <h3>QLRCQ 요약본</h3>
+                <h3>04 QLRCQ 요약본</h3>
                 <p>QLRCQ 기법의 핵심을 정리한 한 장 요약</p>
-                <button onclick="openResource('qlrcq.html')" class="btn btn-primary">열기</button>
+                <button onclick="return checkUserAndOpenResource('qlrcq.html', false, event)" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128187;</div>
-                <h3>AI 환자상담튜터</h3>
+                <h3>05 AI 환자상담튜터</h3>
                 <p>실전 롤플레이로 상담 스킬을 연습할 수 있는 AI 튜터</p>
-                <button onclick="openResource('https://aitalker.co.kr/biz018', true)" class="btn btn-primary">열기</button>
+                <button onclick="return checkUserAndOpenResource('https://aitalker.co.kr/biz018', true, event)" class="btn btn-primary">열기</button>
             </div>
             <div class="resource-card">
                 <div class="resource-icon">&#128196;</div>
-                <h3>상담 시나리오</h3>
+                <h3>06 상담 시나리오</h3>
                 <p>다양한 상황별 상담 시나리오 예시</p>
-                <button onclick="openResource('scenarios.html')" class="btn btn-primary">열기</button>
+                <button onclick="return checkUserAndOpenResource('scenarios.html', false, event)" class="btn btn-primary">열기</button>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#10004;&#65039;</div>
+                <h3>07 OX 문제</h3>
+                <p>환자상담 5단계 OX 문제 25문항</p>
+                <button onclick="return checkUserAndOpenResource('quiz-ox.html', false, event)" class="btn btn-primary">열기</button>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#127312;</div>
+                <h3>08 4지선다형 문제</h3>
+                <p>환자상담 5단계 4지선다형 문제 25문항</p>
+                <button onclick="return checkUserAndOpenResource('quiz-multiple-choice.html', false, event)" class="btn btn-primary">열기</button>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#128101;</div>
+                <h3>09 다음 단계 선택</h3>
+                <p>시나리오 기반 적절한 다음 단계 선택 퀴즈 20문항</p>
+                <button onclick="return checkUserAndOpenResource('quiz-next-step.html', false, event)" class="btn btn-primary">열기</button>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#128172;</div>
+                <h3>10 적절한 질문 선택</h3>
+                <p>시나리오 기반 적절한 질문 선택 퀴즈 20문항</p>
+                <button onclick="return checkUserAndOpenResource('quiz-question-choice.html', false, event)" class="btn btn-primary">열기</button>
+            </div>
+            <div class="resource-card">
+                <div class="resource-icon">&#127917;</div>
+                <h3>11 역할극 시나리오</h3>
+                <p>환자상담 5단계 실습용 역할극 시나리오 10선</p>
+                <button onclick="return checkUserAndOpenResource('quiz-roleplay.html', false, event)" class="btn btn-primary">열기</button>
             </div>
         </div>
     </div>
@@ -2314,92 +2401,92 @@
     <div id="courses" class="page">
         <div class="page-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <h1>강의 영상</h1>
-            <p>덴탈클리닉파인더 환자상담 아카데미가 제공하는 강의 목록</p>
+            <p>덴탈클리닉파인더 환자상담 AI 아카데미가 제공하는 강의 목록</p>
         </div>
-        <div style="max-width: 1100px; margin: 0 auto; padding: 60px 5%;">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 15px;">제공 강의 목록</h2>
-                <p style="color: var(--gray); font-size: 1.1rem;">환자 상담의 새로운 패러다임을 배워보세요</p>
+        <div style="max-width: 1100px; margin: 0 auto; padding: 30px 5%;">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="font-size: 1.5rem; color: var(--dark); margin-bottom: 10px;">제공 강의 목록</h2>
+                <p style="color: var(--gray); font-size: 0.95rem;">환자 상담의 새로운 패러다임을 배워보세요</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 40px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 25px;">
                 <!-- A01 카드 -->
-                <a href="#curriculum1" style="text-decoration: none;">
-                    <div style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; border: 3px solid transparent;"
+                <a href="#curriculum1" style="text-decoration: none;" onclick="return checkUserAndNavigate('#curriculum1', event)">
+                    <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; border: 3px solid transparent;"
                          onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 25px 60px rgba(231,76,60,0.2)'; this.style.borderColor='#e74c3c';"
                          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 15px 50px rgba(0,0,0,0.1)'; this.style.borderColor='transparent';">
-                        <div style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); padding: 40px; color: white; text-align: center;">
-                            <div style="display: inline-block; background: #ffeb3b; color: #333; padding: 12px 30px; border-radius: 25px; font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255,235,59,0.4);">A01</div>
-                            <h3 style="font-size: 1.8rem; margin-bottom: 10px; font-weight: 700;">설득의 종말</h3>
-                            <p style="opacity: 0.9; font-size: 1rem;">왜 더 이상 환자를 설득해서는 안 되는가</p>
+                        <div style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); padding: 25px; color: white; text-align: center;">
+                            <div style="display: inline-block; background: #ffeb3b; color: #333; padding: 8px 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(255,235,59,0.4);">A01</div>
+                            <h3 style="font-size: 1.4rem; margin-bottom: 6px; font-weight: 700;">설득의 종말</h3>
+                            <p style="opacity: 0.9; font-size: 0.9rem;">왜 더 이상 환자를 설득해서는 안 되는가</p>
                         </div>
-                        <div style="padding: 30px;">
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; padding: 12px; background: #fff5f5; border-radius: 12px;">
-                                <span style="font-size: 1.5rem;">👨‍🏫</span>
-                                <span style="font-size: 1rem; color: var(--dark);"><strong>강사</strong> <span style="color: #e74c3c; font-weight: 700;">심재우 CEO</span></span>
+                        <div style="padding: 20px;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; padding: 10px; background: #fff5f5; border-radius: 10px;">
+                                <span style="font-size: 1.2rem;">👨‍🏫</span>
+                                <span style="font-size: 0.9rem; color: var(--dark);"><strong>강사</strong> <span style="color: #e74c3c; font-weight: 700;">심재우 CEO</span></span>
                             </div>
-                            <div style="display: flex; justify-content: space-around; margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-around; margin-bottom: 15px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 2rem; font-weight: 700; color: #e74c3c;">14</div>
-                                    <div style="font-size: 0.85rem; color: var(--gray);">강의 수</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #e74c3c;">14</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">강의 수</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 2rem; font-weight: 700; color: #e74c3c;">32분</div>
-                                    <div style="font-size: 0.85rem; color: var(--gray);">총 학습시간</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #e74c3c;">32분</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">총 학습시간</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 2rem; font-weight: 700; color: #e74c3c;">2</div>
-                                    <div style="font-size: 0.85rem; color: var(--gray);">무료 강의</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #e74c3c;">2</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">무료 강의</div>
                                 </div>
                             </div>
-                            <ul style="list-style: none; color: var(--gray); font-size: 0.95rem; line-height: 2;">
+                            <ul style="list-style: none; color: var(--gray); font-size: 0.85rem; line-height: 1.8;">
                                 <li>✓ QLRCQ 상담 엔진의 이해</li>
                                 <li>✓ 설득 심리학의 한계와 대안</li>
                                 <li>✓ 실전 사례 5가지 적용법</li>
                             </ul>
-                            <div style="text-align: center; margin-top: 25px;">
-                                <span style="display: inline-block; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 14px 40px; border-radius: 30px; font-weight: 600;">강의 보러가기 →</span>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <span style="display: inline-block; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 10px 30px; border-radius: 25px; font-weight: 600; font-size: 0.9rem;">강의 보러가기 →</span>
                             </div>
                         </div>
                     </div>
                 </a>
 
                 <!-- A02 카드 -->
-                <a href="#curriculum2" style="text-decoration: none;">
-                    <div style="background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; border: 3px solid transparent;"
+                <a href="#curriculum2" style="text-decoration: none;" onclick="return checkUserAndNavigate('#curriculum2', event)">
+                    <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer; border: 3px solid transparent;"
                          onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 25px 60px rgba(26,95,122,0.2)'; this.style.borderColor='var(--primary)';"
                          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 15px 50px rgba(0,0,0,0.1)'; this.style.borderColor='transparent';">
-                        <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); padding: 40px; color: white; text-align: center;">
-                            <div style="display: inline-block; background: #ffeb3b; color: #333; padding: 12px 30px; border-radius: 25px; font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255,235,59,0.4);">A02</div>
-                            <h3 style="font-size: 1.8rem; margin-bottom: 10px; font-weight: 700;">성공적인 환자 상담의 완성</h3>
-                            <p style="opacity: 0.9; font-size: 1rem;">5단계 '지도'와 QLRCQ '엔진'의 통합 프레임워크</p>
+                        <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); padding: 25px; color: white; text-align: center;">
+                            <div style="display: inline-block; background: #ffeb3b; color: #333; padding: 8px 20px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(255,235,59,0.4);">A02</div>
+                            <h3 style="font-size: 1.4rem; margin-bottom: 6px; font-weight: 700;">성공적인 환자 상담의 완성</h3>
+                            <p style="opacity: 0.9; font-size: 0.9rem;">5단계 '지도'와 QLRCQ '엔진'의 통합 프레임워크</p>
                         </div>
-                        <div style="padding: 30px;">
-                            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; padding: 12px; background: #f0f9ff; border-radius: 12px;">
-                                <span style="font-size: 1.5rem;">👨‍🏫</span>
-                                <span style="font-size: 1rem; color: var(--dark);"><strong>강사</strong> <span style="color: var(--primary); font-weight: 700;">심재우 CEO</span></span>
+                        <div style="padding: 20px;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; padding: 10px; background: #f0f9ff; border-radius: 10px;">
+                                <span style="font-size: 1.2rem;">👨‍🏫</span>
+                                <span style="font-size: 0.9rem; color: var(--dark);"><strong>강사</strong> <span style="color: var(--primary); font-weight: 700;">심재우 CEO</span></span>
                             </div>
-                            <div style="display: flex; justify-content: space-around; margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-around; margin-bottom: 15px;">
                                 <div style="text-align: center;">
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">14</div>
-                                    <div style="font-size: 0.85rem; color: var(--gray);">강의 수</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">14</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">강의 수</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">42분</div>
-                                    <div style="font-size: 0.85rem; color: var(--gray);">총 학습시간</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">42분</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">총 학습시간</div>
                                 </div>
                                 <div style="text-align: center;">
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">2</div>
-                                    <div style="font-size: 0.85rem; color: var(--gray);">무료 강의</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">2</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">무료 강의</div>
                                 </div>
                             </div>
-                            <ul style="list-style: none; color: var(--gray); font-size: 0.95rem; line-height: 2;">
+                            <ul style="list-style: none; color: var(--gray); font-size: 0.85rem; line-height: 1.8;">
                                 <li>✓ 5단계 지도 × QLRCQ 엔진</li>
                                 <li>✓ 단계별 실전 적용법</li>
                                 <li>✓ 신뢰받는 안내자로의 전환</li>
                             </ul>
-                            <div style="text-align: center; margin-top: 25px;">
-                                <span style="display: inline-block; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; padding: 14px 40px; border-radius: 30px; font-weight: 600;">강의 보러가기 →</span>
+                            <div style="text-align: center; margin-top: 15px;">
+                                <span style="display: inline-block; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; padding: 10px 30px; border-radius: 25px; font-weight: 600; font-size: 0.9rem;">강의 보러가기 →</span>
                             </div>
                         </div>
                     </div>
@@ -2407,9 +2494,9 @@
             </div>
 
             <!-- 하단 안내 -->
-            <div style="text-align: center; margin-top: 60px; padding: 40px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px;">
-                <h3 style="color: var(--dark); margin-bottom: 15px; font-size: 1.3rem;">🎓 학습 안내</h3>
-                <p style="color: var(--gray); line-height: 1.8;">
+            <div style="text-align: center; margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 14px;">
+                <h3 style="color: var(--dark); margin-bottom: 10px; font-size: 1.1rem;">🎓 학습 안내</h3>
+                <p style="color: var(--gray); line-height: 1.6; font-size: 0.9rem;">
                     각 과정의 1-2강은 <strong style="color: var(--secondary);">무료</strong>로 제공됩니다.<br>
                     <strong style="color: #ff6b9d;">유료 강의는 비밀번호 입력 후 시청 가능합니다.</strong>
                 </p>
@@ -2421,11 +2508,11 @@
     <div id="instructors" class="page">
         <div class="page-header" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
             <h1>강사 소개</h1>
-            <p>덴탈클리닉파인더 환자상담 아카데미를 이끄는 전문가들</p>
+            <p>덴탈클리닉파인더 환자상담 AI 아카데미를 이끄는 전문가들</p>
         </div>
         <div style="max-width: 1200px; margin: 0 auto; padding: 60px 5%;">
             <!-- 심재우 CEO -->
-            <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 24px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
+            <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
                 <div style="flex: 0 0 250px;">
                     <img src="https://jaiwshim-project.github.io/dental_platform/images/coach-shim.jpg" alt="심재우 CEO" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
                 </div>
@@ -2475,7 +2562,7 @@
             </div>
 
             <!-- 임영일 CCO -->
-            <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 24px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
+            <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
                 <div style="flex: 0 0 250px;">
                     <img src="https://jaiwshim-project.github.io/dental_platform/AI%EA%B0%A4%EB%9F%AC%EB%A6%AC/image-removebg-preview%20(12).png" alt="임영일 CCO" style="width: 100%; border-radius: 16px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px;">
                 </div>
@@ -2523,7 +2610,7 @@
             </div>
 
             <!-- 이용식 CMO -->
-            <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 24px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
+            <div style="display: flex; gap: 40px; margin-bottom: 60px; flex-wrap: wrap; align-items: flex-start; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);">
                 <div style="flex: 0 0 250px;">
                     <img src="https://jaiwshim-project.github.io/dental_platform/AI%EA%B0%A4%EB%9F%AC%EB%A6%AC/%EC%9D%B4%EC%9A%A9%EC%8B%9D%20CMO.png" alt="이용식 CMO" style="width: 100%; border-radius: 16px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px;">
                 </div>
@@ -2569,10 +2656,10 @@
             </div>
 
             <!-- CTA -->
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); border-radius: 24px; color: white;">
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); border-radius: 16px; color: white;">
                 <h3 style="font-size: 1.8rem; margin-bottom: 15px;">전문가들과 함께 상담 역량을 키워보세요</h3>
-                <p style="opacity: 0.9; margin-bottom: 30px;">덴탈클리닉파인더 환자상담 아카데미에서 체계적인 학습을 시작하세요</p>
-                <a href="#curriculum1" class="btn btn-primary" style="background: white; color: var(--primary);">강의 시작하기</a>
+                <p style="opacity: 0.9; margin-bottom: 30px;">덴탈클리닉파인더 환자상담 AI 아카데미에서 체계적인 학습을 시작하세요</p>
+                <a href="#curriculum1" class="btn btn-primary" style="background: white; color: var(--primary);" onclick="return checkUserAndNavigate('#curriculum1', event)">강의 시작하기</a>
             </div>
         </div>
     </div>
@@ -2646,19 +2733,19 @@
                 </p>
             </div>
             <div class="footer-section">
-                <h4><a href="#courses">강의</a></h4>
+                <h4><a href="#courses" onclick="return checkUserAndNavigate('#courses', event)">강의</a></h4>
                 <ul>
-                    <li><a href="#curriculum1">A01 - 설득의 종말</a></li>
-                    <li><a href="#curriculum2">A02 - 성공적인 환자 상담</a></li>
-                    <li><a href="#free">무료 강의</a></li>
+                    <li><a href="#curriculum1" onclick="return checkUserAndNavigate('#curriculum1', event)">A01 - 설득의 종말</a></li>
+                    <li><a href="#curriculum2" onclick="return checkUserAndNavigate('#curriculum2', event)">A02 - 성공적인 환자 상담</a></li>
+                    <li><a href="#free" onclick="return checkUserAndNavigate('#free', event)">무료 강의</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4><a href="#resources">자료</a></h4>
+                <h4><a href="#resources" onclick="return checkUserAndNavigate('#resources', event)">자료</a></h4>
                 <ul>
-                    <li><a href="checklist.html">상담 체크리스트</a></li>
-                    <li><a href="sentence-cards.html">상담 문장 카드</a></li>
-                    <li><a href="guidebook.html">사용자 가이드북</a></li>
+                    <li><a href="checklist.html" onclick="return checkUserAndNavigate('checklist.html', event)">상담 체크리스트</a></li>
+                    <li><a href="sentence-cards.html" onclick="return checkUserAndNavigate('sentence-cards.html', event)">상담 문장 카드</a></li>
+                    <li><a href="guidebook.html" onclick="return checkUserAndNavigate('guidebook.html', event)">사용자 가이드북</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -2675,15 +2762,199 @@
                     <li><a href="#">이용약관</a></li>
                     <li><a href="#">개인정보처리방침</a></li>
                     <li><a href="contact.html">문의하기</a></li>
+                    <li><a href="#" onclick="resetUserType(); return false;">사용자 유형 변경</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 덴탈클리닉파인더. All rights reserved.</p>
+            <a href="admin-dashboard.html" class="admin-link">관리자 대시보드</a>
         </div>
     </footer>
 
     <script>
+        // ============================================
+        // 사용자 유형 확인 시스템
+        // ============================================
+        function isUserTypeSelected() {
+            return localStorage.getItem('userTypeSelected') === 'true';
+        }
+
+        function getUserType() {
+            return localStorage.getItem('userType');
+        }
+
+        // ============================================
+        // 활동 로그 시스템
+        // ============================================
+        function logActivity(type, data = {}) {
+            const currentUser = JSON.parse(localStorage.getItem('currentPaidUser') || '{}');
+            if (!currentUser.id) return; // 로그인한 사용자만 추적
+
+            const logs = JSON.parse(localStorage.getItem('activityLogs') || '[]');
+            logs.push({
+                type: type,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                date: new Date().toISOString(),
+                ...data
+            });
+
+            // 최근 1000개만 유지
+            if (logs.length > 1000) {
+                logs.splice(0, logs.length - 1000);
+            }
+
+            localStorage.setItem('activityLogs', JSON.stringify(logs));
+        }
+
+        // 방문 로그 (하루에 한 번만 기록)
+        function logVisit() {
+            const currentUser = JSON.parse(localStorage.getItem('currentPaidUser') || '{}');
+            if (!currentUser.id) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            const visitKey = `lastVisit_${currentUser.id}`;
+            const lastVisit = localStorage.getItem(visitKey);
+
+            if (lastVisit !== today) {
+                logActivity('visit');
+                localStorage.setItem(visitKey, today);
+            }
+        }
+
+        // 영상 시청 로그
+        let videoStartTime = null;
+        function logVideoStart(title) {
+            videoStartTime = Date.now();
+            logActivity('video', { title: title, duration: 0 });
+        }
+
+        function logVideoEnd() {
+            if (videoStartTime) {
+                const duration = Math.round((Date.now() - videoStartTime) / 1000); // 초 단위
+                // 마지막 로그 업데이트
+                const logs = JSON.parse(localStorage.getItem('activityLogs') || '[]');
+                if (logs.length > 0) {
+                    const lastLog = logs[logs.length - 1];
+                    if (lastLog.type === 'video') {
+                        lastLog.duration = duration;
+                        localStorage.setItem('activityLogs', JSON.stringify(logs));
+                    }
+                }
+                videoStartTime = null;
+            }
+        }
+
+        // 페이지 로드 시 방문 기록
+        if (isUserTypeSelected() && getUserType() === 'paid') {
+            logVisit();
+        }
+
+        function checkUserAndNavigate(destination, event) {
+            console.log('checkUserAndNavigate 호출됨:', destination);
+            console.log('isUserTypeSelected:', isUserTypeSelected());
+
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            if (!isUserTypeSelected()) {
+                // 사용자 유형 미선택 - 선택 페이지로 이동
+                console.log('user-select.html로 이동');
+                window.location.href = 'user-select.html?dest=' + encodeURIComponent(destination);
+                return false;
+            } else {
+                // 이미 선택됨 - 바로 이동
+                if (destination.startsWith('#')) {
+                    // 페이지 내 앵커
+                    window.location.hash = destination;
+                    const element = document.querySelector(destination);
+                    if (element) element.scrollIntoView({ behavior: 'smooth' });
+                } else if (destination.startsWith('http')) {
+                    // 외부 링크
+                    window.open(destination, '_blank');
+                } else {
+                    // 내부 페이지
+                    window.location.href = destination;
+                }
+            }
+            return false;
+        }
+
+        function checkUserAndOpenModal(title, event) {
+            console.log('checkUserAndOpenModal 호출됨:', title);
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            if (!isUserTypeSelected()) {
+                // 사용자 유형 미선택 - 선택 페이지로 이동 (모달 타이틀 저장)
+                sessionStorage.setItem('pendingModal', title);
+                window.location.href = 'user-select.html?dest=index.html%23courses';
+                return false;
+            } else {
+                // 이미 선택됨 - 바로 모달 열기
+                openModal(title);
+            }
+            return false;
+        }
+
+        function checkUserAndOpenResource(url, isExternal, event) {
+            console.log('checkUserAndOpenResource 호출됨:', url);
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            if (!isUserTypeSelected()) {
+                window.location.href = 'user-select.html?dest=' + encodeURIComponent(url);
+                return false;
+            } else {
+                openResource(url, isExternal);
+            }
+            return false;
+        }
+
+        // 페이지 로드 시 펜딩 모달 확인
+        window.addEventListener('load', function() {
+            const pendingModal = sessionStorage.getItem('pendingModal');
+            if (pendingModal && isUserTypeSelected()) {
+                sessionStorage.removeItem('pendingModal');
+                setTimeout(() => openModal(pendingModal), 500);
+            }
+        });
+
+        // 사용자 유형 선택 초기화 (테스트/변경용)
+        function resetUserType() {
+            localStorage.removeItem('userType');
+            localStorage.removeItem('userTypeSelected');
+            window.location.href = 'user-select.html?dest=' + encodeURIComponent(window.location.hash || '#home');
+        }
+
+        // 디버그: 현재 상태 확인
+        console.log('사용자 유형 선택됨:', isUserTypeSelected());
+        console.log('사용자 유형:', getUserType());
+
+        // 페이지 로드 시 사용자 유형 체크
+        (function() {
+            // URL에 ?reset 파라미터가 있으면 강제 초기화
+            if (window.location.search.includes('reset')) {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('userTypeSelected');
+                window.location.href = 'user-select.html?dest=' + encodeURIComponent(window.location.hash || '#home');
+                return;
+            }
+
+            // 사용자 유형 미선택이면 자동 리다이렉트
+            if (!isUserTypeSelected()) {
+                var dest = window.location.hash || '#home';
+                window.location.replace('user-select.html?dest=' + encodeURIComponent(dest));
+            }
+        })();
+
         // ============================================
         // Bunny Stream 설정
         // ============================================
@@ -2894,18 +3165,51 @@
         function openResource(url, isExternal = false) {
             pendingResourceUrl = url;
 
-            // 이미 인증된 경우 바로 이동
-            if (isPasswordVerified()) {
-                if (isExternal) {
-                    window.open(url, '_blank');
-                } else {
-                    window.location.href = url;
-                }
+            // 무료 사용자인 경우 접근 불가
+            if (getUserType() === 'free') {
+                showResourcePaidOnlyModal();
                 return;
             }
 
-            // 비밀번호 모달 표시
-            showResourcesPasswordModal(isExternal);
+            // 유료 사용자는 비밀번호 확인 없이 바로 이동
+            if (isExternal) {
+                window.open(url, '_blank');
+            } else {
+                window.location.href = url;
+            }
+        }
+
+        // 자료실 유료 전용 메시지 모달
+        function showResourcePaidOnlyModal() {
+            const modalHtml = `
+                <div id="resourcePaidOnlyModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10000;">
+                    <div style="background: white; border-radius: 20px; padding: 40px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.3);">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">👑</div>
+                        <h3 style="color: #1a1a2e; margin-bottom: 10px; font-size: 1.3rem;">프리미엄 자료입니다</h3>
+                        <p style="color: #6b7280; margin-bottom: 25px; line-height: 1.7;">자료실은 유료 사용자 전용 콘텐츠입니다.<br>프리미엄 회원이 되시면 모든 자료를 이용하실 수 있습니다.</p>
+                        <button onclick="closeResourcePaidOnlyModal()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-right: 10px;">
+                            닫기
+                        </button>
+                        <button onclick="switchToPayingUserFromResource()" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none; padding: 12px 30px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                            유료 사용자로 전환
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeResourcePaidOnlyModal() {
+            const modal = document.getElementById('resourcePaidOnlyModal');
+            if (modal) modal.remove();
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchToPayingUserFromResource() {
+            localStorage.setItem('userType', 'paid');
+            closeResourcePaidOnlyModal();
+            alert('유료 사용자로 전환되었습니다. 다시 자료를 선택해주세요.');
         }
 
         // 자료실 비밀번호 모달 표시
@@ -2983,18 +3287,55 @@
 
             // 유료 영상인 경우
             if (!isFreeVideo) {
-                // 이미 비밀번호 인증된 세션이면 바로 재생
-                if (isPasswordVerified()) {
-                    playVideo(title);
+                // 무료 사용자인 경우 접근 불가 메시지
+                if (getUserType() === 'free') {
+                    showPaidOnlyMessage(title);
                     return;
                 }
-                // 비밀번호 입력 필요
-                showPasswordPrompt(title);
+                // 유료 사용자는 비밀번호 확인 없이 바로 재생
+                playVideo(title);
                 return;
             }
 
             // 무료 영상 재생
             playVideo(title);
+        }
+
+        // 유료 전용 콘텐츠 메시지 표시
+        function showPaidOnlyMessage(title) {
+            const videoContent = document.getElementById('videoContent');
+            const modalDesc = document.getElementById('modalDesc');
+
+            videoContent.innerHTML = `
+                <div class="paid-only-message" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 16px; padding: 40px; text-align: center; border: 2px solid #0ea5e9;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">👑</div>
+                    <h3 style="color: var(--dark); margin-bottom: 10px; font-size: 1.3rem;">프리미엄 강의입니다</h3>
+                    <p style="color: var(--gray); margin-bottom: 25px; line-height: 1.7;">이 강의는 유료 사용자 전용 콘텐츠입니다.<br>프리미엄 회원이 되시면 모든 강의를 시청하실 수 있습니다.</p>
+                    <div style="background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #e0e0e0;">
+                        <p style="color: var(--gray); font-size: 0.9rem; margin-bottom: 10px;">현재 이용 가능한 무료 강의:</p>
+                        <ul style="list-style: none; text-align: left; max-width: 300px; margin: 0 auto;">
+                            ${freeVideos.map(v => `<li style="padding: 5px 0; color: #10b981; font-size: 0.85rem;">✓ ${v}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <button onclick="closeModal()" class="btn btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; margin-right: 10px;">
+                        닫기
+                    </button>
+                    <button onclick="switchToPayingUser()" class="btn btn-primary" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none;">
+                        유료 사용자로 전환
+                    </button>
+                </div>
+            `;
+            modalDesc.textContent = videoData[title]?.description || '이 강의에서는 환자 상담의 핵심 원리를 학습합니다.';
+
+            document.getElementById('videoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 유료 사용자로 전환
+        function switchToPayingUser() {
+            localStorage.setItem('userType', 'paid');
+            closeModal();
+            alert('유료 사용자로 전환되었습니다. 다시 강의를 선택해주세요.');
         }
 
         // 비밀번호 입력 프롬프트 표시
@@ -3053,6 +3394,9 @@
             const videoContent = document.getElementById('videoContent');
             const modalDesc = document.getElementById('modalDesc');
 
+            // 영상 시청 로그 기록
+            logVideoStart(title);
+
             // Check if video has Bunny Stream ID
             if (videoData[title] && videoData[title].videoId && videoData[title].videoId.length > 10) {
                 const videoId = videoData[title].videoId;
@@ -3086,6 +3430,8 @@
         }
 
         function closeModal() {
+            // 영상 시청 종료 로그 기록
+            logVideoEnd();
             // Stop video when closing modal (removes iframe to stop playback)
             document.getElementById('videoContent').innerHTML = '';
             document.getElementById('videoModal').classList.remove('active');

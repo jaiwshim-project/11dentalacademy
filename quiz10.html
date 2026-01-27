@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        if (!localStorage.getItem('currentPaidUser')) {
+            window.location.replace('paid-user-select.html');
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10. 적절한 질문 선택 | 덴탈클리닉파인더 아카데미</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --success: #10b981;
+            --error: #ef4444;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 20px 5%;
+            color: white;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 1.2rem; font-weight: 600; }
+
+        .header .quiz-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-type-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 5%;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .scenario-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
+        }
+
+        .scenario-label {
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .scenario-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--dark);
+        }
+
+        .patient-speech {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .patient-speech::before {
+            content: '환자';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: white;
+            padding: 0 8px;
+            font-size: 0.75rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .patient-speech p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--dark);
+            font-style: italic;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option-btn .question-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .option-btn .option-text {
+            padding-top: 6px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #ecfdf5;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.correct .question-icon {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background: var(--error);
+            color: white;
+        }
+
+        .option-btn.wrong .question-icon {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .option-btn:disabled { cursor: not-allowed; }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .result-card.show { display: block; }
+
+        .result-icon { font-size: 4rem; margin-bottom: 20px; }
+        .result-score { font-size: 3rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .result-text { font-size: 1.1rem; color: var(--gray); margin-bottom: 30px; }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .result-detail-item { text-align: center; }
+        .result-detail-item .number { font-size: 1.5rem; font-weight: 700; }
+        .result-detail-item .label { font-size: 0.85rem; color: var(--gray); }
+        .result-detail-item .number.correct { color: var(--success); }
+        .result-detail-item .number.wrong { color: var(--error); }
+
+        .result-buttons { display: flex; gap: 15px; justify-content: center; }
+
+        .result-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .result-btn.primary { background: var(--primary); color: white; }
+        .result-btn.secondary { background: #e5e7eb; color: var(--dark); }
+        .result-btn:hover { transform: translateY(-2px); }
+
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>10. 적절한 질문 선택</h1>
+            <div class="quiz-info">
+                <span class="quiz-type-badge">질문 선택</span>
+                <span>총 10문제</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← 대시보드로 돌아가기</a>
+
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentQuestion">1 / 10</span>
+                <span id="correctCount">정답: 0개</span>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-score" id="resultScore">100점</div>
+            <div class="result-text" id="resultText">훌륭합니다!</div>
+            <div class="result-details">
+                <div class="result-detail-item">
+                    <div class="number correct" id="finalCorrect">10</div>
+                    <div class="label">정답</div>
+                </div>
+                <div class="result-detail-item">
+                    <div class="number wrong" id="finalWrong">0</div>
+                    <div class="label">오답</div>
+                </div>
+            </div>
+            <div class="result-buttons">
+                <button class="result-btn primary" onclick="restartQuiz()">다시 풀기</button>
+                <a href="dashboard.html" class="result-btn secondary">대시보드로</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizId = 'quiz10';
+        const questions = [
+            {
+                scenario: "초진 환자 상담 중",
+                patientSpeech: "이가 아파서 왔어요.",
+                q: "환자의 증상을 파악하기 위해 적절한 질문은?",
+                options: [
+                    "언제부터 아프셨고, 어떤 통증인지 말씀해주시겠어요?",
+                    "왜 이렇게 될 때까지 안 오셨어요?",
+                    "다른 치과는 안 가보셨어요?",
+                    "보험 있으세요?"
+                ],
+                answer: 0
+            },
+            {
+                scenario: "치료 비용 상담 중",
+                patientSpeech: "치료비가 좀 부담되네요...",
+                q: "환자의 상황을 이해하기 위해 적절한 질문은?",
+                options: [
+                    "왜 돈이 없으세요?",
+                    "혹시 분할 납부나 다른 결제 방법이 도움이 될까요?",
+                    "다른 병원은 더 비쌀 거예요.",
+                    "그럼 치료 안 하실 건가요?"
+                ],
+                answer: 1
+            },
+            {
+                scenario: "치료 불안감을 호소하는 환자",
+                patientSpeech: "치과가 너무 무서워요...",
+                q: "환자의 불안을 이해하기 위해 적절한 질문은?",
+                options: [
+                    "뭐가 무섭다는 거예요?",
+                    "어른이 무서워하시면 어떡해요.",
+                    "예전에 치과에서 불편했던 경험이 있으셨나요?",
+                    "무서워할 거 하나도 없어요."
+                ],
+                answer: 2
+            },
+            {
+                scenario: "임플란트 상담 중",
+                patientSpeech: "임플란트 해야 할까요?",
+                q: "환자의 상황을 파악하기 위해 적절한 질문은?",
+                options: [
+                    "당연히 해야죠. 질문이 이상하시네요.",
+                    "현재 불편하신 점이나 걱정되시는 부분이 있으신가요?",
+                    "돈 있으시면 하세요.",
+                    "다른 환자들은 다 했어요."
+                ],
+                answer: 1
+            },
+            {
+                scenario: "소아 환자 보호자 상담 중",
+                patientSpeech: "우리 아이가 치과를 너무 싫어해요.",
+                q: "상황을 파악하기 위해 보호자에게 적절한 질문은?",
+                options: [
+                    "왜 그렇게 키우셨어요?",
+                    "아이가 왜 그런지 모르겠네요.",
+                    "혹시 이전에 치과에서 겁먹은 경험이 있나요?",
+                    "다른 애들은 다 잘 하는데요."
+                ],
+                answer: 2
+            },
+            {
+                scenario: "정기 검진 환자 상담",
+                patientSpeech: "특별히 아픈 곳은 없어요.",
+                q: "구강 건강 상태를 파악하기 위해 적절한 질문은?",
+                options: [
+                    "그럼 왜 오셨어요?",
+                    "최근 잇몸에서 피가 나거나 시린 증상은 없으셨나요?",
+                    "아프지 않으면 치료 필요 없어요.",
+                    "다음에 아프면 오세요."
+                ],
+                answer: 1
+            },
+            {
+                scenario: "치료 후 주의사항 안내",
+                patientSpeech: "오늘 저녁에 약속이 있는데...",
+                q: "환자의 상황을 확인하기 위해 적절한 질문은?",
+                options: [
+                    "약속 취소하세요.",
+                    "그게 왜 중요해요?",
+                    "식사 약속이신가요? 치료 후 식사 관련 주의사항 안내드릴게요.",
+                    "치료 끝났으니 알아서 하세요."
+                ],
+                answer: 2
+            },
+            {
+                scenario: "재방문 환자 상담",
+                patientSpeech: "지난번 치료한 곳이 계속 신경 쓰여요.",
+                q: "상황을 파악하기 위해 적절한 질문은?",
+                options: [
+                    "뭐가 문제예요?",
+                    "어떤 느낌으로 신경 쓰이시나요? 통증이나 불편함이 있으신가요?",
+                    "그럴 리가 없는데요.",
+                    "다시 치료비 내셔야 해요."
+                ],
+                answer: 1
+            },
+            {
+                scenario: "치료 계획 상담 중",
+                patientSpeech: "치료 기간이 얼마나 걸릴까요?",
+                q: "환자의 상황에 맞는 답변을 위해 적절한 질문은?",
+                options: [
+                    "왜 그걸 물어보세요?",
+                    "치료 기간보다 결과가 중요해요.",
+                    "혹시 특별한 일정이나 고려해야 할 사항이 있으신가요?",
+                    "빨리 끝내고 싶으시죠?"
+                ],
+                answer: 2
+            },
+            {
+                scenario: "노인 환자 상담 중",
+                patientSpeech: "요즘 입안이 자주 마르네요.",
+                q: "증상 원인을 파악하기 위해 적절한 질문은?",
+                options: [
+                    "나이가 드시면 그래요.",
+                    "현재 드시는 약이 있으신가요? 구강건조와 관련 있을 수 있어요.",
+                    "물 많이 드세요.",
+                    "그건 저희 분야가 아니에요."
+                ],
+                answer: 1
+            }
+        ];
+
+        let currentIndex = 0;
+        let correctAnswers = 0;
+        let answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('quizContainer');
+            const q = questions[currentIndex];
+
+            container.innerHTML = `
+                <div class="quiz-card">
+                    <div class="question-header">
+                        <span class="question-number">문제 ${currentIndex + 1}</span>
+                    </div>
+                    <div class="scenario-box">
+                        <div class="scenario-label">상황: ${q.scenario}</div>
+                    </div>
+                    <div class="patient-speech">
+                        <p>"${q.patientSpeech}"</p>
+                    </div>
+                    <div class="question-text">${q.q}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="selectAnswer(${i})">
+                                <span class="question-icon">💬</span>
+                                <span class="option-text">"${opt}"</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('progressFill').style.width = `${(currentIndex / questions.length) * 100}%`;
+            document.getElementById('currentQuestion').textContent = `${currentIndex + 1} / ${questions.length}`;
+            document.getElementById('correctCount').textContent = `정답: ${correctAnswers}개`;
+        }
+
+        function selectAnswer(answer) {
+            const q = questions[currentIndex];
+            const isCorrect = answer === q.answer;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === q.answer) btn.classList.add('correct');
+                else if (i === answer && !isCorrect) btn.classList.add('wrong');
+            });
+
+            if (isCorrect) correctAnswers++;
+            answers.push({ question: currentIndex, userAnswer: answer, correct: isCorrect });
+
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultCard').classList.add('show');
+
+            const score = Math.round((correctAnswers / questions.length) * 100);
+            const wrongCount = questions.length - correctAnswers;
+
+            document.getElementById('resultScore').textContent = score + '점';
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalWrong').textContent = wrongCount;
+
+            if (score >= 90) {
+                document.getElementById('resultIcon').textContent = '🎉';
+                document.getElementById('resultText').textContent = '훌륭합니다! 환자에게 적절한 질문을 잘 선택하셨습니다!';
+            } else if (score >= 70) {
+                document.getElementById('resultIcon').textContent = '👍';
+                document.getElementById('resultText').textContent = '잘 하셨습니다! 조금만 더 연습하면 완벽해요!';
+            } else if (score >= 50) {
+                document.getElementById('resultIcon').textContent = '💪';
+                document.getElementById('resultText').textContent = '괜찮아요! 상담 질문 기법을 복습해보세요!';
+            } else {
+                document.getElementById('resultIcon').textContent = '📚';
+                document.getElementById('resultText').textContent = '상담 질문 강의를 다시 복습해보세요!';
+            }
+
+            saveResult(score);
+        }
+
+        function saveResult(score) {
+            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+            if (!user) return;
+
+            const key = `${quizId}_${user.id}`;
+            const data = JSON.parse(localStorage.getItem(key) || '{"history":[]}');
+
+            data.history.push({
+                date: new Date().toISOString(),
+                score: score,
+                correct: correctAnswers,
+                total: questions.length
+            });
+
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            correctAnswers = 0;
+            answers = [];
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>

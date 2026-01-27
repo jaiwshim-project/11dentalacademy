@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        if (!localStorage.getItem('currentPaidUser')) {
+            window.location.replace('paid-user-select.html');
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07. O/X 문제 | 덴탈클리닉파인더 아카데미</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            padding: 20px 5%;
+            color: white;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 1.2rem; font-weight: 600; }
+
+        .header .quiz-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-type-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 5%;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 25px;
+            border: 3px solid #e5e7eb;
+            border-radius: 16px;
+            background: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+            transform: scale(1.02);
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background: var(--error);
+            color: white;
+        }
+
+        .option-btn:disabled { cursor: not-allowed; }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .result-card.show { display: block; }
+
+        .result-icon { font-size: 4rem; margin-bottom: 20px; }
+        .result-score { font-size: 3rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .result-text { font-size: 1.1rem; color: var(--gray); margin-bottom: 30px; }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .result-detail-item { text-align: center; }
+        .result-detail-item .number { font-size: 1.5rem; font-weight: 700; }
+        .result-detail-item .label { font-size: 0.85rem; color: var(--gray); }
+        .result-detail-item .number.correct { color: var(--success); }
+        .result-detail-item .number.wrong { color: var(--error); }
+
+        .result-buttons { display: flex; gap: 15px; justify-content: center; }
+
+        .result-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .result-btn.primary { background: var(--primary); color: white; }
+        .result-btn.secondary { background: #e5e7eb; color: var(--dark); }
+        .result-btn:hover { transform: translateY(-2px); }
+
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>07. O/X 문제</h1>
+            <div class="quiz-info">
+                <span class="quiz-type-badge">O/X 퀴즈</span>
+                <span>총 10문제</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← 대시보드로 돌아가기</a>
+
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentQuestion">1 / 10</span>
+                <span id="correctCount">정답: 0개</span>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-score" id="resultScore">100점</div>
+            <div class="result-text" id="resultText">훌륭합니다!</div>
+            <div class="result-details">
+                <div class="result-detail-item">
+                    <div class="number correct" id="finalCorrect">10</div>
+                    <div class="label">정답</div>
+                </div>
+                <div class="result-detail-item">
+                    <div class="number wrong" id="finalWrong">0</div>
+                    <div class="label">오답</div>
+                </div>
+            </div>
+            <div class="result-buttons">
+                <button class="result-btn primary" onclick="restartQuiz()">다시 풀기</button>
+                <a href="dashboard.html" class="result-btn secondary">대시보드로</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizId = 'quiz07';
+        const questions = [
+            { q: "환자와의 첫 대면에서 밝은 미소와 인사는 신뢰 형성에 중요하다.", a: true },
+            { q: "환자가 불안해 보일 때는 빠르게 치료를 진행하는 것이 좋다.", a: false },
+            { q: "환자의 말을 경청하는 것은 효과적인 상담의 기본이다.", a: true },
+            { q: "전문 용어를 많이 사용할수록 환자의 신뢰도가 높아진다.", a: false },
+            { q: "환자의 치료 계획을 설명할 때는 시각 자료를 활용하면 이해도가 높아진다.", a: true },
+            { q: "환자가 질문을 많이 하면 상담 시간이 길어지므로 피하는 것이 좋다.", a: false },
+            { q: "환자의 개인 정보와 치료 내용은 비밀이 보장되어야 한다.", a: true },
+            { q: "치료비 상담은 치료 설명보다 먼저 하는 것이 효율적이다.", a: false },
+            { q: "환자의 불만 사항에 대해 공감하며 경청하는 태도가 필요하다.", a: true },
+            { q: "AI 챗봇은 모든 환자 상담을 완벽하게 대체할 수 있다.", a: false }
+        ];
+
+        let currentIndex = 0;
+        let correctAnswers = 0;
+        let answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('quizContainer');
+            const q = questions[currentIndex];
+
+            container.innerHTML = `
+                <div class="quiz-card">
+                    <div class="question-header">
+                        <span class="question-number">문제 ${currentIndex + 1}</span>
+                    </div>
+                    <div class="question-text">${q.q}</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(true)">O</button>
+                        <button class="option-btn" onclick="selectAnswer(false)">X</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('progressFill').style.width = `${(currentIndex / questions.length) * 100}%`;
+            document.getElementById('currentQuestion').textContent = `${currentIndex + 1} / ${questions.length}`;
+            document.getElementById('correctCount').textContent = `정답: ${correctAnswers}개`;
+        }
+
+        function selectAnswer(answer) {
+            const q = questions[currentIndex];
+            const isCorrect = answer === q.a;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === 'O') {
+                    if (q.a === true) btn.classList.add('correct');
+                    else if (answer === true) btn.classList.add('wrong');
+                } else {
+                    if (q.a === false) btn.classList.add('correct');
+                    else if (answer === false) btn.classList.add('wrong');
+                }
+            });
+
+            if (isCorrect) correctAnswers++;
+            answers.push({ question: currentIndex, userAnswer: answer, correct: isCorrect });
+
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultCard').classList.add('show');
+
+            const score = Math.round((correctAnswers / questions.length) * 100);
+            const wrongCount = questions.length - correctAnswers;
+
+            document.getElementById('resultScore').textContent = score + '점';
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalWrong').textContent = wrongCount;
+
+            if (score >= 90) {
+                document.getElementById('resultIcon').textContent = '🎉';
+                document.getElementById('resultText').textContent = '훌륭합니다! 완벽에 가까운 점수입니다!';
+            } else if (score >= 70) {
+                document.getElementById('resultIcon').textContent = '👍';
+                document.getElementById('resultText').textContent = '잘 하셨습니다! 조금만 더 노력하면 완벽해요!';
+            } else if (score >= 50) {
+                document.getElementById('resultIcon').textContent = '💪';
+                document.getElementById('resultText').textContent = '괜찮아요! 복습 후 다시 도전해보세요!';
+            } else {
+                document.getElementById('resultIcon').textContent = '📚';
+                document.getElementById('resultText').textContent = '강의를 다시 한번 복습해보세요!';
+            }
+
+            saveResult(score);
+        }
+
+        function saveResult(score) {
+            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+            if (!user) return;
+
+            const key = `${quizId}_${user.id}`;
+            const data = JSON.parse(localStorage.getItem(key) || '{"history":[]}');
+
+            data.history.push({
+                date: new Date().toISOString(),
+                score: score,
+                correct: correctAnswers,
+                total: questions.length
+            });
+
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            correctAnswers = 0;
+            answers = [];
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>

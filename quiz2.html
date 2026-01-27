@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        if (!localStorage.getItem('currentPaidUser')) {
+            window.location.replace('paid-user-select.html');
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시험 2: 치료 설명 스킬 | 덴탈클리닉파인더 아카데미</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --success: #10b981;
+            --error: #ef4444;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            padding: 20px 5%;
+            color: white;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 1.2rem; font-weight: 600; }
+
+        .header .quiz-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-type-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 5%;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: #f59e0b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn .option-label {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .option-btn:hover {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .option-btn.selected {
+            border-color: #f59e0b;
+            background: #f59e0b;
+            color: white;
+        }
+
+        .option-btn.selected .option-label {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.correct .option-label {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background: var(--error);
+            color: white;
+        }
+
+        .option-btn.wrong .option-label {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .option-btn:disabled { cursor: not-allowed; }
+
+        /* 결과 화면 */
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .result-card.show { display: block; }
+
+        .result-icon { font-size: 4rem; margin-bottom: 20px; }
+        .result-score { font-size: 3rem; font-weight: 700; color: #f59e0b; margin-bottom: 10px; }
+        .result-text { font-size: 1.1rem; color: var(--gray); margin-bottom: 30px; }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .result-detail-item { text-align: center; }
+        .result-detail-item .number { font-size: 1.5rem; font-weight: 700; }
+        .result-detail-item .label { font-size: 0.85rem; color: var(--gray); }
+        .result-detail-item .number.correct { color: var(--success); }
+        .result-detail-item .number.wrong { color: var(--error); }
+
+        .result-buttons { display: flex; gap: 15px; justify-content: center; }
+
+        .result-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .result-btn.primary { background: #f59e0b; color: white; }
+        .result-btn.secondary { background: #e5e7eb; color: var(--dark); }
+        .result-btn:hover { transform: translateY(-2px); }
+
+        /* 진행 바 */
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>시험 2: 치료 설명 스킬</h1>
+            <div class="quiz-info">
+                <span class="quiz-type-badge">4지선다</span>
+                <span>총 10문제</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← 대시보드로 돌아가기</a>
+
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentQuestion">1 / 10</span>
+                <span id="correctCount">정답: 0개</span>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-score" id="resultScore">100점</div>
+            <div class="result-text" id="resultText">훌륭합니다!</div>
+            <div class="result-details">
+                <div class="result-detail-item">
+                    <div class="number correct" id="finalCorrect">10</div>
+                    <div class="label">정답</div>
+                </div>
+                <div class="result-detail-item">
+                    <div class="number wrong" id="finalWrong">0</div>
+                    <div class="label">오답</div>
+                </div>
+            </div>
+            <div class="result-buttons">
+                <button class="result-btn primary" onclick="restartQuiz()">다시 풀기</button>
+                <a href="dashboard.html" class="result-btn secondary">대시보드로</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizId = 'quiz2';
+        const questions = [
+            {
+                q: "환자에게 충치 치료 과정을 설명할 때 가장 적절한 방법은?",
+                options: ["전문 용어를 사용하여 정확하게 설명한다", "시각 자료를 활용하여 쉽게 설명한다", "치료 과정은 생략하고 결과만 설명한다", "다른 환자의 사례를 자세히 이야기한다"],
+                answer: 1
+            },
+            {
+                q: "환자가 치료비에 대해 불만을 표시할 때 적절한 대응은?",
+                options: ["다른 병원과 비교하여 저렴함을 강조한다", "치료의 가치와 필요성을 차분히 설명한다", "할인을 먼저 제안한다", "환자의 불만을 무시하고 치료를 진행한다"],
+                answer: 1
+            },
+            {
+                q: "임플란트 치료 설명 시 반드시 포함해야 할 내용이 아닌 것은?",
+                options: ["치료 기간과 과정", "예상 비용", "다른 환자들의 후기", "발생 가능한 부작용"],
+                answer: 2
+            },
+            {
+                q: "환자의 치아 상태를 설명할 때 가장 효과적인 도구는?",
+                options: ["의학 교과서", "구강 카메라 사진", "손으로 그린 그림", "다른 환자의 X-ray"],
+                answer: 1
+            },
+            {
+                q: "치료 동의서 설명 시 주의해야 할 점은?",
+                options: ["빠르게 설명하여 시간을 절약한다", "환자가 이해했는지 반드시 확인한다", "서명만 받으면 된다", "보호자 없이 진행해도 무방하다"],
+                answer: 1
+            },
+            {
+                q: "소아 환자의 부모에게 치료를 설명할 때 중요한 점은?",
+                options: ["아이 앞에서 최대한 자세히 설명한다", "부모의 불안감을 고려하여 설명한다", "치료비만 설명하면 된다", "아이에게만 설명한다"],
+                answer: 1
+            },
+            {
+                q: "치료 후 주의사항 설명으로 적절한 것은?",
+                options: ["구두로만 설명한다", "서면으로 제공하고 중요 사항을 강조한다", "환자가 물어보면 설명한다", "인터넷 검색을 권유한다"],
+                answer: 1
+            },
+            {
+                q: "환자가 치료를 거부할 때 적절한 대응은?",
+                options: ["즉시 치료를 포기한다", "거부 사유를 파악하고 대안을 제시한다", "강하게 설득하여 치료를 진행한다", "다른 병원 방문을 권유한다"],
+                answer: 1
+            },
+            {
+                q: "발치 후 관리 설명에 포함되어야 할 내용이 아닌 것은?",
+                options: ["출혈 관리 방법", "식사 주의사항", "다음 방문 일정", "발치 부위 사진 촬영 방법"],
+                answer: 3
+            },
+            {
+                q: "정기 검진의 중요성을 설명할 때 효과적인 방법은?",
+                options: ["무서운 질병 사례를 강조한다", "예방의 효과와 비용 절감을 설명한다", "의무적으로 와야 한다고 말한다", "다른 환자들이 다 온다고 말한다"],
+                answer: 1
+            }
+        ];
+
+        let currentIndex = 0;
+        let correctAnswers = 0;
+        let answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('quizContainer');
+            const q = questions[currentIndex];
+            const labels = ['A', 'B', 'C', 'D'];
+
+            container.innerHTML = `
+                <div class="quiz-card">
+                    <div class="question-header">
+                        <span class="question-number">문제 ${currentIndex + 1}</span>
+                    </div>
+                    <div class="question-text">${q.q}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="selectAnswer(${i})">
+                                <span class="option-label">${labels[i]}</span>
+                                <span>${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('progressFill').style.width = `${(currentIndex / questions.length) * 100}%`;
+            document.getElementById('currentQuestion').textContent = `${currentIndex + 1} / ${questions.length}`;
+            document.getElementById('correctCount').textContent = `정답: ${correctAnswers}개`;
+        }
+
+        function selectAnswer(answer) {
+            const q = questions[currentIndex];
+            const isCorrect = answer === q.answer;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === q.answer) btn.classList.add('correct');
+                else if (i === answer && !isCorrect) btn.classList.add('wrong');
+            });
+
+            if (isCorrect) correctAnswers++;
+            answers.push({ question: currentIndex, userAnswer: answer, correct: isCorrect });
+
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultCard').classList.add('show');
+
+            const score = Math.round((correctAnswers / questions.length) * 100);
+            const wrongCount = questions.length - correctAnswers;
+
+            document.getElementById('resultScore').textContent = score + '점';
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalWrong').textContent = wrongCount;
+
+            if (score >= 90) {
+                document.getElementById('resultIcon').textContent = '🎉';
+                document.getElementById('resultText').textContent = '훌륭합니다! 완벽에 가까운 점수입니다!';
+            } else if (score >= 70) {
+                document.getElementById('resultIcon').textContent = '👍';
+                document.getElementById('resultText').textContent = '잘 하셨습니다! 조금만 더 노력하면 완벽해요!';
+            } else if (score >= 50) {
+                document.getElementById('resultIcon').textContent = '💪';
+                document.getElementById('resultText').textContent = '괜찮아요! 복습 후 다시 도전해보세요!';
+            } else {
+                document.getElementById('resultIcon').textContent = '📚';
+                document.getElementById('resultText').textContent = '강의를 다시 한번 복습해보세요!';
+            }
+
+            saveResult(score);
+        }
+
+        function saveResult(score) {
+            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+            if (!user) return;
+
+            const key = `${quizId}_${user.id}`;
+            const data = JSON.parse(localStorage.getItem(key) || '{"history":[]}');
+
+            data.history.push({
+                date: new Date().toISOString(),
+                score: score,
+                correct: correctAnswers,
+                total: questions.length
+            });
+
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            correctAnswers = 0;
+            answers = [];
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유료 사용자 선택 | 덴탈클리닉파인더 환자상담 AI 아카데미</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo .academy-name {
+            display: block;
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 5px;
+            -webkit-text-fill-color: #ffd700;
+            background: none;
+        }
+
+        .selection-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+        }
+
+        .selection-card h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .selection-card > p {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+            transform: translateX(5px);
+        }
+
+        .option-btn .icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .option-btn .text h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .option-btn .text p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* 등록 폼 */
+        .register-form {
+            display: none;
+        }
+
+        .register-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
+        }
+
+        /* 기존 사용자 목록 */
+        .user-list {
+            display: none;
+        }
+
+        .user-list.active {
+            display: block;
+        }
+
+        .user-list-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-item:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+        }
+
+        .user-item.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .user-item .avatar {
+            width: 55px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            letter-spacing: 1px;
+        }
+
+        .user-item.selected .avatar {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .user-item .info {
+            flex: 1;
+        }
+
+        .user-item .info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-item .info p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .user-item .info .reg-date {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            margin-top: 3px;
+        }
+
+        .user-item .dashboard-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .user-item .dashboard-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .user-item.selected .dashboard-btn {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .no-users {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+
+        .no-users .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        /* 역할 선택 버튼 */
+        .role-selection {
+            margin-bottom: 18px;
+        }
+
+        .role-selection label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .role-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .role-btn {
+            padding: 12px 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .role-btn:hover {
+            border-color: var(--primary);
+            background: #f5f3ff;
+        }
+
+        .role-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 400px) {
+            .role-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .back-btn:hover {
+            border-color: var(--gray);
+            color: var(--dark);
+        }
+
+        /* 검색창 스타일 */
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .search-box input::placeholder {
+            color: #9ca3af;
+        }
+
+        .no-search-results {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            text-align: center;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        @media (max-width: 500px) {
+            .selection-card {
+                padding: 30px 20px;
+            }
+
+            .selection-card h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <a href="user-select.html" class="logo">
+                덴탈클리닉<span>파인더</span>
+                <span class="academy-name">치과 환자상담 AI 아카데미</span>
+            </a>
+        </div>
+
+        <div class="selection-card">
+            <!-- 초기 선택 화면 -->
+            <div id="initialOptions">
+                <h1>유료 사용자 확인</h1>
+                <p>처음 방문하셨나요? 아니면 이미 등록된 사용자이신가요?</p>
+
+                <div class="options">
+                    <div class="option-btn" onclick="showRegisterForm()">
+                        <span class="icon">✨</span>
+                        <div class="text">
+                            <h3>신규 등록</h3>
+                            <p>처음 방문한 유료 사용자입니다</p>
+                        </div>
+                    </div>
+
+                    <div class="option-btn" onclick="showUserList()">
+                        <span class="icon">👤</span>
+                        <div class="text">
+                            <h3>기존 사용자</h3>
+                            <p>이미 등록된 유료 사용자입니다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 신규 등록 폼 -->
+            <div id="registerForm" class="register-form">
+                <h1>유료 사용자 등록</h1>
+                <p>아래 정보를 입력해주세요</p>
+
+                <form onsubmit="registerUser(event)">
+                    <div class="form-group">
+                        <label>이름 *</label>
+                        <input type="text" id="userName" placeholder="홍길동" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>소속 치과</label>
+                        <input type="text" id="userClinic" placeholder="OO치과의원">
+                    </div>
+
+                    <div class="role-selection">
+                        <label>역할 *</label>
+                        <div class="role-buttons">
+                            <button type="button" class="role-btn" onclick="selectRole('원장')">원장</button>
+                            <button type="button" class="role-btn" onclick="selectRole('의사')">의사</button>
+                            <button type="button" class="role-btn" onclick="selectRole('상담사')">상담사</button>
+                            <button type="button" class="role-btn" onclick="selectRole('간호사')">간호사</button>
+                            <button type="button" class="role-btn" onclick="selectRole('기공사')">기공사</button>
+                            <button type="button" class="role-btn" onclick="selectRole('직원')">직원</button>
+                        </div>
+                        <input type="text" id="customRole" placeholder="직접 입력 (위 버튼에 없는 경우)" oninput="onCustomRoleInput()" style="margin-top:10px;width:100%;padding:12px 14px;border:2px solid #e5e7eb;border-radius:10px;font-size:0.9rem;font-family:inherit;">
+                        <input type="hidden" id="userRole" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>연락처</label>
+                        <input type="tel" id="userPhone" placeholder="010-0000-0000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>접속용 비밀번호 * (숫자 6자리)</label>
+                        <input type="password" id="userPassword" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">등록하고 시작하기</button>
+                </form>
+
+                <button class="back-btn" onclick="showInitialOptions()">← 뒤로 가기</button>
+            </div>
+
+            <!-- 기존 사용자 목록 -->
+            <div id="userList" class="user-list">
+                <h1>프로필 선택</h1>
+                <p>본인의 프로필을 선택해주세요</p>
+
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="userSearchInput" placeholder="일련번호, 이름, 병원명으로 검색" oninput="filterUsers()">
+                </div>
+
+                <div class="user-list-container" id="userListContainer">
+                    <!-- 동적으로 채워짐 -->
+                </div>
+
+                <div class="form-group" id="passwordVerifyGroup" style="display: none;">
+                    <label>비밀번호 입력</label>
+                    <input type="password" id="verifyPassword" placeholder="숫자 6자리" maxlength="6" inputmode="numeric">
+                </div>
+
+                <button class="submit-btn" id="selectUserBtn" onclick="selectUser()" disabled>선택하고 시작하기</button>
+                <button class="back-btn" onclick="showInitialOptions()">← 뒤로 가기</button>
+            </div>
+        </div>
+
+        <a href="user-select.html" class="back-link">← 사용자 유형 다시 선택</a>
+    </div>
+
+    <script>
+        let selectedUserId = null;
+        let selectedRole = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const destination = urlParams.get('dest') || 'index.html#home';
+
+        // 역할 선택 함수
+        function selectRole(role) {
+            selectedRole = role;
+            document.getElementById('userRole').value = role;
+            document.getElementById('customRole').value = ''; // 직접 입력 초기화
+
+            // UI 업데이트
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.textContent === role) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+
+        // 직접 입력 함수
+        function onCustomRoleInput() {
+            const customRole = document.getElementById('customRole').value.trim();
+            if (customRole) {
+                selectedRole = customRole;
+                document.getElementById('userRole').value = customRole;
+                // 버튼 선택 해제
+                document.querySelectorAll('.role-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+            }
+        }
+
+        // 화면 전환 함수들
+        function showInitialOptions() {
+            document.getElementById('initialOptions').style.display = 'block';
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('userList').classList.remove('active');
+        }
+
+        function showRegisterForm() {
+            document.getElementById('initialOptions').style.display = 'none';
+            document.getElementById('registerForm').classList.add('active');
+            document.getElementById('userList').classList.remove('active');
+        }
+
+        function showUserList() {
+            document.getElementById('initialOptions').style.display = 'none';
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('userList').classList.add('active');
+            document.getElementById('passwordVerifyGroup').style.display = 'none';
+            document.getElementById('selectUserBtn').disabled = true;
+            selectedUserId = null;
+            loadUserList();
+        }
+
+        // 사용자 등록
+        function registerUser(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('userName').value.trim();
+            const clinic = document.getElementById('userClinic').value.trim();
+            const role = document.getElementById('userRole').value;
+            const phone = document.getElementById('userPhone').value.trim();
+            const password = document.getElementById('userPassword').value.trim();
+
+            if (!name) {
+                alert('이름을 입력해주세요.');
+                return;
+            }
+
+            if (!role) {
+                alert('역할을 선택해주세요.');
+                return;
+            }
+
+            if (!password || password.length !== 6 || !/^\d{6}$/.test(password)) {
+                alert('비밀번호는 숫자 6자리로 입력해주세요.');
+                return;
+            }
+
+            // 기존 사용자 목록 가져오기
+            let users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+
+            // 일련번호 생성 (0001부터 시작)
+            let nextNumber = 1;
+            if (users.length > 0) {
+                const maxNumber = Math.max(...users.map(u => parseInt(u.serialNumber) || 0));
+                nextNumber = maxNumber + 1;
+            }
+            const serialNumber = String(nextNumber).padStart(4, '0');
+
+            // 새 사용자 추가
+            const newUser = {
+                id: Date.now().toString(),
+                serialNumber: serialNumber,
+                name: name,
+                clinic: clinic,
+                role: role,
+                phone: phone,
+                password: password,
+                registeredAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('paidUsers', JSON.stringify(users));
+
+            // 현재 사용자로 설정
+            localStorage.setItem('currentPaidUser', JSON.stringify(newUser));
+            localStorage.setItem('userType', 'paid');
+            sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+
+            // 목적지로 이동
+            navigateToDestination();
+        }
+
+        // 사용자 목록 로드
+        function loadUserList() {
+            const searchInput = document.getElementById('userSearchInput');
+            if (searchInput) searchInput.value = ''; // 검색창 초기화
+            renderUserList();
+        }
+
+        // 사용자 목록 렌더링
+        function renderUserList(filterText = '') {
+            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            const container = document.getElementById('userListContainer');
+
+            if (users.length === 0) {
+                container.innerHTML = `
+                    <div class="no-users">
+                        <div class="icon">📋</div>
+                        <p>등록된 사용자가 없습니다.<br>신규 등록을 진행해주세요.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 검색 필터 적용
+            const searchTerm = filterText.toLowerCase().trim();
+            const filteredUsers = searchTerm ? users.filter(user => {
+                const serialNum = (user.serialNumber || '').toLowerCase();
+                const name = (user.name || '').toLowerCase();
+                const clinic = (user.clinic || '').toLowerCase();
+                return serialNum.includes(searchTerm) || name.includes(searchTerm) || clinic.includes(searchTerm);
+            }) : users;
+
+            if (filteredUsers.length === 0) {
+                container.innerHTML = `
+                    <div class="no-search-results">
+                        <p>검색 결과가 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredUsers.map(user => {
+                const regDate = user.registeredAt ? new Date(user.registeredAt).toLocaleDateString('ko-KR') : '날짜 없음';
+                const roleText = user.role ? `[${user.role}]` : '';
+                const serialNum = user.serialNumber || '----';
+                return `
+                <div class="user-item" onclick="selectUserItem('${user.id}')" id="user-${user.id}">
+                    <div class="avatar">${serialNum}</div>
+                    <div class="info">
+                        <h4>${user.name} <span style="font-size:0.8rem;color:#8b5cf6;font-weight:500;">${roleText}</span></h4>
+                        <p>${user.clinic || '소속 미입력'}</p>
+                        <p class="reg-date">등록일: ${regDate}</p>
+                    </div>
+                    <button class="dashboard-btn" onclick="event.stopPropagation(); goToDashboard('${user.id}')">내 대시보드 보기</button>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // 사용자 검색 필터
+        function filterUsers() {
+            const searchInput = document.getElementById('userSearchInput');
+            const searchText = searchInput ? searchInput.value : '';
+            renderUserList(searchText);
+        }
+
+        // 사용자 아이템 선택
+        function selectUserItem(userId) {
+            selectedUserId = userId;
+
+            // UI 업데이트
+            document.querySelectorAll('.user-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.getElementById('user-' + userId).classList.add('selected');
+
+            // 비밀번호 입력 필드 표시
+            document.getElementById('passwordVerifyGroup').style.display = 'block';
+            document.getElementById('verifyPassword').value = '';
+            document.getElementById('verifyPassword').focus();
+
+            // 버튼 활성화
+            document.getElementById('selectUserBtn').disabled = false;
+        }
+
+        // 선택한 사용자로 진행
+        function selectUser() {
+            if (!selectedUserId) return;
+
+            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            const user = users.find(u => u.id === selectedUserId);
+            const enteredPassword = document.getElementById('verifyPassword').value.trim();
+
+            if (!user) return;
+
+            // 비밀번호 확인
+            if (user.password && user.password !== enteredPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                document.getElementById('verifyPassword').value = '';
+                document.getElementById('verifyPassword').focus();
+                return;
+            }
+
+            localStorage.setItem('currentPaidUser', JSON.stringify(user));
+            localStorage.setItem('userType', 'paid');
+            sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+            navigateToDestination();
+        }
+
+        // 목적지로 이동
+        function navigateToDestination() {
+            if (destination.startsWith('#')) {
+                window.location.href = 'index.html' + destination;
+            } else if (destination.startsWith('http')) {
+                window.open(destination, '_blank');
+                window.location.href = 'index.html';
+            } else {
+                window.location.href = destination;
+            }
+        }
+
+        // 대시보드로 이동
+        function goToDashboard(userId) {
+            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            const user = users.find(u => u.id === userId);
+
+            if (!user) return;
+
+            // 비밀번호 확인
+            const enteredPassword = prompt('비밀번호를 입력해주세요 (숫자 6자리):');
+
+            if (enteredPassword === null) return; // 취소 클릭
+
+            if (user.password && user.password !== enteredPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            // 현재 사용자 설정 후 대시보드로 이동
+            localStorage.setItem('currentPaidUser', JSON.stringify(user));
+            localStorage.setItem('userType', 'paid');
+            sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

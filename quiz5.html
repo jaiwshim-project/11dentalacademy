@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        if (!localStorage.getItem('currentPaidUser')) {
+            window.location.replace('paid-user-select.html');
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시험 5: 종합 평가 | 덴탈클리닉파인더 아카데미</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ef4444;
+            --primary-dark: #dc2626;
+            --success: #10b981;
+            --error: #ef4444;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            padding: 20px 5%;
+            color: white;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 1.2rem; font-weight: 600; }
+
+        .header .quiz-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .quiz-type-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 5%;
+        }
+
+        .quiz-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn .option-label {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #fef2f2;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .option-btn.selected .option-label {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.correct .option-label {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background: #fca5a5;
+            color: white;
+        }
+
+        .option-btn.wrong .option-label {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .option-btn:disabled { cursor: not-allowed; }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .result-card.show { display: block; }
+
+        .result-icon { font-size: 4rem; margin-bottom: 20px; }
+        .result-score { font-size: 3rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .result-text { font-size: 1.1rem; color: var(--gray); margin-bottom: 30px; }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .result-detail-item { text-align: center; }
+        .result-detail-item .number { font-size: 1.5rem; font-weight: 700; }
+        .result-detail-item .label { font-size: 0.85rem; color: var(--gray); }
+        .result-detail-item .number.correct { color: var(--success); }
+        .result-detail-item .number.wrong { color: var(--error); }
+
+        .result-buttons { display: flex; gap: 15px; justify-content: center; }
+
+        .result-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .result-btn.primary { background: var(--primary); color: white; }
+        .result-btn.secondary { background: #e5e7eb; color: var(--dark); }
+        .result-btn:hover { transform: translateY(-2px); }
+
+        /* 인증서 스타일 */
+        .certificate {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid #f59e0b;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .certificate.show { display: block; }
+
+        .certificate h3 {
+            color: #b45309;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .certificate p {
+            color: #92400e;
+            font-size: 0.9rem;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>시험 5: 종합 평가</h1>
+            <div class="quiz-info">
+                <span class="quiz-type-badge">4지선다</span>
+                <span>총 10문제</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← 대시보드로 돌아가기</a>
+
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentQuestion">1 / 10</span>
+                <span id="correctCount">정답: 0개</span>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-score" id="resultScore">100점</div>
+            <div class="result-text" id="resultText">훌륭합니다!</div>
+            <div class="result-details">
+                <div class="result-detail-item">
+                    <div class="number correct" id="finalCorrect">10</div>
+                    <div class="label">정답</div>
+                </div>
+                <div class="result-detail-item">
+                    <div class="number wrong" id="finalWrong">0</div>
+                    <div class="label">오답</div>
+                </div>
+            </div>
+
+            <div class="certificate" id="certificate">
+                <h3>🏆 축하합니다!</h3>
+                <p>환자상담 AI 아카데미 종합 평가를 우수한 성적으로 통과하셨습니다.</p>
+            </div>
+
+            <div class="result-buttons">
+                <button class="result-btn primary" onclick="restartQuiz()">다시 풀기</button>
+                <a href="dashboard.html" class="result-btn secondary">대시보드로</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizId = 'quiz5';
+        const questions = [
+            {
+                q: "환자 상담에서 가장 중요한 첫 번째 단계는?",
+                options: ["치료 계획 설명", "라포(신뢰관계) 형성", "치료비 안내", "예약 확인"],
+                answer: 1
+            },
+            {
+                q: "환자가 치료 결정을 망설일 때 적절한 대응은?",
+                options: ["빠른 결정을 촉구한다", "다른 환자 사례를 들어 설득한다", "환자의 우려 사항을 경청하고 해결한다", "할인 혜택을 제안한다"],
+                answer: 2
+            },
+            {
+                q: "AI 챗봇을 치과 상담에 도입할 때 가장 적합한 활용 분야는?",
+                options: ["복잡한 치료 상담", "간단한 예약 및 문의 응대", "응급 상황 대응", "치료 계획 수립"],
+                answer: 1
+            },
+            {
+                q: "환자의 치과 공포증을 완화하는 효과적인 방법이 아닌 것은?",
+                options: ["차분한 설명과 안내", "치료 과정 숨기기", "편안한 환경 조성", "환자 통제권 부여"],
+                answer: 1
+            },
+            {
+                q: "효과적인 치료 설명에 포함되어야 할 요소가 아닌 것은?",
+                options: ["치료 과정과 기간", "예상 비용", "다른 환자의 개인 정보", "예상 결과와 주의사항"],
+                answer: 2
+            },
+            {
+                q: "환자 불만 처리 시 첫 번째로 해야 할 행동은?",
+                options: ["변명과 해명", "경청과 공감 표현", "상급자에게 전달", "즉시 보상 제안"],
+                answer: 1
+            },
+            {
+                q: "소아 환자 상담 시 주의해야 할 점은?",
+                options: ["부모 없이 상담한다", "아이와 부모 모두에게 설명한다", "전문 용어를 사용한다", "치료 과정을 생략한다"],
+                answer: 1
+            },
+            {
+                q: "상담 기록 관리에서 중요하지 않은 것은?",
+                options: ["환자 동의 내용", "상담 일시", "상담사의 개인 의견", "환자의 주요 우려사항"],
+                answer: 2
+            },
+            {
+                q: "정기 검진 예약 유도를 위한 효과적인 방법은?",
+                options: ["강압적으로 예약한다", "예방의 가치와 이점을 설명한다", "벌금을 부과한다", "다른 환자와 비교한다"],
+                answer: 1
+            },
+            {
+                q: "AI를 활용한 상담에서 반드시 사람이 개입해야 하는 상황은?",
+                options: ["단순 예약 문의", "영업 시간 안내", "환자의 심각한 불만 표출", "진료 과목 안내"],
+                answer: 2
+            }
+        ];
+
+        let currentIndex = 0;
+        let correctAnswers = 0;
+        let answers = [];
+
+        function renderQuestion() {
+            const container = document.getElementById('quizContainer');
+            const q = questions[currentIndex];
+            const labels = ['A', 'B', 'C', 'D'];
+
+            container.innerHTML = `
+                <div class="quiz-card">
+                    <div class="question-header">
+                        <span class="question-number">문제 ${currentIndex + 1}</span>
+                    </div>
+                    <div class="question-text">${q.q}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="selectAnswer(${i})">
+                                <span class="option-label">${labels[i]}</span>
+                                <span>${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('progressFill').style.width = `${(currentIndex / questions.length) * 100}%`;
+            document.getElementById('currentQuestion').textContent = `${currentIndex + 1} / ${questions.length}`;
+            document.getElementById('correctCount').textContent = `정답: ${correctAnswers}개`;
+        }
+
+        function selectAnswer(answer) {
+            const q = questions[currentIndex];
+            const isCorrect = answer === q.answer;
+            const buttons = document.querySelectorAll('.option-btn');
+
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === q.answer) btn.classList.add('correct');
+                else if (i === answer && !isCorrect) btn.classList.add('wrong');
+            });
+
+            if (isCorrect) correctAnswers++;
+            answers.push({ question: currentIndex, userAnswer: answer, correct: isCorrect });
+
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1200);
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultCard').classList.add('show');
+
+            const score = Math.round((correctAnswers / questions.length) * 100);
+            const wrongCount = questions.length - correctAnswers;
+
+            document.getElementById('resultScore').textContent = score + '점';
+            document.getElementById('finalCorrect').textContent = correctAnswers;
+            document.getElementById('finalWrong').textContent = wrongCount;
+
+            if (score >= 90) {
+                document.getElementById('resultIcon').textContent = '🎉';
+                document.getElementById('resultText').textContent = '훌륭합니다! 모든 과정을 완벽하게 이해하셨습니다!';
+                document.getElementById('certificate').classList.add('show');
+            } else if (score >= 70) {
+                document.getElementById('resultIcon').textContent = '👍';
+                document.getElementById('resultText').textContent = '잘 하셨습니다! 조금만 더 복습하면 완벽해요!';
+            } else if (score >= 50) {
+                document.getElementById('resultIcon').textContent = '💪';
+                document.getElementById('resultText').textContent = '괜찮아요! 부족한 부분을 복습 후 다시 도전해보세요!';
+            } else {
+                document.getElementById('resultIcon').textContent = '📚';
+                document.getElementById('resultText').textContent = '전체 강의를 다시 복습 후 재도전해주세요!';
+            }
+
+            saveResult(score);
+        }
+
+        function saveResult(score) {
+            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+            if (!user) return;
+
+            const key = `${quizId}_${user.id}`;
+            const data = JSON.parse(localStorage.getItem(key) || '{"history":[]}');
+
+            data.history.push({
+                date: new Date().toISOString(),
+                score: score,
+                correct: correctAnswers,
+                total: questions.length
+            });
+
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            correctAnswers = 0;
+            answers = [];
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('resultCard').classList.remove('show');
+            document.getElementById('certificate').classList.remove('show');
+            renderQuestion();
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
