@@ -505,8 +505,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label>접속용 비밀번호 * (숫자 6자리)</label>
+                        <label style="display: flex; align-items: center; gap: 8px;">접속용 비밀번호 * (숫자 6자리) <span style="font-size: 0.75rem; color: #e53e3e; font-weight: 500;">재접속하려면 반드시 기억하세요.</span></label>
                         <input type="password" id="userPassword" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 8px;">관리자 인증번호 * (숫자 8자리) <span style="font-size: 0.75rem; color: #e53e3e; font-weight: 500;">유료사용자에게 전달한 번호</span></label>
+                        <input type="password" id="authCode" placeholder="관리자에게 받은 인증번호 입력" maxlength="8" pattern="[0-9]{8}" inputmode="numeric" required>
                     </div>
 
                     <button type="submit" class="submit-btn">등록하고 시작하기</button>
@@ -542,9 +547,14 @@
         <a href="user-select.html" class="back-link">← 사용자 유형 다시 선택</a>
     </div>
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
     <script>
         let selectedUserId = null;
         let selectedRole = null;
+        let allUsers = []; // 캐시된 사용자 목록
         const urlParams = new URLSearchParams(window.location.search);
         const destination = urlParams.get('dest') || 'index.html#home';
 
@@ -552,9 +562,8 @@
         function selectRole(role) {
             selectedRole = role;
             document.getElementById('userRole').value = role;
-            document.getElementById('customRole').value = ''; // 직접 입력 초기화
+            document.getElementById('customRole').value = '';
 
-            // UI 업데이트
             document.querySelectorAll('.role-btn').forEach(btn => {
                 btn.classList.remove('selected');
                 if (btn.textContent === role) {
@@ -569,7 +578,6 @@
             if (customRole) {
                 selectedRole = customRole;
                 document.getElementById('userRole').value = customRole;
-                // 버튼 선택 해제
                 document.querySelectorAll('.role-btn').forEach(btn => {
                     btn.classList.remove('selected');
                 });
@@ -599,8 +607,11 @@
             loadUserList();
         }
 
-        // 사용자 등록
-        function registerUser(event) {
+        // 관리자 인증번호
+        const ADMIN_AUTH_CODE = '23975734';
+
+        // 사용자 등록 (Supabase)
+        async function registerUser(event) {
             event.preventDefault();
 
             const name = document.getElementById('userName').value.trim();
@@ -608,6 +619,7 @@
             const role = document.getElementById('userRole').value;
             const phone = document.getElementById('userPhone').value.trim();
             const password = document.getElementById('userPassword').value.trim();
+            const authCode = document.getElementById('authCode').value.trim();
 
             if (!name) {
                 alert('이름을 입력해주세요.');
@@ -624,54 +636,120 @@
                 return;
             }
 
-            // 기존 사용자 목록 가져오기
-            let users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            if (!authCode || authCode !== ADMIN_AUTH_CODE) {
+                alert('인증번호가 올바르지 않습니다.\n관리자에게 정확한 인증번호를 확인해주세요.');
+                document.getElementById('authCode').value = '';
+                document.getElementById('authCode').focus();
+                return;
+            }
 
-            // 일련번호 생성 (0001부터 시작)
+            // 로딩 표시
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = '등록 중...';
+            submitBtn.disabled = true;
+
+            try {
+                // Supabase에 사용자 등록
+                const newUser = await registerUserToSupabase({
+                    name: name,
+                    clinic: clinic,
+                    role: role,
+                    phone: phone,
+                    password: password
+                });
+
+                if (newUser) {
+                    // 현재 사용자로 설정
+                    setCurrentUser({
+                        id: newUser.id,
+                        serialNumber: newUser.serial_number,
+                        name: newUser.name,
+                        clinic: newUser.clinic,
+                        role: newUser.role,
+                        phone: newUser.phone,
+                        password: newUser.password,
+                        registeredAt: newUser.created_at
+                    });
+                    localStorage.setItem('userType', 'paid');
+                    sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+
+                    navigateToDestination();
+                } else {
+                    alert('등록에 실패했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                console.error('등록 오류:', error);
+                alert('등록 중 오류가 발생했습니다.');
+            } finally {
+                submitBtn.textContent = '등록하고 시작하기';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Supabase에 사용자 등록
+        async function registerUserToSupabase(userData) {
+            // 일련번호 생성
+            const { data: maxData } = await supabase
+                .from('paid_users')
+                .select('serial_number')
+                .order('serial_number', { ascending: false })
+                .limit(1);
+
             let nextNumber = 1;
-            if (users.length > 0) {
-                const maxNumber = Math.max(...users.map(u => parseInt(u.serialNumber) || 0));
-                nextNumber = maxNumber + 1;
+            if (maxData && maxData.length > 0) {
+                nextNumber = parseInt(maxData[0].serial_number) + 1;
             }
             const serialNumber = String(nextNumber).padStart(4, '0');
 
-            // 새 사용자 추가
-            const newUser = {
-                id: Date.now().toString(),
-                serialNumber: serialNumber,
-                name: name,
-                clinic: clinic,
-                role: role,
-                phone: phone,
-                password: password,
-                registeredAt: new Date().toISOString()
-            };
+            const { data, error } = await supabase
+                .from('paid_users')
+                .insert([{
+                    serial_number: serialNumber,
+                    name: userData.name,
+                    clinic: userData.clinic || null,
+                    role: userData.role || null,
+                    phone: userData.phone || null,
+                    password: userData.password
+                }])
+                .select()
+                .single();
 
-            users.push(newUser);
-            localStorage.setItem('paidUsers', JSON.stringify(users));
-
-            // 현재 사용자로 설정
-            localStorage.setItem('currentPaidUser', JSON.stringify(newUser));
-            localStorage.setItem('userType', 'paid');
-            sessionStorage.setItem('userTypeSelectedThisSession', 'true');
-
-            // 목적지로 이동
-            navigateToDestination();
+            if (error) {
+                console.error('Supabase 등록 오류:', error);
+                return null;
+            }
+            return data;
         }
 
-        // 사용자 목록 로드
-        function loadUserList() {
+        // 사용자 목록 로드 (Supabase)
+        async function loadUserList() {
             const searchInput = document.getElementById('userSearchInput');
-            if (searchInput) searchInput.value = ''; // 검색창 초기화
-            renderUserList();
+            if (searchInput) searchInput.value = '';
+
+            const container = document.getElementById('userListContainer');
+            container.innerHTML = '<div class="no-users"><div class="icon">⏳</div><p>로딩 중...</p></div>';
+
+            try {
+                const { data, error } = await supabase
+                    .from('paid_users')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                allUsers = data || [];
+                renderUserList();
+            } catch (error) {
+                console.error('사용자 목록 로드 오류:', error);
+                container.innerHTML = '<div class="no-users"><div class="icon">⚠️</div><p>목록을 불러오는데 실패했습니다.</p></div>';
+            }
         }
 
         // 사용자 목록 렌더링
         function renderUserList(filterText = '') {
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
             const container = document.getElementById('userListContainer');
 
-            if (users.length === 0) {
+            if (allUsers.length === 0) {
                 container.innerHTML = `
                     <div class="no-users">
                         <div class="icon">📋</div>
@@ -681,28 +759,23 @@
                 return;
             }
 
-            // 검색 필터 적용
             const searchTerm = filterText.toLowerCase().trim();
-            const filteredUsers = searchTerm ? users.filter(user => {
-                const serialNum = (user.serialNumber || '').toLowerCase();
+            const filteredUsers = searchTerm ? allUsers.filter(user => {
+                const serialNum = (user.serial_number || '').toLowerCase();
                 const name = (user.name || '').toLowerCase();
                 const clinic = (user.clinic || '').toLowerCase();
                 return serialNum.includes(searchTerm) || name.includes(searchTerm) || clinic.includes(searchTerm);
-            }) : users;
+            }) : allUsers;
 
             if (filteredUsers.length === 0) {
-                container.innerHTML = `
-                    <div class="no-search-results">
-                        <p>검색 결과가 없습니다.</p>
-                    </div>
-                `;
+                container.innerHTML = '<div class="no-search-results"><p>검색 결과가 없습니다.</p></div>';
                 return;
             }
 
             container.innerHTML = filteredUsers.map(user => {
-                const regDate = user.registeredAt ? new Date(user.registeredAt).toLocaleDateString('ko-KR') : '날짜 없음';
+                const regDate = user.created_at ? new Date(user.created_at).toLocaleDateString('ko-KR') : '날짜 없음';
                 const roleText = user.role ? `[${user.role}]` : '';
-                const serialNum = user.serialNumber || '----';
+                const serialNum = user.serial_number || '----';
                 return `
                 <div class="user-item" onclick="selectUserItem('${user.id}')" id="user-${user.id}">
                     <div class="avatar">${serialNum}</div>
@@ -728,18 +801,15 @@
         function selectUserItem(userId) {
             selectedUserId = userId;
 
-            // UI 업데이트
             document.querySelectorAll('.user-item').forEach(item => {
                 item.classList.remove('selected');
             });
             document.getElementById('user-' + userId).classList.add('selected');
 
-            // 비밀번호 입력 필드 표시
             document.getElementById('passwordVerifyGroup').style.display = 'block';
             document.getElementById('verifyPassword').value = '';
             document.getElementById('verifyPassword').focus();
 
-            // 버튼 활성화
             document.getElementById('selectUserBtn').disabled = false;
         }
 
@@ -747,13 +817,11 @@
         function selectUser() {
             if (!selectedUserId) return;
 
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-            const user = users.find(u => u.id === selectedUserId);
+            const user = allUsers.find(u => u.id === selectedUserId);
             const enteredPassword = document.getElementById('verifyPassword').value.trim();
 
             if (!user) return;
 
-            // 비밀번호 확인
             if (user.password && user.password !== enteredPassword) {
                 alert('비밀번호가 일치하지 않습니다.');
                 document.getElementById('verifyPassword').value = '';
@@ -761,7 +829,17 @@
                 return;
             }
 
-            localStorage.setItem('currentPaidUser', JSON.stringify(user));
+            // 현재 사용자 설정
+            setCurrentUser({
+                id: user.id,
+                serialNumber: user.serial_number,
+                name: user.name,
+                clinic: user.clinic,
+                role: user.role,
+                phone: user.phone,
+                password: user.password,
+                registeredAt: user.created_at
+            });
             localStorage.setItem('userType', 'paid');
             sessionStorage.setItem('userTypeSelectedThisSession', 'true');
             navigateToDestination();
@@ -781,23 +859,27 @@
 
         // 대시보드로 이동
         function goToDashboard(userId) {
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-            const user = users.find(u => u.id === userId);
-
+            const user = allUsers.find(u => u.id === userId);
             if (!user) return;
 
-            // 비밀번호 확인
             const enteredPassword = prompt('비밀번호를 입력해주세요 (숫자 6자리):');
-
-            if (enteredPassword === null) return; // 취소 클릭
+            if (enteredPassword === null) return;
 
             if (user.password && user.password !== enteredPassword) {
                 alert('비밀번호가 일치하지 않습니다.');
                 return;
             }
 
-            // 현재 사용자 설정 후 대시보드로 이동
-            localStorage.setItem('currentPaidUser', JSON.stringify(user));
+            setCurrentUser({
+                id: user.id,
+                serialNumber: user.serial_number,
+                name: user.name,
+                clinic: user.clinic,
+                role: user.role,
+                phone: user.phone,
+                password: user.password,
+                registeredAt: user.created_at
+            });
             localStorage.setItem('userType', 'paid');
             sessionStorage.setItem('userTypeSelectedThisSession', 'true');
             window.location.href = 'dashboard.html';
