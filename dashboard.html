@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내 학습 대시보드 | 덴탈클리닉파인더 환자상담 AI 아카데미</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #8b5cf6;
@@ -715,6 +717,157 @@
             border-radius: 12px;
         }
 
+        /* 원장 전용 직원 관리 섹션 */
+        .staff-section {
+            display: none;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+            border: 2px solid #f59e0b;
+        }
+
+        .staff-section.visible {
+            display: block;
+        }
+
+        .staff-section h2 {
+            color: #b45309;
+        }
+
+        .staff-section h2::after {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        .staff-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .staff-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .staff-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #fde68a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .staff-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+            border-color: #f59e0b;
+        }
+
+        .staff-item .staff-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .staff-item .staff-info {
+            flex: 1;
+        }
+
+        .staff-item .staff-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .staff-item .staff-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .staff-item .view-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .staff-item .view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .no-staff {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            background: #fffbeb;
+            border-radius: 12px;
+        }
+
+        .view-mode-banner {
+            display: none;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #f59e0b;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .view-mode-banner.visible {
+            display: flex;
+        }
+
+        .view-mode-banner .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #b45309;
+        }
+
+        .view-mode-banner .back-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #b45309;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-mode-banner .back-btn:hover {
+            background: #92400e;
+        }
+
         /* 반응형 */
         @media (max-width: 1024px) {
             .stats-grid {
@@ -768,6 +921,15 @@
     </header>
 
     <div class="container">
+        <!-- 조회 모드 배너 (다른 직원 대시보드 조회 시 표시) -->
+        <div class="view-mode-banner" id="viewModeBanner">
+            <div class="info">
+                <span>👁️</span>
+                <span id="viewingStaffName">직원명</span>님의 대시보드를 조회 중입니다 (읽기 전용)
+            </div>
+            <button class="back-btn" onclick="backToMyDashboard()">내 대시보드로 돌아가기</button>
+        </div>
+
         <!-- 프로필 섹션 -->
         <div class="profile-section">
             <div class="profile-avatar" id="profileAvatar">홍</div>
@@ -790,6 +952,15 @@
                     <div class="number" id="progressPercent">0%</div>
                     <div class="label">전체 진도율</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 원장 전용: 우리 병원 직원 섹션 -->
+        <div class="section-card staff-section" id="staffSection">
+            <h2>👥 우리 병원 직원 <span class="staff-badge">원장 전용</span></h2>
+            <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 20px;">같은 병원에 등록된 직원들의 학습 현황을 확인할 수 있습니다.</p>
+            <div class="staff-list" id="staffList">
+                <div class="no-staff">직원 정보를 불러오는 중...</div>
             </div>
         </div>
 
@@ -973,6 +1144,8 @@
         </div>
     </div>
 
+    <!-- Supabase 설정 스크립트 -->
+    <script src="supabase-config.js"></script>
     <script>
         // 현재 사용자 정보 로드
         function loadUserProfile() {
@@ -983,12 +1156,12 @@
             }
 
             // 프로필 정보 표시
-            document.getElementById('profileAvatar').textContent = user.serialNumber || user.name.charAt(0);
-            document.getElementById('profileName').textContent = (user.serialNumber ? '[' + user.serialNumber + '] ' : '') + user.name;
+            document.getElementById('profileAvatar').textContent = user.serial_number || user.serialNumber || user.name.charAt(0);
+            document.getElementById('profileName').textContent = ((user.serial_number || user.serialNumber) ? '[' + (user.serial_number || user.serialNumber) + '] ' : '') + user.name;
             document.getElementById('profileClinic').textContent = (user.clinic || '소속 미입력') + (user.role ? ' | ' + user.role : '');
 
-            if (user.registeredAt) {
-                const regDate = new Date(user.registeredAt).toLocaleDateString('ko-KR');
+            if (user.created_at || user.registeredAt) {
+                const regDate = new Date(user.created_at || user.registeredAt).toLocaleDateString('ko-KR');
                 document.getElementById('profileRegDate').textContent = '등록일: ' + regDate;
             }
 
@@ -1060,27 +1233,42 @@
             window.location.href = 'user-select.html';
         }
 
-        // 시험 기록 로드
-        function loadQuizData(userId) {
+        // 시험 기록 로드 (Supabase에서)
+        async function loadQuizData(userId) {
             const quizIds = ['quiz07', 'quiz08', 'quiz09', 'quiz10'];
             const allHistory = [];
 
+            // Supabase에서 사용자의 퀴즈 결과 조회
+            const quizResults = await getQuizResultsByUser(userId);
+
+            // 퀴즈별로 그룹화
+            const quizDataMap = {};
+            quizResults.forEach(result => {
+                if (!quizDataMap[result.quiz_id]) {
+                    quizDataMap[result.quiz_id] = [];
+                }
+                quizDataMap[result.quiz_id].push({
+                    date: result.created_at,
+                    score: result.score
+                });
+            });
+
             quizIds.forEach(quizId => {
-                const quizData = JSON.parse(localStorage.getItem(`${quizId}_${userId}`) || '{}');
+                const quizData = quizDataMap[quizId] || [];
 
                 // 테이블 업데이트
                 const dateCell = document.querySelector(`.quiz-date[data-quiz="${quizId}"]`);
                 const scoreCell = document.querySelector(`.quiz-score[data-quiz="${quizId}"]`);
                 const countCell = document.querySelector(`.quiz-count[data-quiz="${quizId}"]`);
 
-                if (quizData.history && quizData.history.length > 0) {
+                if (quizData.length > 0) {
                     // 최근 응시일
-                    const lastAttempt = quizData.history[quizData.history.length - 1];
+                    const lastAttempt = quizData[0]; // 이미 최신순으로 정렬됨
                     const lastDate = new Date(lastAttempt.date).toLocaleDateString('ko-KR');
                     dateCell.textContent = lastDate;
 
                     // 최고 점수
-                    const highestScore = Math.max(...quizData.history.map(h => h.score));
+                    const highestScore = Math.max(...quizData.map(h => h.score));
                     scoreCell.textContent = highestScore + '점';
                     scoreCell.classList.remove('high', 'medium', 'low');
                     if (highestScore >= 80) scoreCell.classList.add('high');
@@ -1088,10 +1276,10 @@
                     else scoreCell.classList.add('low');
 
                     // 응시 횟수
-                    countCell.textContent = quizData.history.length + '회';
+                    countCell.textContent = quizData.length + '회';
 
                     // 전체 기록에 추가
-                    quizData.history.forEach(h => {
+                    quizData.forEach(h => {
                         allHistory.push({
                             quizId: quizId,
                             quizName: getQuizName(quizId),
@@ -1101,6 +1289,12 @@
                     });
                 }
             });
+
+            // 퀴즈 평균 점수 계산
+            if (quizResults.length > 0) {
+                const avgScore = Math.round(quizResults.reduce((sum, r) => sum + r.score, 0) / quizResults.length);
+                document.getElementById('quizScore').textContent = avgScore + '점';
+            }
 
             // 최근 시험 기록 표시
             displayQuizHistory(allHistory);
@@ -1150,14 +1344,149 @@
             }).join('');
         }
 
-        // 페이지 로드 시 실행
-        window.onload = function() {
-            loadUserProfile();
-
-            // 시험 기록 로드
+        // 원장인지 확인하고 직원 섹션 표시
+        async function checkDirectorAndLoadStaff() {
             const user = JSON.parse(localStorage.getItem('currentPaidUser'));
-            if (user) {
-                loadQuizData(user.id);
+            if (!user) return;
+
+            // 조회 모드인지 확인
+            const viewingUserId = sessionStorage.getItem('viewingStaffId');
+            if (viewingUserId) {
+                return; // 조회 모드에서는 직원 섹션 숨김
+            }
+
+            // 원장인 경우에만 직원 섹션 표시
+            if (user.role === '원장' && user.clinic) {
+                document.getElementById('staffSection').classList.add('visible');
+                await loadStaffList(user.clinic, user.id);
+            }
+        }
+
+        // 같은 병원 직원 목록 로드
+        async function loadStaffList(clinicName, currentUserId) {
+            const staffListContainer = document.getElementById('staffList');
+
+            try {
+                // Supabase에서 같은 병원 직원 조회
+                const { data: staffMembers, error } = await supabase
+                    .from('paid_users')
+                    .select('*')
+                    .eq('clinic', clinicName)
+                    .neq('id', currentUserId)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!staffMembers || staffMembers.length === 0) {
+                    staffListContainer.innerHTML = '<div class="no-staff">아직 같은 병원에 등록된 직원이 없습니다.</div>';
+                    return;
+                }
+
+                staffListContainer.innerHTML = staffMembers.map(staff => {
+                    const regDate = staff.created_at ? new Date(staff.created_at).toLocaleDateString('ko-KR') : '';
+                    return `
+                        <div class="staff-item" onclick="viewStaffDashboard('${staff.id}', '${staff.name}', '${staff.password || ''}')">
+                            <div class="staff-avatar">${staff.serial_number || staff.name.charAt(0)}</div>
+                            <div class="staff-info">
+                                <h4>${staff.name} ${staff.role ? '<span style="color:#f59e0b;font-size:0.8rem;">[' + staff.role + ']</span>' : ''}</h4>
+                                <p>등록일: ${regDate}</p>
+                            </div>
+                            <button class="view-btn" onclick="event.stopPropagation(); viewStaffDashboard('${staff.id}', '${staff.name}', '${staff.password || ''}')">대시보드 보기</button>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('직원 목록 로드 오류:', error);
+                staffListContainer.innerHTML = '<div class="no-staff">직원 목록을 불러오는데 실패했습니다.</div>';
+            }
+        }
+
+        // 직원 대시보드 조회 (비밀번호 확인)
+        function viewStaffDashboard(staffId, staffName, staffPassword) {
+            const enteredPassword = prompt(`${staffName}님의 비밀번호를 입력해주세요 (숫자 6자리):`);
+
+            if (enteredPassword === null) return; // 취소
+
+            if (staffPassword && enteredPassword !== staffPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            // 조회 모드 설정
+            sessionStorage.setItem('viewingStaffId', staffId);
+            sessionStorage.setItem('viewingStaffName', staffName);
+
+            // 페이지 새로고침하여 해당 직원의 대시보드 표시
+            location.reload();
+        }
+
+        // 내 대시보드로 돌아가기
+        function backToMyDashboard() {
+            sessionStorage.removeItem('viewingStaffId');
+            sessionStorage.removeItem('viewingStaffName');
+            location.reload();
+        }
+
+        // 조회 모드 확인 및 데이터 로드
+        async function checkViewMode() {
+            const viewingStaffId = sessionStorage.getItem('viewingStaffId');
+            const viewingStaffName = sessionStorage.getItem('viewingStaffName');
+
+            if (viewingStaffId) {
+                // 조회 모드 배너 표시
+                document.getElementById('viewModeBanner').classList.add('visible');
+                document.getElementById('viewingStaffName').textContent = viewingStaffName;
+
+                // 직원 섹션 숨김
+                document.getElementById('staffSection').classList.remove('visible');
+
+                // 해당 직원의 데이터 로드
+                const { data: staffUser, error } = await supabase
+                    .from('paid_users')
+                    .select('*')
+                    .eq('id', viewingStaffId)
+                    .single();
+
+                if (!error && staffUser) {
+                    // 프로필 정보 업데이트 (조회 대상 직원)
+                    document.getElementById('profileAvatar').textContent = staffUser.serial_number || staffUser.name.charAt(0);
+                    document.getElementById('profileName').textContent = ((staffUser.serial_number) ? '[' + staffUser.serial_number + '] ' : '') + staffUser.name;
+                    document.getElementById('profileClinic').textContent = (staffUser.clinic || '소속 미입력') + (staffUser.role ? ' | ' + staffUser.role : '');
+
+                    if (staffUser.created_at) {
+                        const regDate = new Date(staffUser.created_at).toLocaleDateString('ko-KR');
+                        document.getElementById('profileRegDate').textContent = '등록일: ' + regDate;
+                    }
+
+                    // 해당 직원의 학습 데이터 및 퀴즈 데이터 로드
+                    loadLearningData(viewingStaffId);
+                    loadQuizData(viewingStaffId);
+                }
+
+                return true; // 조회 모드
+            }
+
+            return false; // 일반 모드
+        }
+
+        // 페이지 로드 시 실행
+        window.onload = async function() {
+            // 조회 모드인지 확인
+            const isViewMode = await checkViewMode();
+
+            if (!isViewMode) {
+                // 일반 모드: 내 프로필 로드
+                loadUserProfile();
+
+                // 시험 기록 로드
+                const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+                if (user) {
+                    loadQuizData(user.id);
+                }
+
+                // 원장인 경우 직원 섹션 로드
+                await checkDirectorAndLoadStaff();
             }
         };
     </script>
