@@ -677,13 +677,22 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = '963314'; // 관리자 비밀번호
+        const ADMIN_PASSWORD = '963314';
         const quizNames = {
             'quiz07': '07. O/X 문제',
             'quiz08': '08. 4지선다형 문제',
             'quiz09': '09. 다음 단계 선택',
             'quiz10': '10. 적절한 질문 선택'
         };
+
+        let allUsers = [];
+        let allQuizResults = [];
+        let allActivityLogs = [];
+
+        // 현재 사용자 저장
+        function setCurrentUser(user) {
+            localStorage.setItem('currentPaidUser', JSON.stringify(user));
+        }
 
         // 관리자 인증
         function verifyAdmin() {
@@ -710,70 +719,56 @@
             window.location.reload();
         }
 
-        // 대시보드 데이터 로드
+        // 대시보드 데이터 로드 (로컬 스토리지)
         function loadDashboardData() {
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            // 로컬 스토리지에서 데이터 로드
+            allUsers = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+
+            // 모든 사용자의 퀴즈 결과 수집
+            allQuizResults = [];
+            allUsers.forEach(user => {
+                const userQuizResults = JSON.parse(localStorage.getItem('quizResults_' + user.id) || '[]');
+                userQuizResults.forEach(result => {
+                    allQuizResults.push({
+                        ...result,
+                        user_id: user.id,
+                        user_name: user.name,
+                        user_serial: user.serialNumber
+                    });
+                });
+            });
+
+            // 활동 로그는 로컬 스토리지에 저장하지 않으므로 빈 배열
+            allActivityLogs = [];
 
             // 통계 계산
-            let totalQuizAttempts = 0;
-            let totalScore = 0;
-            let scoreCount = 0;
-            let highScoreUsers = 0;
-            const allActivities = [];
-            const quizStats = {};
+            let totalQuizAttempts = allQuizResults.length;
+            let totalScore = allQuizResults.reduce((sum, r) => sum + r.score, 0);
+            let highScoreUsers = new Set(allQuizResults.filter(r => r.score >= 80).map(r => r.user_id)).size;
 
-            // 퀴즈 통계 초기화
+            const quizStats = {};
             Object.keys(quizNames).forEach(qId => {
                 quizStats[qId] = { attempts: 0, totalScore: 0, highScores: 0 };
             });
 
-            users.forEach(user => {
-                let userHighScore = false;
-
-                Object.keys(quizNames).forEach(quizId => {
-                    const data = JSON.parse(localStorage.getItem(`${quizId}_${user.id}`) || '{}');
-                    if (data.history && data.history.length > 0) {
-                        data.history.forEach(h => {
-                            totalQuizAttempts++;
-                            totalScore += h.score;
-                            scoreCount++;
-                            quizStats[quizId].attempts++;
-                            quizStats[quizId].totalScore += h.score;
-
-                            if (h.score >= 80) {
-                                quizStats[quizId].highScores++;
-                                userHighScore = true;
-                            }
-
-                            allActivities.push({
-                                userName: user.name,
-                                quizId: quizId,
-                                score: h.score,
-                                date: h.date
-                            });
-                        });
-                    }
-                });
-
-                if (userHighScore) highScoreUsers++;
+            allQuizResults.forEach(r => {
+                if (quizStats[r.quizId]) {
+                    quizStats[r.quizId].attempts++;
+                    quizStats[r.quizId].totalScore += r.score;
+                    if (r.score >= 80) quizStats[r.quizId].highScores++;
+                }
             });
 
             // 통계 카드 업데이트
-            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalUsers').textContent = allUsers.length;
             document.getElementById('totalQuizAttempts').textContent = totalQuizAttempts;
-            document.getElementById('avgScore').textContent = scoreCount > 0 ? Math.round(totalScore / scoreCount) + '점' : '-';
+            document.getElementById('avgScore').textContent = totalQuizAttempts > 0 ? Math.round(totalScore / totalQuizAttempts) + '점' : '-';
             document.getElementById('highScoreUsers').textContent = highScoreUsers;
 
-            // 사용자 테이블 렌더링
-            renderUserTable(users);
-
-            // 퀴즈 통계 렌더링
+            // 렌더링
+            renderUserTable(allUsers);
             renderQuizStats(quizStats);
-
-            // 최근 활동 렌더링
-            renderRecentActivity(allActivities);
-
-            // 날짜별 활동 내역 렌더링
+            renderRecentActivity(allQuizResults);
             renderDailyActivity();
         }
 
@@ -786,9 +781,9 @@
                 return;
             }
 
-            tbody.innerHTML = users.map((user, index) => {
+            tbody.innerHTML = users.map(user => {
                 const regDate = user.registeredAt ? new Date(user.registeredAt).toLocaleDateString('ko-KR') : '-';
-                const quizCount = countUserQuizAttempts(user.id);
+                const quizCount = allQuizResults.filter(r => r.user_id === user.id).length;
                 const roleClass = user.role || '';
                 const serialNum = user.serialNumber || '-';
 
@@ -810,16 +805,6 @@
             }).join('');
         }
 
-        // 사용자 퀴즈 응시 횟수 계산
-        function countUserQuizAttempts(userId) {
-            let count = 0;
-            Object.keys(quizNames).forEach(quizId => {
-                const data = JSON.parse(localStorage.getItem(`${quizId}_${userId}`) || '{}');
-                if (data.history) count += data.history.length;
-            });
-            return count;
-        }
-
         // 퀴즈 통계 렌더링
         function renderQuizStats(stats) {
             const container = document.getElementById('quizStatsGrid');
@@ -839,32 +824,33 @@
         }
 
         // 최근 활동 렌더링
-        function renderRecentActivity(activities) {
+        function renderRecentActivity(results) {
             const tbody = document.getElementById('recentActivityBody');
 
-            if (activities.length === 0) {
+            if (results.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:#6b7280;">퀴즈 활동 기록이 없습니다.</td></tr>';
                 return;
             }
 
             // 날짜순 정렬 (최신순)
-            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
-            const recent = activities.slice(0, 20);
+            const sortedResults = [...results].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const recent = sortedResults.slice(0, 20);
 
-            tbody.innerHTML = recent.map(a => {
-                const date = new Date(a.date).toLocaleString('ko-KR', {
+            tbody.innerHTML = recent.map(r => {
+                const date = new Date(r.date).toLocaleString('ko-KR', {
                     month: 'short',
                     day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
                 });
-                const scoreClass = a.score >= 80 ? 'color:#10b981;' : (a.score >= 60 ? 'color:#f59e0b;' : 'color:#ef4444;');
+                const scoreClass = r.score >= 80 ? 'color:#10b981;' : (r.score >= 60 ? 'color:#f59e0b;' : 'color:#ef4444;');
+                const userName = r.user_name || '알 수 없음';
 
                 return `
                     <tr>
-                        <td>${a.userName}</td>
-                        <td>${quizNames[a.quizId]}</td>
-                        <td style="${scoreClass}font-weight:600;">${a.score}점</td>
+                        <td>${userName}</td>
+                        <td>${quizNames[r.quizId] || r.quizId}</td>
+                        <td style="${scoreClass}font-weight:600;">${r.score}점</td>
                         <td>${date}</td>
                     </tr>
                 `;
@@ -873,16 +859,17 @@
 
         // 사용자 상세 보기
         function viewUserDetail(userId) {
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-            const user = users.find(u => u.id === userId);
+            const user = allUsers.find(u => u.id === userId);
             if (!user) return;
 
+            const userQuizResults = allQuizResults.filter(r => r.user_id === userId);
             let quizInfo = '';
+
             Object.keys(quizNames).forEach(quizId => {
-                const data = JSON.parse(localStorage.getItem(`${quizId}_${user.id}`) || '{}');
-                if (data.history && data.history.length > 0) {
-                    const highScore = Math.max(...data.history.map(h => h.score));
-                    quizInfo += `${quizNames[quizId]}: 최고 ${highScore}점 (${data.history.length}회)\n`;
+                const quizResults = userQuizResults.filter(r => r.quizId === quizId);
+                if (quizResults.length > 0) {
+                    const highScore = Math.max(...quizResults.map(r => r.score));
+                    quizInfo += `${quizNames[quizId]}: 최고 ${highScore}점 (${quizResults.length}회)\n`;
                 }
             });
 
@@ -891,6 +878,7 @@
 이름: ${user.name}
 역할: ${user.role || '-'}
 소속: ${user.clinic || '-'}
+지역: ${user.region || '-'}
 연락처: ${user.phone || '-'}
 등록일: ${user.registeredAt ? new Date(user.registeredAt).toLocaleDateString('ko-KR') : '-'}
 
@@ -903,56 +891,53 @@ ${quizInfo || '응시 기록 없음'}
 
         // 사용자 대시보드로 이동
         function goToUserDashboard(userId) {
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-            const user = users.find(u => u.id === userId);
+            const user = allUsers.find(u => u.id === userId);
             if (!user) return;
 
-            // 해당 사용자를 현재 사용자로 설정
-            localStorage.setItem('currentPaidUser', JSON.stringify(user));
+            setCurrentUser(user);
             localStorage.setItem('userType', 'paid');
             sessionStorage.setItem('userTypeSelectedThisSession', 'true');
-
-            // 대시보드 페이지로 이동
             window.location.href = 'dashboard.html';
         }
 
-        // 사용자 삭제
+        // 사용자 삭제 (로컬 스토리지)
         function deleteUser(userId) {
             if (!confirm('정말 이 사용자를 삭제하시겠습니까?\n퀴즈 기록도 함께 삭제됩니다.')) return;
 
+            // 사용자 목록에서 삭제
             let users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
             users = users.filter(u => u.id !== userId);
             localStorage.setItem('paidUsers', JSON.stringify(users));
 
-            // 퀴즈 기록도 삭제
-            Object.keys(quizNames).forEach(quizId => {
-                localStorage.removeItem(`${quizId}_${userId}`);
-            });
+            // 퀴즈 결과 삭제
+            localStorage.removeItem('quizResults_' + userId);
+
+            // 학습 데이터 삭제
+            localStorage.removeItem('learningData_' + userId);
 
             loadDashboardData();
             alert('사용자가 삭제되었습니다.');
         }
 
-        // 전체 사용자 삭제
+        // 전체 사용자 삭제 (로컬 스토리지)
         function deleteAllUsers() {
             if (!confirm('정말 모든 사용자를 삭제하시겠습니까?\n모든 퀴즈 기록도 함께 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다.')) return;
             if (!confirm('정말로 삭제하시겠습니까? 다시 한번 확인합니다.')) return;
 
+            // 모든 사용자의 퀴즈 결과 및 학습 데이터 삭제
             const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-
-            // 각 사용자의 퀴즈 기록 삭제
             users.forEach(user => {
-                Object.keys(quizNames).forEach(quizId => {
-                    localStorage.removeItem(`${quizId}_${user.id}`);
-                });
-                localStorage.removeItem(`learningData_${user.id}`);
-                localStorage.removeItem(`dailyGoals_${user.id}`);
+                localStorage.removeItem('quizResults_' + user.id);
+                localStorage.removeItem('learningData_' + user.id);
             });
 
             // 사용자 목록 삭제
             localStorage.removeItem('paidUsers');
-            localStorage.removeItem('currentPaidUser');
 
+            // 등록된 병원 목록도 삭제
+            localStorage.removeItem('registeredClinics');
+
+            localStorage.removeItem('currentPaidUser');
             loadDashboardData();
             alert('모든 사용자가 삭제되었습니다.');
         }
@@ -960,10 +945,9 @@ ${quizInfo || '응시 기록 없음'}
         // 사용자 검색/필터
         function filterUsers() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
 
-            const filtered = users.filter(user => {
-                const serialNum = (user.serialNumber || '').toLowerCase();
+            const filtered = allUsers.filter(user => {
+                const serialNum = (user.serial_number || '').toLowerCase();
                 const name = (user.name || '').toLowerCase();
                 const clinic = (user.clinic || '').toLowerCase();
                 return serialNum.includes(searchTerm) || name.includes(searchTerm) || clinic.includes(searchTerm);
@@ -975,15 +959,15 @@ ${quizInfo || '응시 기록 없음'}
         // 날짜별 활동 내역 렌더링
         function renderDailyActivity() {
             const tbody = document.getElementById('dailyActivityBody');
-            const activityLogs = JSON.parse(localStorage.getItem('activityLogs') || '[]');
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
 
             // 날짜별로 데이터 집계
             const dailyData = {};
 
-            // 접속 및 영상 시청 로그 처리
-            activityLogs.forEach(log => {
-                const date = log.date.split('T')[0]; // YYYY-MM-DD
+            // 퀴즈 결과 처리
+            allQuizResults.forEach(r => {
+                const date = r.date ? r.date.split('T')[0] : '';
+                if (!date) return;
+
                 if (!dailyData[date]) {
                     dailyData[date] = {
                         visitors: new Set(),
@@ -995,40 +979,12 @@ ${quizInfo || '응시 기록 없음'}
                         quiz10: 0
                     };
                 }
-
-                if (log.type === 'visit') {
-                    dailyData[date].visitors.add(log.userId);
-                } else if (log.type === 'video') {
-                    dailyData[date].videoViews++;
-                    dailyData[date].watchTime += (log.duration || 0);
+                dailyData[date].visitors.add(r.user_id);
+                if (dailyData[date][r.quizId] !== undefined) {
+                    dailyData[date][r.quizId]++;
                 }
             });
 
-            // 퀴즈 응시 기록 처리
-            users.forEach(user => {
-                Object.keys(quizNames).forEach(quizId => {
-                    const data = JSON.parse(localStorage.getItem(`${quizId}_${user.id}`) || '{}');
-                    if (data.history && data.history.length > 0) {
-                        data.history.forEach(h => {
-                            const date = h.date.split('T')[0];
-                            if (!dailyData[date]) {
-                                dailyData[date] = {
-                                    visitors: new Set(),
-                                    videoViews: 0,
-                                    watchTime: 0,
-                                    quiz07: 0,
-                                    quiz08: 0,
-                                    quiz09: 0,
-                                    quiz10: 0
-                                };
-                            }
-                            dailyData[date][quizId]++;
-                        });
-                    }
-                });
-            });
-
-            // 날짜 배열로 변환하고 정렬 (최신순)
             const dates = Object.keys(dailyData).sort((a, b) => new Date(b) - new Date(a));
 
             if (dates.length === 0) {
@@ -1036,7 +992,6 @@ ${quizInfo || '응시 기록 없음'}
                 return;
             }
 
-            // 최근 30일만 표시
             const recentDates = dates.slice(0, 30);
 
             tbody.innerHTML = recentDates.map(date => {
@@ -1047,17 +1002,13 @@ ${quizInfo || '응시 기록 없음'}
                     day: 'numeric',
                     weekday: 'short'
                 });
-                const watchTimeMin = Math.round(d.watchTime / 60);
-                const watchTimeStr = watchTimeMin >= 60
-                    ? `${Math.floor(watchTimeMin/60)}시간 ${watchTimeMin%60}분`
-                    : `${watchTimeMin}분`;
 
                 return `
                     <tr>
                         <td><strong>${formattedDate}</strong></td>
                         <td style="text-align:center;">${d.visitors.size}명</td>
-                        <td style="text-align:center;">${d.videoViews}회</td>
-                        <td style="text-align:center;">${watchTimeStr}</td>
+                        <td style="text-align:center;">-</td>
+                        <td style="text-align:center;">-</td>
                         <td style="text-align:center;">${d.quiz07}회</td>
                         <td style="text-align:center;">${d.quiz08}회</td>
                         <td style="text-align:center;">${d.quiz09}회</td>

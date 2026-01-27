@@ -550,7 +550,7 @@
                     </div>
 
                     <div class="role-selection">
-                        <label>역할 *</label>
+                        <label style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">역할 * <span style="font-size: 0.75rem; color: #e53e3e; font-weight: 500;">1인 원장의 경우에도 대표원장을 선택하세요</span></label>
                         <div class="role-buttons">
                             <button type="button" class="role-btn" onclick="selectRole('대표원장')">대표원장</button>
                             <button type="button" class="role-btn" onclick="selectRole('원장')">원장</button>
@@ -631,9 +631,36 @@
         // 병원명 자동완성 기능
         // ============================================
 
-        // 등록된 병원 목록 가져오기 (원장이 등록한 병원만)
+        // 등록된 병원 목록 가져오기 (원장/대표원장이 등록한 병원)
         function getRegisteredClinics() {
-            return JSON.parse(localStorage.getItem('registeredClinics') || '[]');
+            // 저장된 병원 목록
+            const savedClinics = JSON.parse(localStorage.getItem('registeredClinics') || '[]');
+
+            // paidUsers에서 원장/대표원장의 병원 정보도 수집
+            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            const directorUsers = users.filter(u => (u.role === '원장' || u.role === '대표원장') && u.clinic);
+
+            // 병원명 목록 병합 (중복 제거)
+            const clinicMap = {};
+
+            // 저장된 병원 먼저 추가
+            savedClinics.forEach(c => {
+                clinicMap[c.name] = c;
+            });
+
+            // paidUsers의 원장 정보 추가 (없는 경우만)
+            directorUsers.forEach(u => {
+                if (!clinicMap[u.clinic]) {
+                    clinicMap[u.clinic] = {
+                        name: u.clinic,
+                        director: u.name,
+                        region: u.region || '',
+                        registeredAt: u.registeredAt
+                    };
+                }
+            });
+
+            return Object.values(clinicMap);
         }
 
         // 병원명 저장 (원장 등록 시)

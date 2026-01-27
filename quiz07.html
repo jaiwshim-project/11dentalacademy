@@ -373,17 +373,14 @@
             const user = JSON.parse(localStorage.getItem('currentPaidUser'));
             if (!user) return;
 
-            const key = `${quizId}_${user.id}`;
-            const data = JSON.parse(localStorage.getItem(key) || '{"history":[]}');
-
-            data.history.push({
-                date: new Date().toISOString(),
+            // 로컬 스토리지에 저장
+            const results = JSON.parse(localStorage.getItem('quizResults_' + user.id) || '[]');
+            results.push({
+                quizId: quizId,
                 score: score,
-                correct: correctAnswers,
-                total: questions.length
+                date: new Date().toISOString()
             });
-
-            localStorage.setItem(key, JSON.stringify(data));
+            localStorage.setItem('quizResults_' + user.id, JSON.stringify(results));
         }
 
         function restartQuiz() {
