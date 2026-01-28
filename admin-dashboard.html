@@ -681,10 +681,10 @@
     <script>
         const ADMIN_PASSWORD = '963314';
         const quizNames = {
-            'quiz07': '07. O/X 문제',
-            'quiz08': '08. 4지선다형 문제',
-            'quiz09': '09. 다음 단계 선택',
-            'quiz10': '10. 적절한 질문 선택'
+            'quiz-ox': '07. O/X 문제',
+            'quiz-multiple-choice': '08. 4지선다형 문제',
+            'quiz-next-step': '09. 다음 단계 선택',
+            'quiz-question-choice': '10. 적절한 질문 선택'
         };
 
         let allUsers = [];
@@ -941,10 +941,10 @@ ${quizInfo || '응시 기록 없음'}
                         visitors: new Set(),
                         videoViews: 0,
                         watchTime: 0,
-                        quiz07: 0,
-                        quiz08: 0,
-                        quiz09: 0,
-                        quiz10: 0
+                        'quiz-ox': 0,
+                        'quiz-multiple-choice': 0,
+                        'quiz-next-step': 0,
+                        'quiz-question-choice': 0
                     };
                 }
                 dailyData[date].visitors.add(r.user_id);
@@ -977,10 +977,10 @@ ${quizInfo || '응시 기록 없음'}
                         <td style="text-align:center;">${d.visitors.size}명</td>
                         <td style="text-align:center;">-</td>
                         <td style="text-align:center;">-</td>
-                        <td style="text-align:center;">${d.quiz07}회</td>
-                        <td style="text-align:center;">${d.quiz08}회</td>
-                        <td style="text-align:center;">${d.quiz09}회</td>
-                        <td style="text-align:center;">${d.quiz10}회</td>
+                        <td style="text-align:center;">${d['quiz-ox']}회</td>
+                        <td style="text-align:center;">${d['quiz-multiple-choice']}회</td>
+                        <td style="text-align:center;">${d['quiz-next-step']}회</td>
+                        <td style="text-align:center;">${d['quiz-question-choice']}회</td>
                     </tr>
                 `;
             }).join('');

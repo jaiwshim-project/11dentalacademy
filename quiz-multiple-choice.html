@@ -322,6 +322,8 @@
         </div>
     </div>
 
+    <script src="supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
     <script>
         const quizData = [
             // 공감 단계 (1~5번)
@@ -618,6 +620,12 @@
             else message = '환자상담 5단계 내용을 다시 학습해보시는 것을 추천드립니다.';
 
             document.getElementById('resultMessage').textContent = message;
+
+            const user = getCurrentUser();
+            if (user) {
+                const score = Math.round(percentage);
+                insertQuizResult(user.id, 'quiz-multiple-choice', score).catch(e => console.error('퀴즈 결과 저장 실패:', e));
+            }
         }
 
         function restartQuiz() {

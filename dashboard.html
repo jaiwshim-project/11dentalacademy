@@ -1102,34 +1102,34 @@
                     <tr>
                         <td>07. O/X 문제</td>
                         <td><span class="quiz-type-badge ox">O/X</span></td>
-                        <td class="quiz-date" data-quiz="quiz07">-</td>
-                        <td class="quiz-score" data-quiz="quiz07">-</td>
-                        <td class="quiz-count" data-quiz="quiz07">0회</td>
-                        <td><button class="quiz-start-btn" onclick="location.href='quiz07.html'">응시하기</button></td>
+                        <td class="quiz-date" data-quiz="quiz-ox">-</td>
+                        <td class="quiz-score" data-quiz="quiz-ox">-</td>
+                        <td class="quiz-count" data-quiz="quiz-ox">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-ox.html'">응시하기</button></td>
                     </tr>
                     <tr>
                         <td>08. 4지선다형 문제</td>
                         <td><span class="quiz-type-badge choice">4지선다</span></td>
-                        <td class="quiz-date" data-quiz="quiz08">-</td>
-                        <td class="quiz-score" data-quiz="quiz08">-</td>
-                        <td class="quiz-count" data-quiz="quiz08">0회</td>
-                        <td><button class="quiz-start-btn" onclick="location.href='quiz08.html'">응시하기</button></td>
+                        <td class="quiz-date" data-quiz="quiz-multiple-choice">-</td>
+                        <td class="quiz-score" data-quiz="quiz-multiple-choice">-</td>
+                        <td class="quiz-count" data-quiz="quiz-multiple-choice">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-multiple-choice.html'">응시하기</button></td>
                     </tr>
                     <tr>
                         <td>09. 다음 단계 선택</td>
                         <td><span class="quiz-type-badge mixed">단계선택</span></td>
-                        <td class="quiz-date" data-quiz="quiz09">-</td>
-                        <td class="quiz-score" data-quiz="quiz09">-</td>
-                        <td class="quiz-count" data-quiz="quiz09">0회</td>
-                        <td><button class="quiz-start-btn" onclick="location.href='quiz09.html'">응시하기</button></td>
+                        <td class="quiz-date" data-quiz="quiz-next-step">-</td>
+                        <td class="quiz-score" data-quiz="quiz-next-step">-</td>
+                        <td class="quiz-count" data-quiz="quiz-next-step">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-next-step.html'">응시하기</button></td>
                     </tr>
                     <tr>
                         <td>10. 적절한 질문 선택</td>
                         <td><span class="quiz-type-badge choice">질문선택</span></td>
-                        <td class="quiz-date" data-quiz="quiz10">-</td>
-                        <td class="quiz-score" data-quiz="quiz10">-</td>
-                        <td class="quiz-count" data-quiz="quiz10">0회</td>
-                        <td><button class="quiz-start-btn" onclick="location.href='quiz10.html'">응시하기</button></td>
+                        <td class="quiz-date" data-quiz="quiz-question-choice">-</td>
+                        <td class="quiz-score" data-quiz="quiz-question-choice">-</td>
+                        <td class="quiz-count" data-quiz="quiz-question-choice">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-question-choice.html'">응시하기</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -1230,7 +1230,7 @@
 
         // 시험 기록 로드 (Supabase)
         async function loadQuizData(userId) {
-            const quizIds = ['quiz07', 'quiz08', 'quiz09', 'quiz10'];
+            const quizIds = ['quiz-ox', 'quiz-multiple-choice', 'quiz-next-step', 'quiz-question-choice'];
             const allHistory = [];
 
             // Supabase에서 사용자의 퀴즈 결과 조회
@@ -1301,10 +1301,10 @@
         // 시험명 반환
         function getQuizName(quizId) {
             const names = {
-                'quiz07': '07. O/X 문제',
-                'quiz08': '08. 4지선다형 문제',
-                'quiz09': '09. 다음 단계 선택',
-                'quiz10': '10. 적절한 질문 선택'
+                'quiz-ox': '07. O/X 문제',
+                'quiz-multiple-choice': '08. 4지선다형 문제',
+                'quiz-next-step': '09. 다음 단계 선택',
+                'quiz-question-choice': '10. 적절한 질문 선택'
             };
             return names[quizId] || quizId;
         }

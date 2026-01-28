@@ -330,6 +330,8 @@
         </div>
     </div>
 
+    <script src="supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
     <script>
         const quizData = [
             {
@@ -685,6 +687,12 @@
             else message = '각 단계에서 해야 할 질문과 하지 말아야 할 질문을 다시 학습해보세요.';
 
             document.getElementById('resultMessage').textContent = message;
+
+            const user = getCurrentUser();
+            if (user) {
+                const score = Math.round(percentage);
+                insertQuizResult(user.id, 'quiz-question-choice', score).catch(e => console.error('퀴즈 결과 저장 실패:', e));
+            }
         }
 
         function restartQuiz() {
