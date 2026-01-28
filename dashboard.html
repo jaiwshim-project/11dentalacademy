@@ -913,6 +913,8 @@
             <nav class="header-nav">
                 <a href="index.html#curriculum">강의 목록</a>
                 <a href="index.html#resources">자료실</a>
+                <a href="#" id="myDashboardBtn" onclick="goMyDashboard()" style="display:none;">내 대시보드</a>
+                <a href="#" onclick="goAdmin()">관리자</a>
                 <a href="#" onclick="logout()">로그아웃</a>
             </nav>
         </div>
@@ -1221,6 +1223,24 @@
             await saveGoalsToDB(user.id, new Date().toDateString(), goals);
         }
 
+        // 내 대시보드로 돌아가기
+        function goMyDashboard() {
+            sessionStorage.removeItem('viewingStaffId');
+            sessionStorage.removeItem('viewingStaffName');
+            window.location.reload();
+        }
+
+        // 관리자 대시보드 이동
+        function goAdmin() {
+            const pw = prompt('관리자 비밀번호를 입력해주세요.');
+            if (pw === '963314') {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                window.location.href = 'admin-dashboard.html';
+            } else if (pw !== null) {
+                alert('비밀번호가 올바르지 않습니다.');
+            }
+        }
+
         // 로그아웃
         function logout() {
             localStorage.removeItem('currentPaidUser');
@@ -1427,6 +1447,7 @@
                 // 조회 모드 배너 표시
                 document.getElementById('viewModeBanner').classList.add('visible');
                 document.getElementById('viewingStaffName').textContent = viewingStaffName;
+                document.getElementById('myDashboardBtn').style.display = '';
 
                 // 직원 섹션 숨김
                 document.getElementById('staffSection').classList.remove('visible');
