@@ -676,6 +676,8 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
     <script>
         const ADMIN_PASSWORD = '963314';
         const quizNames = {
@@ -688,11 +690,6 @@
         let allUsers = [];
         let allQuizResults = [];
         let allActivityLogs = [];
-
-        // 현재 사용자 저장
-        function setCurrentUser(user) {
-            localStorage.setItem('currentPaidUser', JSON.stringify(user));
-        }
 
         // 관리자 인증
         function verifyAdmin() {
@@ -719,26 +716,11 @@
             window.location.reload();
         }
 
-        // 대시보드 데이터 로드 (로컬 스토리지)
-        function loadDashboardData() {
-            // 로컬 스토리지에서 데이터 로드
-            allUsers = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-
-            // 모든 사용자의 퀴즈 결과 수집
-            allQuizResults = [];
-            allUsers.forEach(user => {
-                const userQuizResults = JSON.parse(localStorage.getItem('quizResults_' + user.id) || '[]');
-                userQuizResults.forEach(result => {
-                    allQuizResults.push({
-                        ...result,
-                        user_id: user.id,
-                        user_name: user.name,
-                        user_serial: user.serialNumber
-                    });
-                });
-            });
-
-            // 활동 로그는 로컬 스토리지에 저장하지 않으므로 빈 배열
+        // 대시보드 데이터 로드 (Supabase)
+        async function loadDashboardData() {
+            // Supabase에서 데이터 로드
+            allUsers = await fetchAllUsers();
+            allQuizResults = await fetchAllQuizResults();
             allActivityLogs = [];
 
             // 통계 계산
@@ -900,46 +882,32 @@ ${quizInfo || '응시 기록 없음'}
             window.location.href = 'dashboard.html';
         }
 
-        // 사용자 삭제 (로컬 스토리지)
-        function deleteUser(userId) {
+        // 사용자 삭제 (Supabase)
+        async function deleteUser(userId) {
             if (!confirm('정말 이 사용자를 삭제하시겠습니까?\n퀴즈 기록도 함께 삭제됩니다.')) return;
 
-            // 사용자 목록에서 삭제
-            let users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-            users = users.filter(u => u.id !== userId);
-            localStorage.setItem('paidUsers', JSON.stringify(users));
-
-            // 퀴즈 결과 삭제
-            localStorage.removeItem('quizResults_' + userId);
-
-            // 학습 데이터 삭제
-            localStorage.removeItem('learningData_' + userId);
-
-            loadDashboardData();
-            alert('사용자가 삭제되었습니다.');
+            try {
+                await deleteUserFromDB(userId);
+                await loadDashboardData();
+                alert('사용자가 삭제되었습니다.');
+            } catch (e) {
+                alert('삭제 중 오류가 발생했습니다.');
+            }
         }
 
-        // 전체 사용자 삭제 (로컬 스토리지)
-        function deleteAllUsers() {
+        // 전체 사용자 삭제 (Supabase)
+        async function deleteAllUsers() {
             if (!confirm('정말 모든 사용자를 삭제하시겠습니까?\n모든 퀴즈 기록도 함께 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다.')) return;
             if (!confirm('정말로 삭제하시겠습니까? 다시 한번 확인합니다.')) return;
 
-            // 모든 사용자의 퀴즈 결과 및 학습 데이터 삭제
-            const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-            users.forEach(user => {
-                localStorage.removeItem('quizResults_' + user.id);
-                localStorage.removeItem('learningData_' + user.id);
-            });
-
-            // 사용자 목록 삭제
-            localStorage.removeItem('paidUsers');
-
-            // 등록된 병원 목록도 삭제
-            localStorage.removeItem('registeredClinics');
-
-            localStorage.removeItem('currentPaidUser');
-            loadDashboardData();
-            alert('모든 사용자가 삭제되었습니다.');
+            try {
+                await deleteAllUsersFromDB();
+                localStorage.removeItem('currentPaidUser');
+                await loadDashboardData();
+                alert('모든 사용자가 삭제되었습니다.');
+            } catch (e) {
+                alert('삭제 중 오류가 발생했습니다.');
+            }
         }
 
         // 사용자 검색/필터

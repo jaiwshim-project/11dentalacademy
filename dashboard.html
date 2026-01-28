@@ -1142,10 +1142,12 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
     <script>
         // 현재 사용자 정보 로드
         function loadUserProfile() {
-            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+            const user = getCurrentUser();
             if (!user) {
                 window.location.href = 'paid-user-select.html';
                 return;
@@ -1166,8 +1168,8 @@
         }
 
         // 학습 데이터 로드
-        function loadLearningData(userId) {
-            const learningData = JSON.parse(localStorage.getItem('learningData_' + userId) || '{}');
+        async function loadLearningData(userId) {
+            const learningData = await fetchLearningData(userId);
 
             // 통계 업데이트
             const completedLessons = learningData.completedLessons || 0;
@@ -1204,8 +1206,8 @@
         }
 
         // 목표 저장
-        function saveGoals() {
-            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+        async function saveGoals() {
+            const user = getCurrentUser();
             if (!user) return;
 
             const goals = [];
@@ -1216,10 +1218,7 @@
                 });
             });
 
-            localStorage.setItem('dailyGoals_' + user.id, JSON.stringify({
-                date: new Date().toDateString(),
-                goals: goals
-            }));
+            await saveGoalsToDB(user.id, new Date().toDateString(), goals);
         }
 
         // 로그아웃
@@ -1229,13 +1228,13 @@
             window.location.href = 'user-select.html';
         }
 
-        // 시험 기록 로드 (로컬 스토리지)
-        function loadQuizData(userId) {
+        // 시험 기록 로드 (Supabase)
+        async function loadQuizData(userId) {
             const quizIds = ['quiz07', 'quiz08', 'quiz09', 'quiz10'];
             const allHistory = [];
 
-            // 로컬 스토리지에서 사용자의 퀴즈 결과 조회
-            const quizResults = JSON.parse(localStorage.getItem('quizResults_' + userId) || '[]');
+            // Supabase에서 사용자의 퀴즈 결과 조회
+            const quizResults = await fetchQuizResults(userId);
 
             // 퀴즈별로 그룹화
             const quizDataMap = {};
@@ -1345,7 +1344,7 @@
 
         // 대표원장인지 확인하고 직원 섹션 표시
         function checkDirectorAndLoadStaff() {
-            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+            const user = getCurrentUser();
             if (!user) return;
 
             // 조회 모드인지 확인
@@ -1361,12 +1360,12 @@
             }
         }
 
-        // 같은 병원 직원 목록 로드 (로컬 스토리지)
-        function loadStaffList(clinicName, currentUserId) {
+        // 같은 병원 직원 목록 로드 (Supabase)
+        async function loadStaffList(clinicName, currentUserId) {
             const staffListContainer = document.getElementById('staffList');
 
-            // 로컬 스토리지에서 모든 유료 사용자 조회
-            const allUsers = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            // Supabase에서 모든 유료 사용자 조회
+            const allUsers = await fetchAllUsers();
 
             // 같은 병원 직원 필터링 (현재 사용자 제외)
             const staffMembers = allUsers.filter(user =>
@@ -1420,7 +1419,7 @@
         }
 
         // 조회 모드 확인 및 데이터 로드
-        function checkViewMode() {
+        async function checkViewMode() {
             const viewingStaffId = sessionStorage.getItem('viewingStaffId');
             const viewingStaffName = sessionStorage.getItem('viewingStaffName');
 
@@ -1432,8 +1431,8 @@
                 // 직원 섹션 숨김
                 document.getElementById('staffSection').classList.remove('visible');
 
-                // 로컬 스토리지에서 해당 직원 정보 조회
-                const allUsers = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+                // Supabase에서 해당 직원 정보 조회
+                const allUsers = await fetchAllUsers();
                 const staffUser = allUsers.find(u => u.id === viewingStaffId);
 
                 if (staffUser) {
@@ -1459,18 +1458,18 @@
         }
 
         // 페이지 로드 시 실행
-        window.onload = function() {
+        window.onload = async function() {
             // 조회 모드인지 확인
-            const isViewMode = checkViewMode();
+            const isViewMode = await checkViewMode();
 
             if (!isViewMode) {
                 // 일반 모드: 내 프로필 로드
                 loadUserProfile();
 
                 // 시험 기록 로드
-                const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+                const user = getCurrentUser();
                 if (user) {
-                    loadQuizData(user.id);
+                    await loadQuizData(user.id);
                 }
 
                 // 대표원장인 경우 직원 섹션 로드

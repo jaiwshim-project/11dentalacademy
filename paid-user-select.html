@@ -612,83 +612,34 @@
         <a href="user-select.html" class="back-link">← 사용자 유형 다시 선택</a>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
     <script>
         let selectedUserId = null;
         let selectedRole = null;
         let allUsers = [];
+        let allClinics = [];
         const urlParams = new URLSearchParams(window.location.search);
         const destination = urlParams.get('dest') || 'index.html#home';
 
         // 관리자 인증번호
         const ADMIN_AUTH_CODE = '23975734';
 
-        // 현재 사용자 저장
-        function setCurrentUser(user) {
-            localStorage.setItem('currentPaidUser', JSON.stringify(user));
-        }
-
         // ============================================
         // 병원명 자동완성 기능
         // ============================================
 
-        // 등록된 병원 목록 가져오기 (원장/대표원장이 등록한 병원)
+        // 등록된 병원 목록 가져오기 (캐시된 데이터 + 사용자 데이터 병합)
         function getRegisteredClinics() {
-            try {
-                // 저장된 병원 목록
-                const savedClinics = JSON.parse(localStorage.getItem('registeredClinics') || '[]');
-
-                // paidUsers에서 원장/대표원장의 병원 정보도 수집
-                const users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
-                const directorUsers = users.filter(u => (u.role === '원장' || u.role === '대표원장') && u.clinic);
-
-                // 병원명 목록 병합 (중복 제거)
-                const clinicMap = {};
-
-                // 저장된 병원 먼저 추가
-                savedClinics.forEach(c => {
-                    if (c && c.name) {
-                        clinicMap[c.name] = c;
-                    }
-                });
-
-                // paidUsers의 원장 정보 추가 (없는 경우만)
-                directorUsers.forEach(u => {
-                    if (u.clinic && !clinicMap[u.clinic]) {
-                        clinicMap[u.clinic] = {
-                            name: u.clinic,
-                            director: u.name || '',
-                            region: u.region || '',
-                            registeredAt: u.registeredAt
-                        };
-                    }
-                });
-
-                return Object.values(clinicMap);
-            } catch (e) {
-                console.error('병원 목록 로드 오류:', e);
-                return [];
-            }
-        }
-
-        // 병원명 저장 (원장 등록 시)
-        function saveClinicName(clinicName, directorName, regionName) {
-            if (!clinicName) return;
-
-            const clinics = getRegisteredClinics();
-            // 이미 등록된 병원인지 확인
-            const existsIndex = clinics.findIndex(c => c.name === clinicName);
-            if (existsIndex === -1) {
-                clinics.push({
-                    name: clinicName,
-                    director: directorName,
-                    region: regionName || '',
-                    registeredAt: new Date().toISOString()
-                });
-            } else {
-                // 기존 병원 정보 업데이트 (지역 추가)
-                clinics[existsIndex].region = regionName || clinics[existsIndex].region || '';
-            }
-            localStorage.setItem('registeredClinics', JSON.stringify(clinics));
+            const clinicMap = {};
+            allClinics.forEach(c => { if (c && c.name) clinicMap[c.name] = c; });
+            const directorUsers = allUsers.filter(u => (u.role === '원장' || u.role === '대표원장') && u.clinic);
+            directorUsers.forEach(u => {
+                if (u.clinic && !clinicMap[u.clinic]) {
+                    clinicMap[u.clinic] = { name: u.clinic, director: u.name || '', region: u.region || '', registeredAt: u.registeredAt };
+                }
+            });
+            return Object.values(clinicMap);
         }
 
         // 병원명 입력 시 자동완성
@@ -798,8 +749,8 @@
             loadUserList();
         }
 
-        // 사용자 등록 (로컬 스토리지)
-        function registerUser(event) {
+        // 사용자 등록 (Supabase)
+        async function registerUser(event) {
             event.preventDefault();
 
             const name = document.getElementById('userName').value.trim();
@@ -834,7 +785,7 @@
 
             try {
                 // 기존 사용자 목록 가져오기
-                let users = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+                const users = await fetchAllUsers();
 
                 // 일련번호 생성 (0001부터 시작)
                 let nextNumber = 1;
@@ -857,12 +808,11 @@
                     registeredAt: new Date().toISOString()
                 };
 
-                users.push(newUser);
-                localStorage.setItem('paidUsers', JSON.stringify(users));
+                await insertUser(newUser);
 
                 // 대표원장 또는 원장인 경우 병원명 저장 (자동완성용)
                 if ((role === '대표원장' || role === '원장') && clinic) {
-                    saveClinicName(clinic, name, region);
+                    await upsertClinic(clinic, name, region);
                 }
 
                 // 현재 사용자로 설정
@@ -878,12 +828,13 @@
             }
         }
 
-        // 사용자 목록 로드 (로컬 스토리지)
-        function loadUserList() {
+        // 사용자 목록 로드 (Supabase)
+        async function loadUserList() {
             const searchInput = document.getElementById('userSearchInput');
             if (searchInput) searchInput.value = '';
 
-            allUsers = JSON.parse(localStorage.getItem('paidUsers') || '[]');
+            allUsers = await fetchAllUsers();
+            allClinics = await fetchRegisteredClinics();
             renderUserList();
         }
 

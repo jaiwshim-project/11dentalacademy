@@ -271,6 +271,8 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
     <script>
         const quizId = 'quiz07';
         const questions = [
@@ -369,18 +371,15 @@
             saveResult(score);
         }
 
-        function saveResult(score) {
-            const user = JSON.parse(localStorage.getItem('currentPaidUser'));
+        async function saveResult(score) {
+            const user = getCurrentUser();
             if (!user) return;
 
-            // 로컬 스토리지에 저장
-            const results = JSON.parse(localStorage.getItem('quizResults_' + user.id) || '[]');
-            results.push({
-                quizId: quizId,
-                score: score,
-                date: new Date().toISOString()
-            });
-            localStorage.setItem('quizResults_' + user.id, JSON.stringify(results));
+            try {
+                await insertQuizResult(user.id, quizId, score);
+            } catch (e) {
+                console.error('퀴즈 결과 저장 실패:', e);
+            }
         }
 
         function restartQuiz() {
