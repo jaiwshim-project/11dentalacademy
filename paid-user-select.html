@@ -733,10 +733,13 @@
             document.getElementById('userList').classList.remove('active');
         }
 
-        function showRegisterForm() {
+        async function showRegisterForm() {
             document.getElementById('initialOptions').style.display = 'none';
             document.getElementById('registerForm').classList.add('active');
             document.getElementById('userList').classList.remove('active');
+            // 자동완성용 데이터 로드
+            allUsers = await fetchAllUsers();
+            allClinics = await fetchRegisteredClinics();
         }
 
         function showUserList() {
