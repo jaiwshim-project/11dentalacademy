@@ -630,6 +630,12 @@
             renderQuestion();
         }
 
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                nextQuestion();
+            }
+        });
+
         renderQuestion();
     </script>
 </body>

@@ -313,7 +313,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="supabase.min.js"></script>
     <script src="supabase-client.js"></script>
     <script>
         const quizId = 'quiz09';
@@ -428,14 +428,8 @@
             if (isCorrect) correctAnswers++;
             answers.push({ question: currentIndex, userAnswer: answer, correct: isCorrect });
 
-            setTimeout(() => {
-                currentIndex++;
-                if (currentIndex < questions.length) {
-                    renderQuestion();
-                } else {
-                    showResult();
-                }
-            }, 1200);
+            waitingNext = true;
+            nextTimer = setTimeout(goNext, 1200);
         }
 
         function showResult() {
@@ -485,6 +479,25 @@
             document.getElementById('resultCard').classList.remove('show');
             renderQuestion();
         }
+
+        let waitingNext = false;
+        let nextTimer = null;
+
+        function goNext() {
+            if (!waitingNext) return;
+            waitingNext = false;
+            clearTimeout(nextTimer);
+            currentIndex++;
+            if (currentIndex < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') goNext();
+        });
 
         renderQuestion();
     </script>

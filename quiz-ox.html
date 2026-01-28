@@ -644,6 +644,13 @@
             renderQuestion();
         }
 
+        // 엔터키로 다음 문제 이동
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                nextQuestion();
+            }
+        });
+
         // 초기화
         renderQuestion();
     </script>
