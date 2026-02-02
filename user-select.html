@@ -272,6 +272,36 @@
             color: rgba(255,255,255,0.9);
         }
 
+        .floating-sample-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 50px;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-sample-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.6);
+        }
+
+        @media (max-width: 600px) {
+            .floating-sample-btn {
+                bottom: 20px;
+                left: 20px;
+                padding: 12px 20px;
+                font-size: 0.82rem;
+            }
+        }
+
         @media (max-width: 600px) {
             .options {
                 flex-direction: column;
@@ -352,11 +382,13 @@
             </button>
         </div>
 
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="dashboard-sample.html" style="display:inline-block; padding:12px 28px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:12px; color:white; text-decoration:none; font-size:0.95rem; font-weight:600; transition:all 0.3s; backdrop-filter:blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'; this.style.transform='none'">👀 대시보드 샘플보기</a>
-        </div>
         <a href="#" onclick="resetSelection(); return false;" class="back-link">선택 초기화</a>
     </div>
+
+    <!-- 플로팅 버튼 -->
+    <a href="dashboard-sample.html" class="floating-sample-btn">
+        👀 대시보드 샘플보기
+    </a>
 
     <script>
         let selectedType = null;
