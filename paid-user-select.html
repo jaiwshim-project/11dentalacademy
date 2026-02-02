@@ -821,6 +821,7 @@
                 // 현재 사용자로 설정
                 setCurrentUser(newUser);
                 localStorage.setItem('userType', 'paid');
+                localStorage.setItem('userTypeSelected', 'true');
                 sessionStorage.setItem('userTypeSelectedThisSession', 'true');
 
                 // 목적지로 이동
@@ -928,6 +929,7 @@
             // 현재 사용자 설정
             setCurrentUser(user);
             localStorage.setItem('userType', 'paid');
+            localStorage.setItem('userTypeSelected', 'true');
             sessionStorage.setItem('userTypeSelectedThisSession', 'true');
             navigateToDestination();
         }
@@ -959,6 +961,7 @@
 
             setCurrentUser(user);
             localStorage.setItem('userType', 'paid');
+            localStorage.setItem('userTypeSelected', 'true');
             sessionStorage.setItem('userTypeSelectedThisSession', 'true');
             window.location.href = 'dashboard.html';
         }
