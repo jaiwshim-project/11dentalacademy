@@ -245,6 +245,25 @@
             color: #8b5cf6;
         }
 
+        .option-card.tester:hover {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .option-card.tester.selected {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .option-card.tester .option-badge {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .option-card.tester .features-list li::before {
+            color: #f59e0b;
+        }
+
         .option-card.selected .features-list li {
             color: rgba(255,255,255,0.9);
         }
@@ -305,6 +324,27 @@
                         <li>AI 튜터 무제한</li>
                     </ul>
                 </div>
+
+                <div class="option-card tester" onclick="selectOption('tester')">
+                    <span class="option-badge">테스트</span>
+                    <span class="option-icon">🔧</span>
+                    <div class="option-title">테스터용</div>
+                    <div class="option-desc">테스트 목적으로 이용합니다</div>
+                    <ul class="features-list">
+                        <li>전체 강의 28개 시청</li>
+                        <li>자료실 전체 열람</li>
+                        <li>AI 튜터 무제한</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 테스터 비밀번호 입력 -->
+            <div id="testerPasswordGroup" style="display:none; margin-bottom: 20px;">
+                <input type="password" id="testerPassword" placeholder="테스터 비밀번호를 입력하세요"
+                    style="width:100%; padding:14px 16px; border:2px solid #e5e7eb; border-radius:12px; font-size:1rem; font-family:'Noto Sans KR',sans-serif; text-align:center; outline:none; transition:border-color 0.3s;"
+                    onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='#e5e7eb'"
+                    onkeydown="if(event.key==='Enter') confirmSelection()">
+                <p id="testerError" style="color:#ef4444; font-size:0.85rem; margin-top:8px; display:none;">비밀번호가 일치하지 않습니다.</p>
             </div>
 
             <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmSelection()">
@@ -331,8 +371,16 @@
 
             // Enable button
             document.getElementById('confirmBtn').disabled = false;
-            document.getElementById('confirmBtn').textContent =
-                type === 'free' ? '무료 사용자로 계속하기' : '유료 사용자로 계속하기';
+            var btnText = type === 'free' ? '무료 사용자로 계속하기' : type === 'paid' ? '유료 사용자로 계속하기' : '테스터로 계속하기';
+            document.getElementById('confirmBtn').textContent = btnText;
+
+            // 테스터 비밀번호 입력 표시/숨김
+            document.getElementById('testerPasswordGroup').style.display = type === 'tester' ? 'block' : 'none';
+            document.getElementById('testerError').style.display = 'none';
+            if (type === 'tester') {
+                document.getElementById('testerPassword').value = '';
+                setTimeout(function() { document.getElementById('testerPassword').focus(); }, 100);
+            }
         }
 
         function confirmSelection() {
@@ -341,7 +389,33 @@
             if (selectedType === 'free') {
                 // 무료 사용자: 바로 메인 페이지로 이동
                 localStorage.setItem('userType', 'free');
+                localStorage.setItem('userTypeSelected', 'true');
                 sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+
+                if (destination.startsWith('#')) {
+                    window.location.href = 'index.html' + destination;
+                } else if (destination.startsWith('http')) {
+                    window.open(destination, '_blank');
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = destination;
+                }
+            } else if (selectedType === 'tester') {
+                // 테스터: 비밀번호 확인 후 유료 권한 부여
+                var pw = document.getElementById('testerPassword').value.trim();
+                if (pw !== '12345') {
+                    document.getElementById('testerError').style.display = 'block';
+                    document.getElementById('testerPassword').value = '';
+                    document.getElementById('testerPassword').focus();
+                    return;
+                }
+                localStorage.setItem('userType', 'paid');
+                localStorage.setItem('userTypeSelected', 'true');
+                sessionStorage.setItem('userTypeSelectedThisSession', 'true');
+
+                // 테스터용 사용자 정보 설정
+                var testerUser = { id: 'tester', name: '테스터', clinic: '테스트', role: 'tester', password: '12345' };
+                localStorage.setItem('currentPaidUser', JSON.stringify(testerUser));
 
                 if (destination.startsWith('#')) {
                     window.location.href = 'index.html' + destination;
