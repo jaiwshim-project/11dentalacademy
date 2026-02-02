@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n유료 사용자 로그인 후 페이지 튕김 버그 수정\n\nindex.html의 isUserTypeSelected\\(\\)가 localStorage의 userTypeSelected를 확인하는데\npaid-user-select.html에서 해당 값을 설정하지 않아 로그인 후 다시 리다이렉트되는 문제 수정\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n테스터용 사용자 유형 추가 \\(비밀번호 12345로 유료 권한 부여\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n대시보드 샘플보기 페이지 추가 \\(심재우 사용자 데이터 기반\\)\n\n- dashboard-sample.html: 로그인 없이 심재우 사용자의 대시보드를 미리볼 수 있는 페이지\n- user-select.html: 대시보드 샘플보기 버튼 추가\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(xargs:*)",
+      "Bash(powershell -Command \"\n$snippet = @''\n\n<!-- 대시보드 샘플보기 플로팅 버튼 -->\n<a href=\"\"dashboard-sample.html\"\" style=\"\"position:fixed;bottom:30px;left:30px;padding:14px 24px;background:linear-gradient\\(135deg,#3b82f6,#2563eb\\);color:white;text-decoration:none;font-size:0.9rem;font-weight:600;border-radius:50px;box-shadow:0 8px 30px rgba\\(59,130,246,0.5\\);transition:all 0.3s;z-index:1000;\"\" onmouseover=\"\"this.style.transform=''translateY\\(-3px\\)'';this.style.boxShadow=''0 12px 40px rgba\\(59,130,246,0.6\\)''\"\" onmouseout=\"\"this.style.transform=''none'';this.style.boxShadow=''0 8px 30px rgba\\(59,130,246,0.5\\)''\"\">👀 대시보드 샘플보기</a>\n''@\n\n$files = @\\(\n''admin-dashboard.html'',''checklist.html'',''contact.html'',''dashboard.html'',\n''guide_engine.html'',''guidebook.html'',''guide_engine_manual.html'',''index.html'',\n''intro.html'',''qlrcq.html'',''quiz-multiple-choice.html'',''quiz-next-step.html'',\n''quiz-ox.html'',''quiz-question-choice.html'',''quiz-roleplay.html'',''quiz07.html'',\n''quiz08.html'',''quiz09.html'',''quiz1.html'',''quiz10.html'',''quiz2.html'',''quiz3.html'',\n''quiz4.html'',''quiz5.html'',''scenarios.html'',''sentence-cards.html'',''paid-user-select.html''\n\\)\n\nforeach \\($f in $files\\) {\n    $content = [System.IO.File]::ReadAllText\\($f, [System.Text.Encoding]::UTF8\\)\n    # Find LAST occurrence of </body>\n    $idx = $content.LastIndexOf\\(''</body>''\\)\n    if \\($idx -gt 0\\) {\n        $newContent = $content.Substring\\(0, $idx\\) + $snippet + [Environment]::NewLine + ''</body>'' + $content.Substring\\($idx + 7\\)\n        [System.IO.File]::WriteAllText\\($f, $newContent, [System.Text.Encoding]::UTF8\\)\n        Write-Host \"\"Updated: $f\"\"\n    } else {\n        Write-Host \"\"NOT FOUND: $f\"\"\n    }\n}\n\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\01 Claude-Code\\\\01 치과 아카데미\\\\add_button.ps1\")",
+      "Bash(python:*)",
+      "WebFetch(domain:chatbot-sdk.aitalker.co.kr)"
+    ]
+  }
+}

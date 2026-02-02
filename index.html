@@ -3498,6 +3498,22 @@
     <script src="https://chatbot-sdk.aitalker.co.kr/talker-sdk.umd.js"></script>
     <script>
         TalkerSDK.initializeTalkerSDK({ code: "biz018", position: "right" });
+        // 오른쪽 플로팅 버튼에 "원장AI톡" 라벨 추가
+        (function addTalkerLabel() {
+            var tries = 0;
+            var iv = setInterval(function() {
+                var btn = document.querySelector('#talker-sdk-floating-btn, [id*="talker"][id*="btn"], .talker-sdk-floating-btn');
+                if (!btn) { var iframes = document.querySelectorAll('iframe'); iframes.forEach(function(f){ if(f.style.position==='fixed') btn = f; }); }
+                if (btn) {
+                    clearInterval(iv);
+                    var label = document.createElement('div');
+                    label.textContent = '원장AI톡';
+                    label.style.cssText = 'position:fixed;bottom:12px;right:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;z-index:9998;pointer-events:none;box-shadow:0 2px 10px rgba(102,126,234,0.4);font-family:"Noto Sans KR",sans-serif;';
+                    document.body.appendChild(label);
+                }
+                if (++tries > 50) clearInterval(iv);
+            }, 200);
+        })();
     </script>
 
     <!-- 화이트서울치과 플로팅 버튼 -->
@@ -3547,5 +3563,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
         화이트서울치과
     </a>
+
+<!-- 대시보드 샘플보기 플로팅 버튼 -->
+<a href="dashboard-sample.html" style="position:fixed;bottom:90px;left:30px;padding:14px 24px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;text-decoration:none;font-size:0.9rem;font-weight:600;border-radius:50px;box-shadow:0 8px 30px rgba(59,130,246,0.5);transition:all 0.3s;z-index:1000;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 40px rgba(59,130,246,0.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 30px rgba(59,130,246,0.5)'">👀 대시보드 샘플보기</a>
 </body>
 </html>
