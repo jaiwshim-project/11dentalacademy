@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대시보드 샘플 | 덴탈클리닉파인더 환자상담 AI 아카데미</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #1a1a2e;
+            --gray: #6b7280;
+            --gray-light: #9ca3af;
+            --light: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            padding: 20px 5%;
+            color: white;
+            box-shadow: 0 4px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-nav a {
+            color: rgba(255,255,255,0.95);
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header-nav a:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 5%;
+        }
+
+        /* 프로필 섹션 */
+        .profile-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 300% 100%;
+            animation: gradientMove 4s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 8px 25px rgba(118, 75, 162, 0.4);
+            position: relative;
+        }
+
+        .profile-avatar::after {
+            content: '✓';
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .profile-info h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--dark) 0%, #4a4a6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .profile-info .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+        }
+
+        .profile-info .badge::before {
+            content: '👑';
+        }
+
+        .profile-stats {
+            margin-left: auto;
+            display: flex;
+            gap: 25px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+        }
+
+        .stat-item .number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* 통계 카드 그리드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(30%, -30%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .stat-card .icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card.purple .icon { background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); }
+        .stat-card.purple::before { background: #8b5cf6; }
+        .stat-card.green .icon { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+        .stat-card.green::before { background: #10b981; }
+        .stat-card.blue .icon { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
+        .stat-card.blue::before { background: #3b82f6; }
+        .stat-card.orange .icon { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); }
+        .stat-card.orange::before { background: #f59e0b; }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .stat-card p {
+            font-size: 0.88rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        /* 섹션 그리드 */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .section-card h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--dark);
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .section-card h2::after {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 60px;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* 진행 중인 강의 */
+        .course-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.08);
+        }
+
+        .course-item:hover {
+            background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%);
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .course-item .course-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.35);
+        }
+
+        .course-item .course-info {
+            flex: 1;
+        }
+
+        .course-item .course-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .course-item .course-info .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .course-item .course-info .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .course-item .course-info .progress-bar .fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .course-item .course-info .progress-text {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .course-item .continue-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .course-item .continue-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        /* 최근 활동 */
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+        }
+
+        .activity-item:hover {
+            background: #f8f9ff;
+        }
+
+        .activity-item .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-item .activity-icon.video { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+        .activity-item .activity-icon.quiz { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+        .activity-item .activity-icon.complete { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+
+        .activity-item .activity-info h5 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .activity-item .activity-info p {
+            font-size: 0.75rem;
+            color: var(--gray-light);
+        }
+
+        /* 퀵 액션 버튼들 */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 25px;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+        }
+
+        /* 학습 목표 */
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            margin-bottom: 6px;
+        }
+
+        .goal-item:hover {
+            background: #f8f9ff;
+        }
+
+        .goal-item .checkbox {
+            width: 26px;
+            height: 26px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .goal-item .checkbox.checked {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+        }
+
+        .goal-item .goal-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .goal-item .goal-text.completed {
+            text-decoration: line-through;
+            color: var(--gray-light);
+        }
+
+        /* 시험 기록 섹션 */
+        .quiz-section {
+            margin-top: 25px;
+        }
+
+        .quiz-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+        }
+
+        .quiz-table th,
+        .quiz-table td {
+            padding: 16px 14px;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .quiz-table th {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f3f4f6 100%);
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .quiz-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .quiz-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        .quiz-table tr {
+            transition: all 0.3s;
+        }
+
+        .quiz-table tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+        }
+
+        .quiz-table td {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .quiz-type-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .quiz-type-badge.ox {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1d4ed8;
+        }
+
+        .quiz-type-badge.choice {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #b45309;
+        }
+
+        .quiz-type-badge.mixed {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            color: #7c3aed;
+        }
+
+        .quiz-score {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .quiz-score.high {
+            color: #10b981;
+        }
+
+        .quiz-score.medium {
+            color: #f59e0b;
+        }
+
+        .quiz-score.low {
+            color: #ef4444;
+        }
+
+        .quiz-start-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+        }
+
+        .quiz-start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(139, 92, 246, 0.35);
+        }
+
+        .quiz-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(139, 92, 246, 0.08);
+            transition: all 0.3s;
+        }
+
+        .quiz-history-item:hover {
+            transform: translateX(5px);
+            border-color: rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+        }
+
+        .quiz-history-item .date {
+            color: var(--gray-light);
+            font-size: 0.8rem;
+        }
+
+        .no-quiz-record {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            background: #f8f9ff;
+            border-radius: 12px;
+        }
+
+        /* 대표원장 전용 직원 관리 섹션 */
+        .staff-section {
+            display: none;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+            border: 2px solid #f59e0b;
+        }
+
+        .staff-section.visible {
+            display: block;
+        }
+
+        .staff-section h2 {
+            color: #b45309;
+        }
+
+        .staff-section h2::after {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        .staff-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .staff-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .staff-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #fde68a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .staff-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+            border-color: #f59e0b;
+        }
+
+        .staff-item .staff-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .staff-item .staff-info {
+            flex: 1;
+        }
+
+        .staff-item .staff-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .staff-item .staff-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .staff-item .view-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .staff-item .view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .no-staff {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+            background: #fffbeb;
+            border-radius: 12px;
+        }
+
+        .view-mode-banner {
+            display: none;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #f59e0b;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .view-mode-banner.visible {
+            display: flex;
+        }
+
+        .view-mode-banner .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #b45309;
+        }
+
+        .view-mode-banner .back-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #b45309;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-mode-banner .back-btn:hover {
+            background: #92400e;
+        }
+
+        .sample-banner {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            padding: 14px 24px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sample-banner .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1d4ed8;
+            font-size: 0.95rem;
+        }
+
+        .sample-banner .back-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .sample-banner .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-stats {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                덴탈클리닉<span>파인더</span> 아카데미
+            </a>
+            <nav class="header-nav">
+                <a href="user-select.html">돌아가기</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- 샘플 안내 배너 -->
+        <div class="sample-banner">
+            <div class="info">
+                <span>👀</span>
+                <span>샘플 대시보드입니다 (심재우 님의 학습 현황)</span>
+            </div>
+            <a href="user-select.html" class="back-btn">사용자 선택으로 돌아가기</a>
+        </div>
+
+        <!-- 프로필 섹션 -->
+        <div class="profile-section">
+            <div class="profile-avatar" id="profileAvatar">심</div>
+            <div class="profile-info">
+                <h1 id="profileName">심재우</h1>
+                <p id="profileClinic">로딩 중...</p>
+                <p id="profileRegDate" style="font-size: 0.8rem; color: #9ca3af;">등록일: 로딩 중...</p>
+                <span class="badge">프리미엄 회원</span>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="number" id="completedLessons">0</div>
+                    <div class="label">수강 완료</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="totalHours">0</div>
+                    <div class="label">학습 시간</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="progressPercent">0%</div>
+                    <div class="label">전체 진도율</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 통계 카드 -->
+        <div class="stats-grid">
+            <div class="stat-card purple">
+                <div class="icon">📚</div>
+                <h3 id="totalCourses">28</h3>
+                <p>전체 강의</p>
+            </div>
+            <div class="stat-card green">
+                <div class="icon">✅</div>
+                <h3 id="completedCourses">0</h3>
+                <p>완료한 강의</p>
+            </div>
+            <div class="stat-card blue">
+                <div class="icon">▶️</div>
+                <h3 id="inProgressCourses">0</h3>
+                <p>진행 중</p>
+            </div>
+            <div class="stat-card orange">
+                <div class="icon">🏆</div>
+                <h3 id="quizScore">-</h3>
+                <p>퀴즈 평균</p>
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="content-grid">
+            <!-- 진행 중인 강의 -->
+            <div class="section-card">
+                <h2>📖 진행 중인 강의</h2>
+                <div id="inProgressList">
+                    <div class="course-item" onclick="location.href='index.html#curriculum1'">
+                        <div class="course-icon">A01</div>
+                        <div class="course-info">
+                            <h4>설득의 종말</h4>
+                            <div class="progress-bar">
+                                <div class="fill" style="width: 30%"></div>
+                            </div>
+                            <p class="progress-text">3/14 강의 완료 (21%)</p>
+                        </div>
+                        <button class="continue-btn" onclick="event.stopPropagation(); location.href='index.html#curriculum1'">이어보기</button>
+                    </div>
+                    <div class="course-item" onclick="location.href='index.html#curriculum2'">
+                        <div class="course-icon">A02</div>
+                        <div class="course-info">
+                            <h4>성공적인 환자 상담의 완성</h4>
+                            <div class="progress-bar">
+                                <div class="fill" style="width: 10%"></div>
+                            </div>
+                            <p class="progress-text">1/14 강의 완료 (7%)</p>
+                        </div>
+                        <button class="continue-btn" onclick="event.stopPropagation(); location.href='index.html#curriculum2'">이어보기</button>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <a href="index.html#curriculum" class="quick-action-btn">
+                        📚 전체 강의 보기
+                    </a>
+                    <a href="index.html#resources" class="quick-action-btn">
+                        📁 자료실 바로가기
+                    </a>
+                    <a href="scenarios.html" class="quick-action-btn">
+                        🎭 시나리오 연습
+                    </a>
+                    <a href="index.html#ai-tutor" class="quick-action-btn">
+                        🤖 AI 튜터 상담
+                    </a>
+                </div>
+            </div>
+
+            <!-- 사이드바 -->
+            <div>
+                <!-- 최근 활동 -->
+                <div class="section-card" style="margin-bottom: 20px;">
+                    <h2>🕐 최근 활동</h2>
+                    <div id="recentActivity">
+                        <div class="activity-item">
+                            <div class="activity-icon video">📹</div>
+                            <div class="activity-info">
+                                <h5>강의 시청: 환자 응대 기본</h5>
+                                <p>오늘 14:30</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon quiz">📝</div>
+                            <div class="activity-info">
+                                <h5>퀴즈 완료: A01 과정 테스트</h5>
+                                <p>어제 16:20</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon complete">✅</div>
+                            <div class="activity-info">
+                                <h5>강의 완료: 상담 스크립트 작성</h5>
+                                <p>2일 전</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 오늘의 학습 목표 -->
+                <div class="section-card">
+                    <h2>🎯 오늘의 학습 목표</h2>
+                    <div id="dailyGoals">
+                        <div class="goal-item">
+                            <div class="checkbox checked" onclick="toggleGoal(this)">✓</div>
+                            <span class="goal-text completed">강의 1개 시청하기</span>
+                        </div>
+                        <div class="goal-item">
+                            <div class="checkbox" onclick="toggleGoal(this)"></div>
+                            <span class="goal-text">퀴즈 풀기</span>
+                        </div>
+                        <div class="goal-item">
+                            <div class="checkbox" onclick="toggleGoal(this)"></div>
+                            <span class="goal-text">시나리오 연습 1회</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 시험 문제 풀이 섹션 -->
+        <div class="section-card quiz-section">
+            <h2>📝 시험 문제 풀이</h2>
+
+            <table class="quiz-table">
+                <thead>
+                    <tr>
+                        <th>시험명</th>
+                        <th>유형</th>
+                        <th>최근 응시일</th>
+                        <th>최고 점수</th>
+                        <th>응시 횟수</th>
+                        <th>시작</th>
+                    </tr>
+                </thead>
+                <tbody id="quizTableBody">
+                    <tr>
+                        <td>07. O/X 문제</td>
+                        <td><span class="quiz-type-badge ox">O/X</span></td>
+                        <td class="quiz-date" data-quiz="quiz-ox">-</td>
+                        <td class="quiz-score" data-quiz="quiz-ox">-</td>
+                        <td class="quiz-count" data-quiz="quiz-ox">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-ox.html'">응시하기</button></td>
+                    </tr>
+                    <tr>
+                        <td>08. 4지선다형 문제</td>
+                        <td><span class="quiz-type-badge choice">4지선다</span></td>
+                        <td class="quiz-date" data-quiz="quiz-multiple-choice">-</td>
+                        <td class="quiz-score" data-quiz="quiz-multiple-choice">-</td>
+                        <td class="quiz-count" data-quiz="quiz-multiple-choice">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-multiple-choice.html'">응시하기</button></td>
+                    </tr>
+                    <tr>
+                        <td>09. 다음 단계 선택</td>
+                        <td><span class="quiz-type-badge mixed">단계선택</span></td>
+                        <td class="quiz-date" data-quiz="quiz-next-step">-</td>
+                        <td class="quiz-score" data-quiz="quiz-next-step">-</td>
+                        <td class="quiz-count" data-quiz="quiz-next-step">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-next-step.html'">응시하기</button></td>
+                    </tr>
+                    <tr>
+                        <td>10. 적절한 질문 선택</td>
+                        <td><span class="quiz-type-badge choice">질문선택</span></td>
+                        <td class="quiz-date" data-quiz="quiz-question-choice">-</td>
+                        <td class="quiz-score" data-quiz="quiz-question-choice">-</td>
+                        <td class="quiz-count" data-quiz="quiz-question-choice">0회</td>
+                        <td><button class="quiz-start-btn" onclick="location.href='quiz-question-choice.html'">응시하기</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 최근 시험 기록 -->
+            <h3 style="margin-top: 30px; font-size: 1rem; font-weight: 600;">최근 시험 기록</h3>
+            <div id="quizHistory" style="margin-top: 15px;">
+                <div class="no-quiz-record">아직 응시한 시험이 없습니다.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="supabase.min.js"></script>
+    <script src="supabase-client.js"></script>
+    <script>
+        // 학습 목표 토글 (샘플이므로 저장하지 않음)
+        function toggleGoal(element) {
+            element.classList.toggle('checked');
+            const goalText = element.nextElementSibling;
+            if (element.classList.contains('checked')) {
+                element.textContent = '✓';
+                goalText.classList.add('completed');
+            } else {
+                element.textContent = '';
+                goalText.classList.remove('completed');
+            }
+        }
+
+        // 시험명 반환
+        function getQuizName(quizId) {
+            const names = {
+                'quiz-ox': '07. O/X 문제',
+                'quiz-multiple-choice': '08. 4지선다형 문제',
+                'quiz-next-step': '09. 다음 단계 선택',
+                'quiz-question-choice': '10. 적절한 질문 선택'
+            };
+            return names[quizId] || quizId;
+        }
+
+        // 심재우 사용자 데이터 로드
+        window.onload = async function() {
+            // Supabase에서 심재우 사용자 찾기
+            const allUsers = await fetchAllUsers();
+            const sampleUser = allUsers.find(u => u.name === '심재우');
+
+            if (!sampleUser) {
+                document.getElementById('profileClinic').textContent = '사용자를 찾을 수 없습니다';
+                return;
+            }
+
+            // 프로필 표시
+            document.getElementById('profileAvatar').textContent = sampleUser.serialNumber || '심';
+            document.getElementById('profileName').textContent = (sampleUser.serialNumber ? '[' + sampleUser.serialNumber + '] ' : '') + sampleUser.name;
+            document.getElementById('profileClinic').textContent = (sampleUser.clinic || '소속 미입력') + (sampleUser.role ? ' | ' + sampleUser.role : '');
+
+            if (sampleUser.registeredAt) {
+                document.getElementById('profileRegDate').textContent = '등록일: ' + new Date(sampleUser.registeredAt).toLocaleDateString('ko-KR');
+            }
+
+            // 학습 데이터 로드
+            const learningData = await fetchLearningData(sampleUser.id);
+            const completedLessons = learningData.completedLessons || 0;
+            const totalHours = learningData.totalHours || 0;
+            const totalCourses = 28;
+            const progressPercent = Math.round((completedLessons / totalCourses) * 100);
+
+            document.getElementById('completedLessons').textContent = completedLessons;
+            document.getElementById('totalHours').textContent = totalHours + 'h';
+            document.getElementById('progressPercent').textContent = progressPercent + '%';
+            document.getElementById('completedCourses').textContent = completedLessons;
+            document.getElementById('inProgressCourses').textContent = learningData.inProgress || 2;
+
+            if (learningData.quizAverage) {
+                document.getElementById('quizScore').textContent = learningData.quizAverage + '점';
+            }
+
+            // 퀴즈 데이터 로드
+            const quizIds = ['quiz-ox', 'quiz-multiple-choice', 'quiz-next-step', 'quiz-question-choice'];
+            const quizResults = await fetchQuizResults(sampleUser.id);
+            const allHistory = [];
+
+            const quizDataMap = {};
+            quizResults.forEach(function(result) {
+                if (!quizDataMap[result.quizId]) quizDataMap[result.quizId] = [];
+                quizDataMap[result.quizId].push({ date: result.date, score: result.score });
+            });
+
+            quizIds.forEach(function(quizId) {
+                const quizData = quizDataMap[quizId] || [];
+                const dateCell = document.querySelector('.quiz-date[data-quiz="' + quizId + '"]');
+                const scoreCell = document.querySelector('.quiz-score[data-quiz="' + quizId + '"]');
+                const countCell = document.querySelector('.quiz-count[data-quiz="' + quizId + '"]');
+
+                if (quizData.length > 0) {
+                    quizData.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+                    dateCell.textContent = new Date(quizData[0].date).toLocaleDateString('ko-KR');
+                    var highestScore = Math.max.apply(null, quizData.map(function(h) { return h.score; }));
+                    scoreCell.textContent = highestScore + '점';
+                    scoreCell.classList.remove('high', 'medium', 'low');
+                    if (highestScore >= 80) scoreCell.classList.add('high');
+                    else if (highestScore >= 60) scoreCell.classList.add('medium');
+                    else scoreCell.classList.add('low');
+                    countCell.textContent = quizData.length + '회';
+
+                    quizData.forEach(function(h) {
+                        allHistory.push({ quizId: quizId, quizName: getQuizName(quizId), date: h.date, score: h.score });
+                    });
+                }
+            });
+
+            if (quizResults.length > 0) {
+                var avgScore = Math.round(quizResults.reduce(function(sum, r) { return sum + r.score; }, 0) / quizResults.length);
+                document.getElementById('quizScore').textContent = avgScore + '점';
+            }
+
+            // 최근 시험 기록
+            var container = document.getElementById('quizHistory');
+            if (allHistory.length === 0) {
+                container.innerHTML = '<div class="no-quiz-record">아직 응시한 시험이 없습니다.</div>';
+            } else {
+                allHistory.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+                container.innerHTML = allHistory.slice(0, 10).map(function(h) {
+                    var date = new Date(h.date).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    var scoreClass = h.score >= 80 ? 'high' : (h.score >= 60 ? 'medium' : 'low');
+                    return '<div class="quiz-history-item"><span>' + h.quizName + '</span><span class="quiz-score ' + scoreClass + '">' + h.score + '점</span><span class="date">' + date + '</span></div>';
+                }).join('');
+            }
+        };
+    </script>
+</body>
+</html>
